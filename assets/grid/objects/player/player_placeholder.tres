@@ -1,0 +1,14 @@
+[gd_resource type="PlaneMesh" load_steps=3 format=3 uid="uid://brg7xeybbrynd"]
+
+[ext_resource type="Texture2D" uid="uid://bkg18dvpyfinb" path="res://assets/grid/objects/player/player_placeholder.png" id="1_wmvem"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_orwn5"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+albedo_texture = ExtResource("1_wmvem")
+
+[resource]
+material = SubResource("StandardMaterial3D_orwn5")
+size = Vector2(1, 1)
+center_offset = Vector3(0, -0.3, 0)

@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://chdj4buu06dr2"]
+
+[ext_resource type="Script" path="res://assets/grid/objects/player/player.gd" id="1_8xgkv"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i58sy"]
+albedo_color = Color(0, 1, 1, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_8dp53"]
+material = SubResource("StandardMaterial3D_i58sy")
+
+[node name="player" type="Node3D"]
+script = ExtResource("1_8xgkv")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.31134e-07, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, 1.31134e-07, -5.73206e-15, 0, 0.5, 0)
+mesh = SubResource("PrismMesh_8dp53")

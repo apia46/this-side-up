@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://dktdxfq14ap5j"]
+
+[ext_resource type="Script" path="res://assets/resources/ObjectState.gd" id="1_cwv7r"]
+
+[resource]
+script = ExtResource("1_cwv7r")
+position = Vector3i(0, 0, 0)
+rotation = 0
