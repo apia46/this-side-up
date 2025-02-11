@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://docarmmiy2xhp"
-path.s3tc="res://.godot/imported/box_placeholder.png-c71fdfe497e741cfd45251119a858f91.s3tc.ctex"
+path.s3tc="res://.godot/imported/box_placeholder.png-3e9c1d59dba4a1d60132b436dc71a25d.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/grid/objects/box_placeholder.png"
-dest_files=["res://.godot/imported/box_placeholder.png-c71fdfe497e741cfd45251119a858f91.s3tc.ctex"]
+source_file="res://assets/grid/objects/box/box_placeholder.png"
+dest_files=["res://.godot/imported/box_placeholder.png-3e9c1d59dba4a1d60132b436dc71a25d.s3tc.ctex"]
 
 [params]
 

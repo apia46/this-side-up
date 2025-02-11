@@ -1,6 +1,6 @@
 [gd_resource type="PlaneMesh" load_steps=3 format=3 uid="uid://dx7j7ykewb12k"]
 
-[ext_resource type="Texture2D" uid="uid://docarmmiy2xhp" path="res://assets/grid/objects/box_placeholder.png" id="1_31yx5"]
+[ext_resource type="Texture2D" uid="uid://docarmmiy2xhp" path="res://assets/grid/objects/box/box_placeholder.png" id="1_31yx5"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_orwn5"]
 transparency = 2

@@ -1,0 +1,18 @@
+[gd_resource type="MeshLibrary" load_steps=3 format=3 uid="uid://b54wjm1eelmux"]
+
+[ext_resource type="PlaneMesh" uid="uid://brg7xeybbrynd" path="res://assets/grid/objects/player/player_placeholder.tres" id="1_5crdj"]
+[ext_resource type="PlaneMesh" uid="uid://dx7j7ykewb12k" path="res://assets/grid/objects/box/box_placeholder.tres" id="2_h6tbx"]
+
+[resource]
+item/0/name = "player"
+item/0/mesh = ExtResource("1_5crdj")
+item/0/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/0/shapes = []
+item/0/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/0/navigation_layers = 1
+item/1/name = "box"
+item/1/mesh = ExtResource("2_h6tbx")
+item/1/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/1/shapes = []
+item/1/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/1/navigation_layers = 1
