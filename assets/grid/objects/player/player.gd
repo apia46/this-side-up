@@ -111,6 +111,7 @@ func _input(event):
 	
 	# pick up?
 	var offset = Vector3i(0,0,0)
+	print(level.objects.solid)
 	while state.positionRelative(Vector3i(1,0,0) + offset, fork.high) in level.objects.solid:
 		var object = level.objects.solid[state.positionRelative(Vector3i(1,0,0) + offset, fork.high)]
 		if object is Box and !object.held:
@@ -123,7 +124,7 @@ func _input(event):
 	for object in held:
 		object.moveTo(state.positionRelative(Vector3i(1,0,0)), unfixedRotation)
 	
-	for object in level.objecs.goals:
+	for object in level.objects.goals:
 		level.objects.goals[object].endOfTurn()
 
 static func cantBodyInto(checkState:Level.STATES) -> bool:

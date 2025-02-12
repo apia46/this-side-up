@@ -33,7 +33,7 @@ func hold(_rotation):
 
 func moveTo(_position: Vector3i, _rotation:=-1, changeHeight:=false):
 	level.stateGrid.set_cell_item(state.position, -1)
-	level.objects.erase(state.position)
+	level.objects.solid.erase(state.position)
 	
 	if changeHeight:
 		state.position.y += _position.y
@@ -57,7 +57,7 @@ func moveTo(_position: Vector3i, _rotation:=-1, changeHeight:=false):
 	rotationTween.tween_property(self, "rotation", state.getRotationAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	
 	level.stateGrid.set_cell_item(state.position, Level.STATES.BOX_HELD)
-	level.objects[state.position] = self
+	level.objects.solid[state.position] = self
 
 func cantDrop() -> bool:
 	return state.getTileRelative(Vector3i(1,0,0), level.stateGrid) in [Level.STATES.SOLID, Level.STATES.BOX]

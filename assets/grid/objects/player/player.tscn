@@ -1,16 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://chdj4buu06dr2"]
+[gd_scene load_steps=6 format=3 uid="uid://chdj4buu06dr2"]
 
 [ext_resource type="Script" path="res://assets/grid/objects/player/player.gd" id="1_8xgkv"]
+[ext_resource type="PackedScene" uid="uid://cdrne0o1l0d6p" path="res://assets/grid/objects/player/body.blend" id="2_4xsxk"]
 [ext_resource type="Script" path="res://assets/grid/objects/player/fork.gd" id="2_pu337"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i58sy"]
-albedo_color = Color(0, 1, 1, 1)
-
-[sub_resource type="PrismMesh" id="PrismMesh_8dp53"]
-material = SubResource("StandardMaterial3D_i58sy")
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_87lhf"]
-albedo_color = Color(0, 1, 1, 1)
+albedo_color = Color(1, 0, 0, 1)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_lqauu"]
 material = SubResource("StandardMaterial3D_87lhf")
@@ -20,9 +15,8 @@ center_offset = Vector3(0.75, 0.2, 0)
 [node name="player" type="Node3D"]
 script = ExtResource("1_8xgkv")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1.31134e-07, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, 1.31134e-07, -5.73206e-15, 0, 0.5, 0)
-mesh = SubResource("PrismMesh_8dp53")
+[node name="body" parent="." instance=ExtResource("2_4xsxk")]
+transform = Transform3D(-0.5, 0, -4.37114e-08, 0, 0.5, 0, 4.37114e-08, 0, -0.5, 0, 0, 0)
 
 [node name="fork" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
@@ -35,6 +29,7 @@ remote_path = NodePath("../camerawrapper")
 update_rotation = false
 
 [node name="camerawrapper" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 top_level = true
 
 [node name="camera" type="Camera3D" parent="camerawrapper"]
@@ -45,3 +40,5 @@ projection = 1
 fov = 75.2571
 size = 9.92
 far = 20.0
+
+[node name="Decal" type="Decal" parent="."]
