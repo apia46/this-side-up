@@ -68,3 +68,5 @@ func drop():
 	level.stateGrid.set_cell_item(state.position, -1)
 	moveTo(state.positionRelative(Vector3i(1,0,0)), state.rotation)
 	level.stateGrid.set_cell_item(state.position, Level.STATES.BOX)
+
+func endOfTurn(): return

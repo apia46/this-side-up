@@ -59,17 +59,17 @@ func _input(event):
 		if cantBodyInto(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
 		if cantForkInto(state.getTileRelative(Vector3i(1,0,-2), level.stateGrid, fork.high)): return
 		if holding and cantBodyInto(state.getTileRelative(Vector3i(1,0,-2), level.stateGrid, fork.high)): return
-		if holding and cantBodyInto(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, fork.high)): return
-		if holding and cantBodyInto(state.getTileRelative(Vector3i(2,0,-1), level.stateGrid, fork.high)): return
+		#if holding and cantBodyInto(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, fork.high)): return
+		#if holding and cantBodyInto(state.getTileRelative(Vector3i(2,0,-1), level.stateGrid, fork.high)): return
 		state.moveRotated(Vector3i(1,0,-1))
 		state.rotation += 90
 	elif event.is_action_pressed("forward_right"):
 		if cantBodyInto(state.getTileRelative(Vector3i(1,0,1), level.stateGrid)): return
 		if cantBodyInto(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
 		if cantForkInto(state.getTileRelative(Vector3i(1,0,2), level.stateGrid, fork.high)): return
-		if holding and cantBodyInto(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, fork.high)): return
+		#if holding and cantBodyInto(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, fork.high)): return
 		if holding and cantBodyInto(state.getTileRelative(Vector3i(1,0,2), level.stateGrid, fork.high)): return
-		if holding and cantBodyInto(state.getTileRelative(Vector3i(2,0,1), level.stateGrid, fork.high)): return
+		#if holding and cantBodyInto(state.getTileRelative(Vector3i(2,0,1), level.stateGrid, fork.high)): return
 		state.moveRotated(Vector3i(1,0,1))
 		state.rotation += -90
 	elif event.is_action_pressed("backward"):
@@ -78,15 +78,15 @@ func _input(event):
 	elif event.is_action_pressed("backward_left"):
 		if cantBodyInto(state.getTileRelative(Vector3i(-1,0,-1), level.stateGrid)): return
 		if cantBodyInto(state.getTileRelative(Vector3i(-1,0,0), level.stateGrid)): return
-		if holding and cantBodyInto(state.getTileRelative(Vector3i(0,0,1), level.stateGrid, fork.high)): return
-		if holding and cantBodyInto(state.getTileRelative(Vector3i(-1,0,1), level.stateGrid, fork.high)): return
+		#if holding and cantBodyInto(state.getTileRelative(Vector3i(0,0,1), level.stateGrid, fork.high)): return
+		#if holding and cantBodyInto(state.getTileRelative(Vector3i(-1,0,1), level.stateGrid, fork.high)): return
 		state.moveRotated(Vector3i(-1,0,-1))
 		state.rotation += -90
 	elif event.is_action_pressed("backward_right"):
 		if cantBodyInto(state.getTileRelative(Vector3i(-1,0,1), level.stateGrid)): return
 		if cantBodyInto(state.getTileRelative(Vector3i(-1,0,0), level.stateGrid)): return
-		if holding and cantBodyInto(state.getTileRelative(Vector3i(0,0,-1), level.stateGrid, fork.high)): return
-		if holding and cantBodyInto(state.getTileRelative(Vector3i(-1,0,-1), level.stateGrid, fork.high)): return
+		#if holding and cantBodyInto(state.getTileRelative(Vector3i(0,0,-1), level.stateGrid, fork.high)): return
+		#if holding and cantBodyInto(state.getTileRelative(Vector3i(-1,0,-1), level.stateGrid, fork.high)): return
 		state.moveRotated(Vector3i(-1,0,1))
 		state.rotation += 90
 	else:
@@ -111,8 +111,8 @@ func _input(event):
 	
 	# pick up?
 	var offset = Vector3i(0,0,0)
-	while state.positionRelative(Vector3i(1,0,0) + offset, fork.high) in level.objects:
-		var object = level.objects[state.positionRelative(Vector3i(1,0,0) + offset, fork.high)]
+	while state.positionRelative(Vector3i(1,0,0) + offset, fork.high) in level.objects.solid:
+		var object = level.objects.solid[state.positionRelative(Vector3i(1,0,0) + offset, fork.high)]
 		if object is Box and !object.held:
 			held.append(object)
 			object.hold(state.rotation)
@@ -122,9 +122,14 @@ func _input(event):
 	
 	for object in held:
 		object.moveTo(state.positionRelative(Vector3i(1,0,0)), unfixedRotation)
+	
+	for object in level.objecs.goals:
+		level.objects.goals[object].endOfTurn()
 
 static func cantBodyInto(checkState:Level.STATES) -> bool:
 	return checkState in [Level.STATES.SOLID, Level.STATES.BOX]
 
 static func cantForkInto(checkState:Level.STATES) -> bool:
 	return checkState == Level.STATES.SOLID
+
+func endOfTurn(): return

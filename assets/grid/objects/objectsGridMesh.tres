@@ -1,7 +1,8 @@
-[gd_resource type="MeshLibrary" load_steps=3 format=3 uid="uid://b54wjm1eelmux"]
+[gd_resource type="MeshLibrary" load_steps=4 format=3 uid="uid://b54wjm1eelmux"]
 
 [ext_resource type="PlaneMesh" uid="uid://brg7xeybbrynd" path="res://assets/grid/objects/player/player_placeholder.tres" id="1_5crdj"]
-[ext_resource type="PlaneMesh" uid="uid://dx7j7ykewb12k" path="res://assets/grid/objects/box/box_placeholder.tres" id="2_h6tbx"]
+[ext_resource type="PlaneMesh" uid="uid://bok4qwa5bqbt7" path="res://assets/grid/objects/box/box_placeholder.tres" id="2_h6tbx"]
+[ext_resource type="PlaneMesh" uid="uid://dx7j7ykewb12k" path="res://assets/grid/objects/boxGoal/boxGoal_placeholder.tres" id="3_ldstn"]
 
 [resource]
 item/0/name = "player"
@@ -16,3 +17,9 @@ item/1/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/1/shapes = []
 item/1/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/1/navigation_layers = 1
+item/2/name = "boxGoal"
+item/2/mesh = ExtResource("3_ldstn")
+item/2/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/2/shapes = []
+item/2/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/2/navigation_layers = 1
