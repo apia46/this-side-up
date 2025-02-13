@@ -21,7 +21,7 @@ static func New(_position: Vector3i, _level: Level) -> Box:
 func hold(_rotation):
 	assert(!held)
 	held = true
-	state.positionOffset = Vector3(0,0.25,0)
+	state.positionOffset = Vector3(0,0.1,0)
 	state.rotation = _rotation
 	rotation = state.getRotationAsVector()
 	
@@ -68,5 +68,3 @@ func drop():
 	level.stateGrid.set_cell_item(state.position, -1)
 	moveTo(state.positionRelative(Vector3i(1,0,0)), state.rotation)
 	level.stateGrid.set_cell_item(state.position, Level.STATES.BOX)
-
-func endOfTurn(): return

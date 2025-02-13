@@ -12,5 +12,5 @@ static func New(_position: Vector3i, _level: Level) -> BoxGoal:
 	_boxGoal.rotation = _boxGoal.state.getRotationAsVector()
 	return _boxGoal
 
-func endOfTurn():
-	print(state.position in level.objects and level.objects[state.position] is Box)
+func hasBox():
+	return state.position in level.objects.solid and level.objects.solid[state.position] is Box
