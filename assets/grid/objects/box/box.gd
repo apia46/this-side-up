@@ -21,6 +21,7 @@ static func New(_position: Vector3i, _level: Level) -> Box:
 func hold(_rotation):
 	assert(!held)
 	held = true
+	state.rotationStateOffset = state.rotation
 	state.positionOffset = Vector3(0,0.1,0)
 	state.rotation = _rotation
 	rotation = state.getRotationAsVector()

@@ -1,16 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://ccleyb6wqufsc"]
+[gd_scene load_steps=3 format=3 uid="uid://ccleyb6wqufsc"]
 
 [ext_resource type="Script" path="res://assets/grid/objects/box/box.gd" id="1_2dhlc"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7cjlh"]
-albedo_color = Color(1, 1, 0, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_8a2jt"]
-material = SubResource("StandardMaterial3D_7cjlh")
+[ext_resource type="PackedScene" uid="uid://cr3h4dlysu2p5" path="res://assets/grid/objects/box/box.blend" id="2_vu6mc"]
 
 [node name="box" type="Node3D"]
 script = ExtResource("1_2dhlc")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-mesh = SubResource("BoxMesh_8a2jt")
+[node name="box" parent="." instance=ExtResource("2_vu6mc")]
