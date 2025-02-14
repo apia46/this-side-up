@@ -1,8 +1,6 @@
 class_name Box
 extends Node3D
 
-const FULL_ROTATION = Vector3(0, deg_to_rad(360), 0)
-
 var level: Level
 var state: ObjectState
 var held: bool = false
@@ -30,26 +28,35 @@ func hold():
 	
 	level.stateGrid.set_cell_item(state.position, Level.STATES.BOX_HELD)
 
-func moveTo(_position: Vector3i, _rotation:=-1, changeHeight:=false):
-	state.rotationY += 90
+func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false):
 	level.stateGrid.set_cell_item(state.position, -1)
 	level.objects.solid.erase(state.position)
+	var relativePosition = _position - state.position
 	
 	if changeHeight:
 		state.position.y += _position.y
 	else:
 		state.position.x = _position.x
 		state.position.z = _position.z
-	if _rotation != -1: state.rotation += _rotation
+	state.rotation += _rotation
 	
-	if state.rotation > 270:
-		state.rotation -= 360
-		rotation -= FULL_ROTATION
-	if state.rotation < 0:
-		state.rotation += 360
-		rotation += FULL_ROTATION
+	if !held and cantLandOn(state.getTileRelative(Vector3i(0,-1,0), level.stateGrid)):
+		while cantLandOn(state.getTileRelative(Vector3i(0,-1,0), level.stateGrid)):
+			state.position.y -= 1
+		var toRotate = Vector3i(0,0,0)
+		match sign(relativePosition.x):
+			1: toRotate.z = -90
+			-1: toRotate.z = 90
+		match sign(relativePosition.z):
+			1: toRotate.x = 90
+			-1: toRotate.x = -90
+		state.rotation += state.rotateVector3i(toRotate, true)
+	
 	if positionTween and positionTween.is_running(): positionTween.kill()
 	if rotationTween and rotationTween.is_running(): rotationTween.kill()
+	
+	fixRotation()
+	
 	positionTween = get_tree().create_tween()
 	rotationTween = get_tree().create_tween()
 	positionTween.tween_property(self, "position", state.getPositionAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
@@ -58,8 +65,8 @@ func moveTo(_position: Vector3i, _rotation:=-1, changeHeight:=false):
 	level.stateGrid.set_cell_item(state.position, Level.STATES.BOX_HELD)
 	level.objects.solid[state.position] = self
 
-func cantDrop() -> bool:
-	return state.getTileRelative(Vector3i(1,0,0), level.stateGrid) in [Level.STATES.SOLID, Level.STATES.BOX]
+func cantInto(_position: Vector3i) -> bool:
+	return state.getTile(_position, level.stateGrid) in [Level.STATES.SOLID, Level.STATES.BOX]
 
 func drop(_position: Vector3i):
 	held = false
@@ -69,3 +76,28 @@ func drop(_position: Vector3i):
 	level.stateGrid.set_cell_item(state.position, -1)
 	moveTo(_position)
 	level.stateGrid.set_cell_item(state.position, Level.STATES.BOX)
+
+static func cantLandOn(checkState:Level.STATES) -> bool:
+	return checkState in [Level.STATES.NONE]
+
+func fixRotation():
+	if state.rotation.x > 270:
+		state.rotation.x -= 360
+		rotation.x -= TAU
+	if state.rotation.x < 0:
+		state.rotation.x += 360
+		rotation.x += TAU
+	
+	if state.rotation.y > 270:
+		state.rotation.y -= 360
+		rotation.y -= TAU
+	if state.rotation.y < 0:
+		state.rotation.y += 360
+		rotation.y += TAU
+	
+	if state.rotation.z > 270:
+		state.rotation.z -= 360
+		rotation.z -= TAU
+	if state.rotation.z < 0:
+		state.rotation.z += 360
+		rotation.z += TAU

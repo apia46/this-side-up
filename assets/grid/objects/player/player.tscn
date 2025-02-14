@@ -29,11 +29,12 @@ remote_path = NodePath("../camerawrapper")
 update_rotation = false
 
 [node name="camerawrapper" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 top_level = true
 
 [node name="camera" type="Camera3D" parent="camerawrapper"]
 unique_name_in_owner = true
-transform = Transform3D(0.932328, -0.311483, 0.18369, -0.0434504, 0.407799, 0.912037, -0.358993, -0.8583, 0.366668, 1.24343, 7.31552, 2.04267)
+transform = Transform3D(0.932329, -0.311484, 0.183691, -0.0434504, 0.407799, 0.912037, -0.358993, -0.858299, 0.366668, 1.433, 7.31552, 2.80549)
 rotation_edit_mode = 1
 projection = 1
 fov = 75.2571
