@@ -22,6 +22,8 @@ static func New(_position: Vector3i, _level: Level) -> Player:
 	return _player
 
 func _input(event):
+	var previousRotation = state.rotation
+	
 	if event.is_action_pressed("debug"):
 		level.stateGrid.visible = !level.stateGrid.visible
 	
@@ -29,7 +31,7 @@ func _input(event):
 		for object in held:
 			if object.cantDrop(): return
 		for object in held:
-			object.drop()
+			object.drop(state.positionRelative(Vector3i(2,0,0)))
 		held = []
 		holding = false
 		return
@@ -109,19 +111,21 @@ func _input(event):
 	positionTween.tween_property(self, "position", state.getPositionAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	rotationTween.tween_property(self, "rotation", state.getRotationAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	
+	for object in held:
+		object.moveTo(state.positionRelative(Vector3i(1,0,0)), unfixedRotation - previousRotation)
+	
 	# pick up?
 	var offset = Vector3i(0,0,0)
 	while state.positionRelative(Vector3i(1,0,0) + offset, fork.high) in level.objects.solid:
 		var object = level.objects.solid[state.positionRelative(Vector3i(1,0,0) + offset, fork.high)]
 		if object is Box and !object.held:
 			held.append(object)
-			object.hold(state.rotation)
+			object.hold()
 			holding = true
 			offset += Vector3i(0,1,0)
 		else: break
 	
-	for object in held:
-		object.moveTo(state.positionRelative(Vector3i(1,0,0)), unfixedRotation)
+	print(unfixedRotation - previousRotation)
 	
 	for object in level.objects.goals:
 		if !level.objects.goals[object].hasBox(): return

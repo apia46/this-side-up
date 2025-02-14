@@ -3,12 +3,13 @@ extends Resource
 
 @export var position: Vector3i
 @export var rotation: int
+@export var rotationY: int
 @export var positionOffset: Vector3
-@export var rotationStateOffset: int
 
-func _init(_position = Vector3i(0,0,0), _rotation = 0, _positionOffset = Vector3(0,0,0)):
+func _init(_position = Vector3i(0,0,0), _rotation = 0, _positionOffset = Vector3(0,0,0), _rotationY = 0):
 	position = _position
 	rotation = _rotation
+	rotationY = _rotationY
 	positionOffset = _positionOffset
 
 func moveRotated(vector:Vector3i) -> void:
@@ -18,7 +19,7 @@ func getPositionAsVector() -> Vector3:
 	return Vector3(position) + Vector3(0.5, 0, 0.5) + positionOffset
 
 func getRotationAsVector() -> Vector3:
-	return Vector3(0, deg_to_rad(rotation + rotationStateOffset), 0)
+	return Vector3(deg_to_rad(rotationY), deg_to_rad(rotation), 0)
  
 func getTileRelative(location:Vector3i, stateGrid:GridMap, lifted:=false) -> Level.STATES:
 	return max(0, stateGrid.get_cell_item(positionRelative(location, lifted))) # cast this somehow

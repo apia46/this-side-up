@@ -14,16 +14,14 @@ static func New(_position: Vector3i, _level: Level) -> Box:
 	var _box = preload("res://assets/grid/objects/box/box.tscn").instantiate()
 	_box.level = _level
 	_box.state = ObjectState.new(_position, 0)
+	_box.state.positionOffset = Vector3(0, 0.5, 0)
 	_box.position = _box.state.getPositionAsVector()
 	_box.rotation = _box.state.getRotationAsVector()
 	return _box
 
-func hold(_rotation):
-	assert(!held)
+func hold():
 	held = true
-	state.rotationStateOffset = state.rotation
-	state.positionOffset = Vector3(0,0.1,0)
-	state.rotation = _rotation
+	state.positionOffset = Vector3(0,0.6,0)
 	rotation = state.getRotationAsVector()
 	
 	if positionTween and positionTween.is_running(): positionTween.kill()
@@ -33,6 +31,7 @@ func hold(_rotation):
 	level.stateGrid.set_cell_item(state.position, Level.STATES.BOX_HELD)
 
 func moveTo(_position: Vector3i, _rotation:=-1, changeHeight:=false):
+	state.rotationY += 90
 	level.stateGrid.set_cell_item(state.position, -1)
 	level.objects.solid.erase(state.position)
 	
@@ -41,7 +40,7 @@ func moveTo(_position: Vector3i, _rotation:=-1, changeHeight:=false):
 	else:
 		state.position.x = _position.x
 		state.position.z = _position.z
-	if _rotation != -1: state.rotation = _rotation
+	if _rotation != -1: state.rotation += _rotation
 	
 	if state.rotation > 270:
 		state.rotation -= 360
@@ -49,7 +48,6 @@ func moveTo(_position: Vector3i, _rotation:=-1, changeHeight:=false):
 	if state.rotation < 0:
 		state.rotation += 360
 		rotation += FULL_ROTATION
-	
 	if positionTween and positionTween.is_running(): positionTween.kill()
 	if rotationTween and rotationTween.is_running(): rotationTween.kill()
 	positionTween = get_tree().create_tween()
@@ -63,9 +61,11 @@ func moveTo(_position: Vector3i, _rotation:=-1, changeHeight:=false):
 func cantDrop() -> bool:
 	return state.getTileRelative(Vector3i(1,0,0), level.stateGrid) in [Level.STATES.SOLID, Level.STATES.BOX]
 
-func drop():
+func drop(_position: Vector3i):
 	held = false
-	state.positionOffset = Vector3(0,0,0)
+	state.positionOffset = Vector3(0,0.5,0)
+	if rotationTween and rotationTween.is_running(): rotationTween.kill()
+	rotation = state.getRotationAsVector()
 	level.stateGrid.set_cell_item(state.position, -1)
-	moveTo(state.positionRelative(Vector3i(1,0,0)), state.rotation)
+	moveTo(_position)
 	level.stateGrid.set_cell_item(state.position, Level.STATES.BOX)
