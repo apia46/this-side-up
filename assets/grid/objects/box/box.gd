@@ -41,7 +41,7 @@ func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false
 	state.rotation += _rotation
 	
 	if !held and cantLandOn(state.getTileRelative(Vector3i(0,-1,0), level.stateGrid)):
-		while cantLandOn(state.getTileRelative(Vector3i(0,-1,0), level.stateGrid)):
+		while state.position.y > -5 and cantLandOn(state.getTileRelative(Vector3i(0,-1,0), level.stateGrid)):
 			state.position.y -= 1
 		var toRotate = Vector3i(0,0,0)
 		match sign(relativePosition.x):
@@ -50,12 +50,22 @@ func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false
 		match sign(relativePosition.z):
 			1: toRotate.x = 90
 			-1: toRotate.x = -90
-		state.rotation += state.rotateVector3i(toRotate, true)
+		print("=====")
+		print("prerotateprefixed", state.rotation)
+		rotation += Vector3(state.fixSelfRotation(state.rotation)) * ObjectState.TAU_OVER_360
+		print("prerotatepostfixed", state.rotation)
+		print("prerotated", state.rotation)
+		print("torotate", toRotate)
+		state.rotation = state.rotateRotation(toRotate)
+		print("rotated", state.rotation)
+		rotation += Vector3(state.fixSelfRotation(state.rotation)) * ObjectState.TAU_OVER_360
+		print("fixed", state.rotation)
 	
 	if positionTween and positionTween.is_running(): positionTween.kill()
 	if rotationTween and rotationTween.is_running(): rotationTween.kill()
 	
-	fixRotation()
+	rotation += Vector3(state.wrapSelfRotation(state.rotation)) * ObjectState.TAU_OVER_360
+	print("wrapped", state.rotation)
 	
 	positionTween = get_tree().create_tween()
 	rotationTween = get_tree().create_tween()
@@ -79,25 +89,3 @@ func drop(_position: Vector3i):
 
 static func cantLandOn(checkState:Level.STATES) -> bool:
 	return checkState in [Level.STATES.NONE]
-
-func fixRotation():
-	if state.rotation.x > 270:
-		state.rotation.x -= 360
-		rotation.x -= TAU
-	if state.rotation.x < 0:
-		state.rotation.x += 360
-		rotation.x += TAU
-	
-	if state.rotation.y > 270:
-		state.rotation.y -= 360
-		rotation.y -= TAU
-	if state.rotation.y < 0:
-		state.rotation.y += 360
-		rotation.y += TAU
-	
-	if state.rotation.z > 270:
-		state.rotation.z -= 360
-		rotation.z -= TAU
-	if state.rotation.z < 0:
-		state.rotation.z += 360
-		rotation.z += TAU

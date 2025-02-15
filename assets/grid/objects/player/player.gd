@@ -97,7 +97,7 @@ func _input(event):
 	
 	var unfixedRotation = state.rotation
 	
-	fixRotation()
+	rotation += Vector3(state.wrapSelfRotation(state.rotation)) * ObjectState.TAU_OVER_360
 	
 	positionTween = get_tree().create_tween()
 	rotationTween = get_tree().create_tween()
@@ -127,25 +127,3 @@ static func cantBodyInto(checkState:Level.STATES) -> bool:
 
 static func cantForkInto(checkState:Level.STATES) -> bool:
 	return checkState == Level.STATES.SOLID
-
-func fixRotation():
-	if state.rotation.x > 270:
-		state.rotation.x -= 360
-		rotation.x -= TAU
-	if state.rotation.x < 0:
-		state.rotation.x += 360
-		rotation.x += TAU
-	
-	if state.rotation.y > 270:
-		state.rotation.y -= 360
-		rotation.y -= TAU
-	if state.rotation.y < 0:
-		state.rotation.y += 360
-		rotation.y += TAU
-	
-	if state.rotation.z > 270:
-		state.rotation.z -= 360
-		rotation.z -= TAU
-	if state.rotation.z < 0:
-		state.rotation.z += 360
-		rotation.z += TAU
