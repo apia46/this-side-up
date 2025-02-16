@@ -22,9 +22,9 @@ unique_name_in_owner = true
 mesh_library = ExtResource("3_qslss")
 cell_size = Vector3(1, 1, 1)
 data = {
-"cells": PackedInt32Array(65532, 3, 0, 0, 2, 1, 65536, 2, 1, 0, 3, 1, 65536, 3, 1, 0, 4, 1, 65536, 4, 1, 0, 1, 1, 65536, 1, 1)
+"cells": PackedInt32Array(65532, 3, 0, 0, 2, 1, 65536, 2, 1, 0, 3, 1, 65536, 3, 1, 0, 4, 1, 65536, 4, 1, 0, 1, 1, 65536, 1, 1, 65531, 2, 1, 131067, 2, 1, 196603, 2, 1, 262139, 2, 1, 327675, 2, 1, 393211, 2, 1, 458747, 2, 1, 524283, 2, 1, 589819, 2, 1, 655355, 2, 1)
 }
-metadata/_editor_floor_ = Vector3(0, 0, 0)
+metadata/_editor_floor_ = Vector3(0, 9, 0)
 
 [node name="stateGrid" type="GridMap" parent="."]
 unique_name_in_owner = true
