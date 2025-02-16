@@ -28,8 +28,10 @@ func _input(event):
 	if event.is_action_pressed("drop"):
 		for object in held:
 			if object.cantInto(state.positionRelative(Vector3i(1,0,0), fork.high)): return
+		var objects = 0
 		for object in held:
-			object.drop(state.positionRelative(Vector3i(2,0,0)))
+			objects += 1
+			object.drop(state.positionRelative(Vector3i(1 + objects,0,0)))
 		held = []
 		holding = false
 		return

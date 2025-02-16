@@ -45,52 +45,45 @@ func rotatePosition(vector:Vector3i) -> Vector3i:
 			result.z = vector.x
 	return result
 
-func rotateRotation(vector:Vector3i) -> Vector3i:
+func rotateRotation(vector:Vector3i) -> Array[Vector3i]: # rotates our rotation by an axis
 	# can only rotate one axis at a time
 	assert((1 if vector.x else 0) + (1 if vector.y else 0) + (1 if vector.z else 0) == 1)
 	var result = rotation
+	var rotationDifference = -rotation
 	if vector.y:
 		result.y = vector.y
 	elif vector.x:
-		match rotation.y:
+		if mod180(rotation.x) == 90 and mod180(rotation.y) == 90:
+			result.y -= 90 * sign(rotation.x - 180)
+			rotation.y -= 90 * sign(rotation.x - 180)
+			result.z += 90
+			rotation.z += 90
+			#print("fixed to", rotation)
+		match mod360(rotation.y):
 			0: result.x += vector.x
-			90: result.z += vector.x
+			90: result.z -= vector.x * sign(rotation.x - 90)
 			180: result.x -= vector.x
-			270: result.z -= -vector.x
+			270: result.z += vector.x * sign(rotation.x - 90)
 	elif vector.z:
-		match rotation.x:
-			0, 180:
-				var flip = -1 if rotation.x == 180 else 1
-				match rotation.y:
-					0: result.z += vector.z * flip
-					90: result.x -= vector.z
-					180: result.z -= vector.z * flip
-					270: result.x += vector.z
-			90, 270:
-				match rotation.y:
-					0, 180:
-						print("unfixed rotation")
-						assert(false)
-					90: result.x += -vector.z
-					270: result.x += vector.z
-	return result
+		if mod180(rotation.x) == 90 and mod180(rotation.y) == 0:
+			result.y -= 90 * sign(rotation.x - 180)
+			rotation.y -= 90 * sign(rotation.x - 180)
+			result.z += 90
+			rotation.z += 90
+			#print("fixed to", rotation)
+		match mod360(rotation.y):
+			0: result.z -= vector.z * sign(rotation.x - 90)
+			90: result.x -= vector.z
+			180: result.z += vector.z * sign(rotation.x - 90)
+			270: result.x += vector.z
+	rotationDifference += rotation
+	return [result, rotationDifference]
 
 func wrapRotation(vector) -> Vector3i:
 	var result = vector
-	while result.x > 270:
-		result.x -= 360
-	while result.x < 0:
-		result.x += 360
-	
-	while result.y > 270:
-		result.y -= 360
-	while result.y < 0:
-		result.y += 360
-	
-	while result.z > 270:
-		result.z -= 360
-	while result.z < 0:
-		result.z += 360
+	result.x = mod360(vector.x)
+	result.y = mod360(vector.y)
+	result.z = mod360(vector.z)
 	return result
 
 func wrapSelfRotation(vector) -> Vector3i:
@@ -98,31 +91,12 @@ func wrapSelfRotation(vector) -> Vector3i:
 	rotation = fixed
 	return fixed - vector
 
-func fixRotation(vector) -> Vector3i:
-	var result = vector
-	if vector.y % 360 == 90:
-		if vector.x % 360 == 90: result = Vector3i(90, 0, [270,0,90,180][(vector.z%360)/90])
-		elif vector.x % 360 == 270: result = Vector3i(270, 180, [270,0,90,180][(vector.z%360)/90])
-		else: result = vector
-	
-	if vector.x % 360 == 90:
-		result.y = 90
-		if vector.y % 360 == 0: result.z += 90
-		elif vector.y % 360 == 180: result.z -= 90
-		else: result.y = vector.y
-	if vector.x % 360 == 270:
-		result.y = 270
-		if vector.y % 360 == 0: result.z += 90
-		elif vector.y % 360 == 180: result.z -= 90
-		else: result.y = vector.y
-	return result
-
-func fixSelfRotation(vector) -> Vector3i:
-	var fixed = fixRotation(vector)
-	rotation = fixed
-	print("difference", fixed - vector)
-	return fixed - vector
-
-
 func positionRelative(location:Vector3i, lifted:=false) -> Vector3i:
 	return rotatePosition(location) + position  + (Vector3i(0,0,0) if !lifted else Vector3i(0,1,0))
+
+@warning_ignore("shadowed_variable")
+func mod360(_rotation:int) -> int:
+	return (_rotation % 360 + 360) % 360
+
+func mod180(_rotation:int) -> int:
+	return (_rotation % 180 + 180) % 180

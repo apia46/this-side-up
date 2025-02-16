@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cr3h4dlysu2p5" path="res://assets/grid/objects/box/box.blend" id="2_vu6mc"]
 
 [node name="box" type="Node3D"]
-transform = Transform3D(-0.999999, 8.74227e-08, 1.19249e-08, 1.19249e-08, -5.21253e-16, 0.999999, 8.74227e-08, 0.999999, -5.21253e-16, 0, 0, 0)
+transform = Transform3D(-8.74227e-08, 1.19249e-08, 0.999999, 0.999999, -1.19249e-08, 8.74227e-08, 1.19249e-08, 0.999999, -1.19249e-08, 0, 0, 0)
 script = ExtResource("1_2dhlc")
 
 [node name="box" parent="." instance=ExtResource("2_vu6mc")]

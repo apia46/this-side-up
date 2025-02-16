@@ -50,22 +50,19 @@ func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false
 		match sign(relativePosition.z):
 			1: toRotate.x = 90
 			-1: toRotate.x = -90
-		print("=====")
-		print("prerotateprefixed", state.rotation)
-		rotation += Vector3(state.fixSelfRotation(state.rotation)) * ObjectState.TAU_OVER_360
-		print("prerotatepostfixed", state.rotation)
-		print("prerotated", state.rotation)
-		print("torotate", toRotate)
-		state.rotation = state.rotateRotation(toRotate)
-		print("rotated", state.rotation)
-		rotation += Vector3(state.fixSelfRotation(state.rotation)) * ObjectState.TAU_OVER_360
-		print("fixed", state.rotation)
+		#print("=====")
+		#print("prerotated", state.rotation)
+		#print("torotate", toRotate)
+		var aWantForBetterSyntax = state.rotateRotation(toRotate)
+		state.rotation = aWantForBetterSyntax[0]
+		rotation += Vector3i(aWantForBetterSyntax[1]) * ObjectState.TAU_OVER_360
+		#print("rotated", state.rotation)
 	
 	if positionTween and positionTween.is_running(): positionTween.kill()
 	if rotationTween and rotationTween.is_running(): rotationTween.kill()
 	
 	rotation += Vector3(state.wrapSelfRotation(state.rotation)) * ObjectState.TAU_OVER_360
-	print("wrapped", state.rotation)
+	#print("wrapped", state.rotation)
 	
 	positionTween = get_tree().create_tween()
 	rotationTween = get_tree().create_tween()
