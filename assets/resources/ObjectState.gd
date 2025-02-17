@@ -94,9 +94,11 @@ func wrapSelfRotation(vector) -> Vector3i:
 func positionRelative(location:Vector3i, lifted:=false) -> Vector3i:
 	return rotatePosition(location) + position  + (Vector3i(0,0,0) if !lifted else Vector3i(0,1,0))
 
-@warning_ignore("shadowed_variable")
 func mod360(_rotation:int) -> int:
 	return (_rotation % 360 + 360) % 360
 
 func mod180(_rotation:int) -> int:
 	return (_rotation % 180 + 180) % 180
+
+func facingUp() -> bool:
+	return mod360(rotation.x) == mod360(rotation.z) and mod180(rotation.x) == 0

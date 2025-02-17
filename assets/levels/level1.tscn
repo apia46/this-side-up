@@ -35,10 +35,27 @@ cell_size = Vector3(1, 1, 1)
 [node name="texts" type="Node3D" parent="."]
 
 [node name="controls" type="Label3D" parent="texts"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -23.5, 1.5, 1.5)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -23.5, 1.5, 5)
+modulate = Color(0, 0, 0, 1)
 outline_modulate = Color(0, 0, 0, 0)
-text = "Movement:
-QWE ASD"
+text = "W and S
+to move"
+font_size = 96
+
+[node name="controls3" type="Label3D" parent="texts"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -18.5, 1.5, 5)
+modulate = Color(0, 0, 0, 1)
+outline_modulate = Color(0, 0, 0, 0)
+text = "A + W
+to turn left"
+font_size = 96
+
+[node name="controls4" type="Label3D" parent="texts"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -18.5, 1.5, 0.5)
+modulate = Color(0, 0, 0, 1)
+outline_modulate = Color(0, 0, 0, 0)
+text = "You can also
+turn right"
 font_size = 96
 
 [node name="controls2" type="Label3D" parent="texts"]

@@ -12,9 +12,6 @@ enum STATES {
 
 var objects = {solid={},goals={}}
 
-func _ready():
-	loadLevel()
-
 func loadLevel():
 	for cell in %tileGrid.get_used_cells():
 		match %tileGrid.get_cell_item(cell):
@@ -40,3 +37,5 @@ func loadLevel():
 			add_child(object)
 	
 	%objectGrid.visible = false
+	
+	return self

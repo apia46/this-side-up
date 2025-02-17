@@ -13,4 +13,4 @@ static func New(_position: Vector3i, _level: Level) -> BoxGoal:
 	return _boxGoal
 
 func hasBox():
-	return state.position in level.objects.solid and level.objects.solid[state.position] is Box
+	return state.position in level.objects.solid and level.objects.solid[state.position] is Box and level.objects.solid[state.position].state.facingUp()

@@ -29,7 +29,6 @@ remote_path = NodePath("../camerawrapper")
 update_rotation = false
 
 [node name="camerawrapper" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 top_level = true
 
 [node name="camera" type="Camera3D" parent="camerawrapper"]
