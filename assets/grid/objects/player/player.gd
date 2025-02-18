@@ -13,7 +13,7 @@ var rotationTween: Tween
 
 var won = false
 
-const canUp = false
+const canUp = true
 const betterControls = true
 
 static func New(_position: Vector3i, _level: Level) -> Player:
@@ -45,6 +45,7 @@ func _input(event):
 			if highRelative: objects += 1
 		held = []
 		holding = false
+		endOfTurn()
 		return
 	
 	if canUp and event.is_action_pressed("toggle_height"):
@@ -130,10 +131,7 @@ func _input(event):
 			holding = true
 			offset += Vector3i(0,1,0)
 		else: break
-	
-	for object in level.objects.goals:
-		if !level.objects.goals[object].hasBox(): return
-	win()
+	endOfTurn()
 
 static func cantBodyInto(checkState:Level.STATES) -> bool:
 	return checkState in [Level.STATES.SOLID, Level.STATES.BOX]
@@ -145,3 +143,8 @@ func win():
 	won = true
 	await get_tree().create_timer(1.0).timeout
 	level.toNextLevel()
+
+func endOfTurn():
+	for object in level.objects.goals:
+		if !level.objects.goals[object].hasBox(): return
+	win()

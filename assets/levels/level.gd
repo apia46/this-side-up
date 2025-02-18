@@ -20,7 +20,7 @@ func loadLevel():
 				%stateGrid.set_cell_item(cell, STATES.SOLID)
 			1: # halfwall
 				%stateGrid.set_cell_item(cell, STATES.SOLID)
-	for cell in %objectGrid.get_used_cells():
+	for cell in %objectGrid .get_used_cells():
 		var object
 		var layer = "solid"
 		var actualCell = cell
