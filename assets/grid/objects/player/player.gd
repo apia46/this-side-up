@@ -11,6 +11,9 @@ var holding: bool = false
 var positionTween: Tween
 var rotationTween: Tween
 
+var won = false
+
+const canUp = false
 const betterControls = true
 
 static func New(_position: Vector3i, _level: Level) -> Player:
@@ -22,10 +25,14 @@ static func New(_position: Vector3i, _level: Level) -> Player:
 	return _player
 
 func _input(event):
+	if won: return
 	var previousRotation = state.rotation
 	
 	if event.is_action_pressed("debug"):
 		level.stateGrid.visible = !level.stateGrid.visible
+	
+	if event.is_action_pressed("win"):
+		level.toNextLevel()
 	
 	if event.is_action_pressed("drop"):
 		var objects = 0
@@ -40,7 +47,7 @@ func _input(event):
 		holding = false
 		return
 	
-	if event.is_action_pressed("toggle_height"):
+	if canUp and event.is_action_pressed("toggle_height"):
 		if fork.high:
 			if cantBodyInto(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
 			fork.high = false
@@ -126,10 +133,15 @@ func _input(event):
 	
 	for object in level.objects.goals:
 		if !level.objects.goals[object].hasBox(): return
-	print("solved")
+	win()
 
 static func cantBodyInto(checkState:Level.STATES) -> bool:
 	return checkState in [Level.STATES.SOLID, Level.STATES.BOX]
 
 static func cantForkInto(checkState:Level.STATES) -> bool:
 	return checkState == Level.STATES.SOLID
+
+func win():
+	won = true
+	await get_tree().create_timer(1.0).timeout
+	level.toNextLevel()

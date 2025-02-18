@@ -10,6 +10,7 @@ enum STATES {
 
 @onready var stateGrid: GridMap = %stateGrid
 
+@export var nextLevel: PackedScene
 var objects = {solid={},goals={}}
 
 func loadLevel():
@@ -19,23 +20,29 @@ func loadLevel():
 				%stateGrid.set_cell_item(cell, STATES.SOLID)
 			1: # halfwall
 				%stateGrid.set_cell_item(cell, STATES.SOLID)
-		
 	for cell in %objectGrid.get_used_cells():
 		var object
 		var layer = "solid"
+		var actualCell = cell
+		while %stateGrid.get_cell_item(actualCell - Vector3i(0,1,0)) == -1:
+			actualCell -= Vector3i(0,1,0)
 		match %objectGrid.get_cell_item(cell):
 			0:
-				object = Player.New(cell, self)
+				object = Player.New(actualCell, self)
 			1:
-				object = Box.New(cell, self)
-				%stateGrid.set_cell_item(cell, STATES.BOX)
+				object = Box.New(actualCell, self)
+				%stateGrid.set_cell_item(actualCell, STATES.BOX)
 			2:
-				object = BoxGoal.New(cell, self)
+				object = BoxGoal.New(actualCell, self)
 				layer = "goals"
 		if object:
-			objects[layer][cell] = object
+			objects[layer][actualCell] = object
 			add_child(object)
 	
 	%objectGrid.visible = false
 	
 	return self
+
+func toNextLevel():
+	get_node("/root/game").add_child(nextLevel.instantiate().loadLevel())
+	queue_free()
