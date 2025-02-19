@@ -5,7 +5,7 @@
 [ext_resource type="MeshLibrary" uid="uid://b54wjm1eelmux" path="res://assets/grid/objects/objectsGridMesh.tres" id="3_qslss"]
 [ext_resource type="MeshLibrary" uid="uid://datu87mb6cyca" path="res://assets/grid/states/stateMeshLibrary.tres" id="4_r3f0u"]
 
-[node name="testlevel" type="Node3D"]
+[node name="level" type="Node3D"]
 script = ExtResource("1_adec4")
 
 [node name="tileGrid" type="GridMap" parent="."]

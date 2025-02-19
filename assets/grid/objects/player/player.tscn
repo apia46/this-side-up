@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://chdj4buu06dr2"]
+[gd_scene load_steps=22 format=3 uid="uid://chdj4buu06dr2"]
 
 [ext_resource type="Script" path="res://assets/grid/objects/player/player.gd" id="1_8xgkv"]
 [ext_resource type="ArrayMesh" uid="uid://bia2v6l4teegv" path="res://assets/grid/objects/player/body.tres" id="2_6stbq"]
@@ -6,6 +6,126 @@
 [ext_resource type="ArrayMesh" uid="uid://b8mcdjynfclse" path="res://assets/grid/objects/player/wheels.tres" id="3_va4tc"]
 [ext_resource type="ArrayMesh" uid="uid://dgrgv65ga5701" path="res://assets/grid/objects/player/lift.tres" id="5_7er6v"]
 [ext_resource type="ArrayMesh" uid="uid://bjnlp3t17vtks" path="res://assets/grid/objects/player/forks.tres" id="6_olknq"]
+[ext_resource type="Texture2D" uid="uid://cx22g5loe00fp" path="res://assets/grid/objects/player/arrow_animation.png" id="7_tigf0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4jcqf"]
+atlas = ExtResource("7_tigf0")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d240g"]
+atlas = ExtResource("7_tigf0")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sriu4"]
+atlas = ExtResource("7_tigf0")
+region = Rect2(512, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t8hlj"]
+atlas = ExtResource("7_tigf0")
+region = Rect2(640, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0y6q5"]
+atlas = ExtResource("7_tigf0")
+region = Rect2(384, 128, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6vfqp"]
+atlas = ExtResource("7_tigf0")
+region = Rect2(512, 128, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d0scq"]
+atlas = ExtResource("7_tigf0")
+region = Rect2(640, 128, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o2rxp"]
+atlas = ExtResource("7_tigf0")
+region = Rect2(0, 128, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dmx17"]
+atlas = ExtResource("7_tigf0")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6q7lm"]
+atlas = ExtResource("7_tigf0")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jxmyt"]
+atlas = ExtResource("7_tigf0")
+region = Rect2(0, 128, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jsi67"]
+atlas = ExtResource("7_tigf0")
+region = Rect2(128, 128, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_71ewg"]
+atlas = ExtResource("7_tigf0")
+region = Rect2(256, 128, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_mofqt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4jcqf")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d240g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sriu4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t8hlj")
+}],
+"loop": true,
+"name": &"idle_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0y6q5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6vfqp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d0scq")
+}],
+"loop": true,
+"name": &"idle_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o2rxp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dmx17")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6q7lm")
+}],
+"loop": false,
+"name": &"turn_left",
+"speed": 45.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jxmyt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jsi67")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_71ewg")
+}],
+"loop": false,
+"name": &"turn_right",
+"speed": 45.0
+}]
 
 [node name="player" type="Node3D"]
 script = ExtResource("1_8xgkv")
@@ -23,23 +143,6 @@ transform = Transform3D(0.12, 0, 0, 0, 0, -0.12, 0, 0.12, 0, 0.3, 0.12, 0.38)
 mesh = ExtResource("3_va4tc")
 skeleton = NodePath("")
 
-[node name="cameramover" type="RemoteTransform3D" parent="."]
-transform = Transform3D(0.910658, -0.304844, 0.278876, -0.0412165, 0.604585, 0.795474, -0.411099, -0.735899, 0.538006, 0, 0, 0)
-remote_path = NodePath("../camerawrapper")
-update_rotation = false
-
-[node name="camerawrapper" type="Node3D" parent="."]
-top_level = true
-
-[node name="camera" type="Camera3D" parent="camerawrapper"]
-unique_name_in_owner = true
-transform = Transform3D(0.932329, -0.311484, 0.183691, -0.0434504, 0.407799, 0.912037, -0.358993, -0.858299, 0.366668, 1.433, 7.31552, 2.80549)
-rotation_edit_mode = 1
-projection = 1
-fov = 75.2571
-size = 9.92
-far = 20.0
-
 [node name="fork" type="Node3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.25, 0.1, 0)
@@ -55,3 +158,27 @@ unique_name_in_owner = true
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.5, 0.4, 0)
 mesh = ExtResource("6_olknq")
 skeleton = NodePath("")
+
+[node name="arrow" type="AnimatedSprite3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(-4.37114e-08, -1, 0, -4.37114e-08, 1.91069e-15, -1, 1, -4.37114e-08, -4.37114e-08, 0, 1.2, 0)
+pixel_size = 0.0156
+no_depth_test = true
+sprite_frames = SubResource("SpriteFrames_mofqt")
+animation = &"idle_left"
+
+[node name="cameraPosition" type="Node3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(0.932328, -0.311483, 0.18369, -0.0434504, 0.407799, 0.912037, -0.358993, -0.8583, 0.366668, 1.433, 7.31552, 2.80549)
+
+[node name="camera" type="Camera3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(0.932328, -0.311483, 0.18369, -0.0434504, 0.407799, 0.912037, -0.358993, -0.8583, 0.366669, 0, 0, 0)
+rotation_edit_mode = 1
+top_level = true
+projection = 1
+fov = 75.2571
+size = 9.92
+far = 20.0
+
+[connection signal="animation_finished" from="arrow" to="." method="animateArrow"]

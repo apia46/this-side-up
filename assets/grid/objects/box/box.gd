@@ -29,6 +29,9 @@ func hold():
 	level.stateGrid.set_cell_item(state.position, Level.STATES.BOX_HELD)
 
 func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false):
+	position = state.getPositionAsVector()
+	rotation = state.getRotationAsVector()
+	
 	level.stateGrid.set_cell_item(state.position, -1)
 	level.objects.solid.erase(state.position)
 	var relativePosition = _position - state.position

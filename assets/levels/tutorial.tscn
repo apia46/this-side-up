@@ -1,12 +1,12 @@
 [gd_scene load_steps=6 format=3 uid="uid://bbfbhbl1bgla3"]
 
 [ext_resource type="Script" path="res://assets/levels/level.gd" id="1_yvtuu"]
-[ext_resource type="PackedScene" uid="uid://d1krpsq3t6mj6" path="res://assets/levels/level1.tscn" id="2_7qgso"]
+[ext_resource type="PackedScene" uid="uid://bcynsbd24ulx6" path="res://assets/levels/level1.tscn" id="2_7qgso"]
 [ext_resource type="MeshLibrary" uid="uid://3gbxnqp433cm" path="res://assets/grid/tiles/tileGridMesh.tres" id="3_t4soc"]
 [ext_resource type="MeshLibrary" uid="uid://b54wjm1eelmux" path="res://assets/grid/objects/objectsGridMesh.tres" id="4_igd0x"]
 [ext_resource type="MeshLibrary" uid="uid://datu87mb6cyca" path="res://assets/grid/states/stateMeshLibrary.tres" id="5_m2jrs"]
 
-[node name="testlevel" type="Node3D"]
+[node name="level" type="Node3D"]
 script = ExtResource("1_yvtuu")
 nextLevel = ExtResource("2_7qgso")
 

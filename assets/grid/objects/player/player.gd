@@ -13,6 +13,10 @@ var rotationTween: Tween
 
 var won = false
 
+var birdseyeCameraPosition = Vector3(0,10,0)
+var birdseyeCamera = false
+const CAMERA_SPEED = 15
+
 const canUp = true
 const betterControls = true
 
@@ -24,6 +28,17 @@ static func New(_position: Vector3i, _level: Level) -> Player:
 	_player.rotation = _player.state.getRotationAsVector()
 	return _player
 
+func _ready():
+	%arrow.play("idle")
+	%camera.position = global_transform.origin + %cameraPosition.position
+
+func _process(delta):
+	if Input.is_action_pressed("forward") and birdseyeCameraPosition.z >= level.topBound: birdseyeCameraPosition -= Vector3(0,0,CAMERA_SPEED*delta)
+	if Input.is_action_pressed("left") and birdseyeCameraPosition.x >= level.leftBound: birdseyeCameraPosition -= Vector3(CAMERA_SPEED*delta,0,0)
+	if Input.is_action_pressed("right") and birdseyeCameraPosition.x <= level.rightBound: birdseyeCameraPosition += Vector3(CAMERA_SPEED*delta,0,0)
+	if Input.is_action_pressed("backward") and birdseyeCameraPosition.z <= level.bottomBound: birdseyeCameraPosition += Vector3(0,0,CAMERA_SPEED*delta)
+	%camera.position += ((birdseyeCameraPosition.snapped(Vector3(1,1,1)) + Vector3(0.5,0,1.1) if birdseyeCamera else global_transform.origin + %cameraPosition.position) - %camera.position) * 0.15
+
 func _input(event):
 	if won: return
 	var previousRotation = state.rotation
@@ -33,6 +48,17 @@ func _input(event):
 	
 	if event.is_action_pressed("win"):
 		level.toNextLevel()
+	
+	if event.is_action_pressed("toggle_camera"):
+		if birdseyeCamera:
+			get_tree().create_tween().tween_property(%camera, "rotation", %cameraPosition.rotation, 0.5).set_trans(Tween.TRANS_QUAD)
+		else:
+			birdseyeCameraPosition = Vector3(state.position) + Vector3(0,10,0)
+			get_tree().create_tween().tween_property(%camera, "rotation", Vector3(-1.5,0,0), 0.5).set_trans(Tween.TRANS_QUAD)
+		birdseyeCamera = !birdseyeCamera
+	if birdseyeCamera: return
+	
+	if event is InputEventKey: animateArrow()
 	
 	if event.is_action_pressed("drop"):
 		var objects = 0
@@ -148,3 +174,36 @@ func endOfTurn():
 	for object in level.objects.goals:
 		if !level.objects.goals[object].hasBox(): return
 	win()
+
+func animateArrow():
+	if Input.is_action_pressed("left"):
+		match %arrow.animation:
+			"idle": %arrow.play("turn_left")
+			"turn_left": %arrow.play("idle_left")
+			"turn_right":
+				if %arrow.frame == 0:
+					%arrow.play("turn_left")
+				else: %arrow.play_backwards("turn_right")
+			"idle_right": %arrow.play_backwards("turn_right")
+	elif Input.is_action_pressed("right"):
+		match %arrow.animation:
+			"idle": %arrow.play("turn_right")
+			"turn_right": %arrow.play("idle_right")
+			"turn_left":
+				if %arrow.frame == 0:
+					%arrow.play("turn_right")
+				else: %arrow.play_backwards("turn_left")
+			"idle_left": %arrow.play_backwards("turn_left")
+	else:
+		match %arrow.animation:
+			"turn_left":
+				if %arrow.frame == 0:
+					%arrow.play("idle")
+				else: %arrow.play_backwards("turn_left")
+			"turn_right":
+				if %arrow.frame == 0:
+					%arrow.play("idle")
+				else: %arrow.play_backwards("turn_right")
+			"idle_left": %arrow.play_backwards("turn_left")
+			"idle_right": %arrow.play_backwards("turn_right")
+	
