@@ -10,7 +10,7 @@ enum STATES {
 
 @onready var stateGrid: GridMap = %stateGrid
 
-@export var nextLevel: PackedScene
+@export_file("*.tscn") var nextLevel: String
 var objects = {solid={},goals={}}
 
 var topBound = null
@@ -55,5 +55,5 @@ func loadLevel():
 	return self
 
 func toNextLevel():
-	get_node("/root/game").add_child(nextLevel.instantiate().loadLevel())
+	get_node("/root/game").add_child(load(nextLevel).instantiate().loadLevel())
 	queue_free()
