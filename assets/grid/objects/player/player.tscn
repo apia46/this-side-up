@@ -1,8 +1,8 @@
 [gd_scene load_steps=22 format=3 uid="uid://chdj4buu06dr2"]
 
-[ext_resource type="Script" path="res://assets/grid/objects/player/player.gd" id="1_8xgkv"]
+[ext_resource type="Script" uid="uid://ds8stcfk7k81e" path="res://assets/grid/objects/player/player.gd" id="1_8xgkv"]
 [ext_resource type="ArrayMesh" uid="uid://bia2v6l4teegv" path="res://assets/grid/objects/player/body.tres" id="2_6stbq"]
-[ext_resource type="Script" path="res://assets/grid/objects/player/fork.gd" id="2_pu337"]
+[ext_resource type="Script" uid="uid://dwyacp0v76qvm" path="res://assets/grid/objects/player/fork.gd" id="2_pu337"]
 [ext_resource type="ArrayMesh" uid="uid://b8mcdjynfclse" path="res://assets/grid/objects/player/wheels.tres" id="3_va4tc"]
 [ext_resource type="ArrayMesh" uid="uid://dgrgv65ga5701" path="res://assets/grid/objects/player/lift.tres" id="5_7er6v"]
 [ext_resource type="ArrayMesh" uid="uid://bjnlp3t17vtks" path="res://assets/grid/objects/player/forks.tres" id="6_olknq"]

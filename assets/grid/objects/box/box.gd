@@ -8,10 +8,12 @@ var held: bool = false
 var positionTween: Tween
 var rotationTween: Tween
 
-static func New(_position: Vector3i, _level: Level) -> Box:
+static func New(_position: Vector3i, _level: Level, _state:ObjectState) -> Box:
+	print(_position)
 	var _box = preload("res://assets/grid/objects/box/box.tscn").instantiate()
 	_box.level = _level
-	_box.state = ObjectState.new(_position, 0)
+	_box.state = _state
+	_box.state.position = _position
 	_box.state.positionOffset = Vector3(0, 0.5, 0)
 	_box.position = _box.state.getPositionAsVector()
 	_box.rotation = _box.state.getRotationAsVector()

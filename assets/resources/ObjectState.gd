@@ -3,9 +3,9 @@ extends Resource
 
 const TAU_OVER_360 = 0.0174532925
 
-@export var position: Vector3i
-@export var rotation: Vector3i
-@export var positionOffset: Vector3
+var position = Vector3i(0,0,0)
+@export var rotation = Vector3i(0,0,0)
+var positionOffset = Vector3(0,0,0)
 
 func _init(_position = Vector3i(0,0,0), _rotation = 0, _positionOffset = Vector3(0,0,0)):
 	position = _position
@@ -22,10 +22,10 @@ func getRotationAsVector() -> Vector3:
 	return Vector3(rotation) * TAU_OVER_360
  
 func getTileRelative(location:Vector3i, stateGrid:GridMap, lifted:=false) -> Level.STATES:
-	return max(0, stateGrid.get_cell_item(positionRelative(location, lifted))) # cast this somehow
+	return max(0, stateGrid.get_cell_item(positionRelative(location, lifted))) as Level.STATES
 
 func getTile(location:Vector3i, stateGrid:GridMap) -> Level.STATES:
-	return max(0, stateGrid.get_cell_item(location)) # cast this somehow
+	return max(0, stateGrid.get_cell_item(location)) as Level.STATES
 
 func rotatePosition(vector:Vector3i) -> Vector3i:
 	var result = Vector3i(0,0,0)

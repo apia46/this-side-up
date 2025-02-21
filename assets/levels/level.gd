@@ -11,6 +11,9 @@ enum STATES {
 @onready var stateGrid: GridMap = %stateGrid
 
 @export_file("*.tscn") var nextLevel: String
+@export var canLift = true
+@export var data: Dictionary[Vector3i, ObjectState]
+
 var objects = {solid={},goals={}}
 
 var topBound = null
@@ -29,8 +32,8 @@ func loadLevel():
 		if bottomBound == null or bottomBound < cell.z: bottomBound = cell.z
 		if leftBound == null or leftBound > cell.x: leftBound = cell.x
 		if rightBound == null or rightBound < cell.x: rightBound = cell.x
-	print(topBound, " ", bottomBound)
-	print(leftBound, " ", rightBound)
+	#print(topBound, " ", bottomBound)
+	#print(leftBound, " ", rightBound)
 	for cell in %objectGrid .get_used_cells():
 		var object
 		var layer = "solid"
@@ -41,7 +44,7 @@ func loadLevel():
 			0:
 				object = Player.New(actualCell, self)
 			1:
-				object = Box.New(actualCell, self)
+				object = Box.New(actualCell, self, data[cell] if cell in data else ObjectState.new())
 				%stateGrid.set_cell_item(actualCell, STATES.BOX)
 			2:
 				object = BoxGoal.New(actualCell, self)

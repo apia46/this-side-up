@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://ccleyb6wqufsc"]
 
-[ext_resource type="Script" path="res://assets/grid/objects/box/box.gd" id="1_2dhlc"]
+[ext_resource type="Script" uid="uid://bxmamikfwmu01" path="res://assets/grid/objects/box/box.gd" id="1_2dhlc"]
 [ext_resource type="PackedScene" uid="uid://cr3h4dlysu2p5" path="res://assets/grid/objects/box/box.blend" id="2_vu6mc"]
 
 [node name="box" type="Node3D"]

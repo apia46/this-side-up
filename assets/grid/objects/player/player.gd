@@ -17,7 +17,6 @@ var birdseyeCameraPosition = Vector3(0,10,0)
 var birdseyeCamera = false
 const CAMERA_SPEED = 15
 
-const canUp = true
 const betterControls = true
 
 static func New(_position: Vector3i, _level: Level) -> Player:
@@ -74,7 +73,7 @@ func _input(event):
 		endOfTurn()
 		return
 	
-	if canUp and event.is_action_pressed("toggle_height"):
+	if level.canLift and event.is_action_pressed("toggle_height"):
 		if fork.high:
 			if cantBodyInto(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
 			fork.high = false

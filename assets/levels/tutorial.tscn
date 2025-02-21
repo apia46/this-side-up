@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bbfbhbl1bgla3"]
 
-[ext_resource type="Script" path="res://assets/levels/level.gd" id="1_yvtuu"]
+[ext_resource type="Script" uid="uid://b7nu886vfs1kr" path="res://assets/levels/level.gd" id="1_yvtuu"]
 [ext_resource type="MeshLibrary" uid="uid://3gbxnqp433cm" path="res://assets/grid/tiles/tileGridMesh.tres" id="3_t4soc"]
 [ext_resource type="MeshLibrary" uid="uid://b54wjm1eelmux" path="res://assets/grid/objects/objectsGridMesh.tres" id="4_igd0x"]
 [ext_resource type="MeshLibrary" uid="uid://datu87mb6cyca" path="res://assets/grid/states/stateMeshLibrary.tres" id="5_m2jrs"]
@@ -8,6 +8,7 @@
 [node name="level" type="Node3D"]
 script = ExtResource("1_yvtuu")
 nextLevel = "res://assets/levels/level1.tscn"
+canLift = false
 
 [node name="tileGrid" type="GridMap" parent="."]
 unique_name_in_owner = true
