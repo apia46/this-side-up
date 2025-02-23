@@ -1,5 +1,5 @@
 class_name Box
-extends Node3D
+extends GameObject
 
 var level: Level
 var state: ObjectState
@@ -8,16 +8,26 @@ var held: bool = false
 var positionTween: Tween
 var rotationTween: Tween
 
-static func New(_position: Vector3i, _level: Level, _state:ObjectState) -> Box:
-	print(_position)
-	var _box = preload("res://assets/grid/objects/box/box.tscn").instantiate()
-	_box.level = _level
-	_box.state = _state
-	_box.state.position = _position
+static func New(_position: Vector3i, _level: Level, _state:=ObjectState.new()) -> Box:
+	var _box = baseNew(preload("res://assets/grid/objects/box/box.tscn").instantiate(), _position, _level, _state)
 	_box.state.positionOffset = Vector3(0, 0.5, 0)
-	_box.position = _box.state.getPositionAsVector()
-	_box.rotation = _box.state.getRotationAsVector()
+	baseNewEnd(_box)
 	return _box
+
+func _ready():
+	for arrow in %hoverArrows.get_children():
+		arrow.play("default")
+
+func hover():
+	print(state.position)
+	super()
+	for arrow in %hoverArrows.get_children():
+		arrow.visible = true
+
+func unhover():
+	super()
+	for arrow in %hoverArrows.get_children():
+		arrow.visible = false
 
 func hold():
 	held = true
@@ -45,8 +55,8 @@ func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false
 		state.position.z = _position.z
 	state.rotation += _rotation
 	
-	if !held and cantLandOn(state.getTileRelative(Vector3i(0,-1,0), level.stateGrid)):
-		while state.position.y > -5 and cantLandOn(state.getTileRelative(Vector3i(0,-1,0), level.stateGrid)):
+	if !held and isTileNonsolid(state.getTileRelative(Vector3i(0,-1,0), level.stateGrid)):
+		while state.position.y > -5 and isTileNonsolid(state.getTileRelative(Vector3i(0,-1,0), level.stateGrid)):
 			state.position.y -= 1
 		var toRotate = Vector3i(0,0,0)
 		match sign(relativePosition.x):
@@ -77,9 +87,6 @@ func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false
 	level.stateGrid.set_cell_item(state.position, Level.STATES.BOX_HELD)
 	level.objects.solid[state.position] = self
 
-func cantInto(_position: Vector3i) -> bool:
-	return state.getTile(_position, level.stateGrid) in [Level.STATES.SOLID, Level.STATES.BOX]
-
 func drop(_position: Vector3i):
 	held = false
 	state.positionOffset = Vector3(0,0.5,0)
@@ -88,6 +95,3 @@ func drop(_position: Vector3i):
 	level.stateGrid.set_cell_item(state.position, -1)
 	moveTo(_position)
 	level.stateGrid.set_cell_item(state.position, Level.STATES.BOX)
-
-static func cantLandOn(checkState:Level.STATES) -> bool:
-	return checkState in [Level.STATES.NONE]

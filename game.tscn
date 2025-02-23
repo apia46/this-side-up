@@ -6,8 +6,25 @@
 script = ExtResource("1_2cxbc")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.5, -0.612372, 0.612372, 0, 0.707107, 0.707107, -0.866025, 0.353553, -0.353553, 0, 10, 0)
+transform = Transform3D(-0.431865, -0.885274, 0.172575, -0.0717353, 0.224445, 0.971843, -0.899081, 0.407325, -0.160436, 0, 10, 0)
 shadow_enabled = true
 shadow_normal_bias = 1.404
 shadow_opacity = 0.75
 shadow_blur = 0.202
+
+[node name="ui" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="levelNumber" type="Label" parent="ui"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 275.0
+offset_bottom = 59.0
+theme_override_font_sizes/font_size = 40
+text = "Level Number"

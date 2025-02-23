@@ -1,0 +1,59 @@
+[gd_scene load_steps=8 format=3 uid="uid://d25ayg6d6snd1"]
+
+[ext_resource type="Script" uid="uid://b7nu886vfs1kr" path="res://assets/levels/level.gd" id="1_3y7cm"]
+[ext_resource type="MeshLibrary" uid="uid://3gbxnqp433cm" path="res://assets/grid/tiles/tileGridMesh.tres" id="2_40n3b"]
+[ext_resource type="Script" uid="uid://b5lh1fbsn6mnn" path="res://assets/resources/ObjectState.gd" id="2_fhv7x"]
+[ext_resource type="MeshLibrary" uid="uid://b54wjm1eelmux" path="res://assets/grid/objects/objectsGridMesh.tres" id="3_rf8ro"]
+[ext_resource type="MeshLibrary" uid="uid://datu87mb6cyca" path="res://assets/grid/states/stateMeshLibrary.tres" id="4_8lkvn"]
+
+[sub_resource type="Resource" id="Resource_fhv7x"]
+script = ExtResource("2_fhv7x")
+rotation = Vector3i(0, 0, 90)
+metadata/_custom_type_script = "uid://b5lh1fbsn6mnn"
+
+[sub_resource type="Resource" id="Resource_bbgc6"]
+script = ExtResource("2_fhv7x")
+rotation = Vector3i(90, 0, 0)
+metadata/_custom_type_script = "uid://b5lh1fbsn6mnn"
+
+[node name="level" type="Node3D"]
+script = ExtResource("1_3y7cm")
+levelNumber = "2-1"
+nextLevel = "uid://0bgtcnsdkanx"
+data = Dictionary[Vector3i, ExtResource("2_fhv7x")]({
+Vector3i(-1, 0, -1): SubResource("Resource_fhv7x"),
+Vector3i(2, 0, 0): SubResource("Resource_bbgc6")
+})
+
+[node name="tileGrid" type="GridMap" parent="."]
+unique_name_in_owner = true
+mesh_library = ExtResource("2_40n3b")
+cell_size = Vector3(1, 1, 1)
+data = {
+"cells": PackedInt32Array(-4, 0, 0, -2, 0, 0, -1, 0, 0, -1, 1, 0, -3, 0, 0, -4, 65535, 0, -3, 65535, 0, -2, 65535, 0, -1, 65535, 0, -65536, 65535, 0, -65536, 0, 0, -65536, 1, 0, -2, 65534, 0, -3, 65534, 0, -4, 65534, 0, 0, 1, 0, 65535, 0, 0, 65535, 1, 0, -65536, 65534, 0, -1, 65534, 0, -65535, 65534, 0, -65535, 65535, 0, -65535, 0, 0, -65535, 1, 0, -65534, 1, 0, -65533, 1, 0, -65533, 0, 0, -65533, 65535, 0, -65534, 65535, 0, -65534, 0, 0, 1, 65535, 0, 1, 1, 0, 1, 65534, 0, 0, 65534, 0, 65535, 65534, 0, -1, 65533, 0, -2, 65533, 0, -3, 65533, 0, -4, 65533, 0, -5, 65533, 0, -5, 65534, 0, -5, 65535, 0, -5, 0, 0, 65535, 65533, 0, -1, 2, 0, -2, 2, 0, -3, 2, 0, -4, 2, 0, -6, 2, 0, -5, 2, 0, -6, 1, 0, -6, 0, 0, -6, 65535, 0, -6, 65534, 0, -6, 65533, 0, -6, 65532, 0, -5, 65532, 0, -4, 65532, 0, -3, 65532, 0, -2, 65532, 0, -1, 65532, 0, -7, 65532, 0, -7, 65533, 0, -7, 65534, 0, -7, 65535, 0, -7, 0, 0, -7, 1, 0, -7, 2, 0, -2, 1, 0, -3, 1, 0, -4, 1, 0, -5, 1, 0, 65535, 2, 0, 65534, 2, 0, 65533, 2, 0, 65532, 2, 0, 65531, 2, 0, 65530, 2, 0, 65529, 2, 0, 65529, 1, 0, 65529, 65534, 0, 65529, 65533, 0, 65529, 65532, 0, 65529, 0, 0, 65529, 65535, 0, 65530, 65532, 0, 65531, 65532, 0, 65532, 65532, 0, 65533, 65532, 0, 65534, 65532, 0, 65535, 65532, 0, 2, 1, 0, 3, 1, 0, 3, 65535, 0, 2, 65535, 0, 3, 0, 0, 65539, 1, 1, 65538, 1, 1, 65537, 1, 1, 65537, 65535, 1, 65538, 65535, 1, 65539, 65535, 1, 65539, 0, 1, 65537, 65534, 1, 65536, 65534, 1, 131071, 65534, 1, 131071, 0, 1, 131071, 1, 1, 131071, 2, 1, 131070, 2, 1, 131069, 2, 1, 131068, 2, 1, 131067, 2, 1, 131066, 2, 1, 131065, 2, 1, 131065, 1, 1, 131065, 0, 1, 131065, 65535, 1, 131065, 65534, 1, 131065, 65533, 1, 131065, 65532, 1, 131066, 65532, 1, 131067, 65532, 1, 131068, 65532, 1, 131069, 65532, 1, 131070, 65532, 1, 131071, 65532, 1, 131071, 65533, 1, 65536, 2, 1, 65537, 2, 1, 0, 2, 0, 1, 2, 0, -65536, 2, 0, -65535, 2, 0)
+}
+metadata/_editor_floor_ = Vector3(0, -1, 0)
+
+[node name="objectGrid" type="GridMap" parent="."]
+unique_name_in_owner = true
+mesh_library = ExtResource("3_rf8ro")
+cell_size = Vector3(1, 1, 1)
+data = {
+"cells": PackedInt32Array(65532, 65535, 0, 2, 0, 1, 65535, 65535, 1, 65530, 65534, 2, 65530, 0, 2, 65536, 1, 1, 65530, 65535, 2)
+}
+metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="stateGrid" type="GridMap" parent="."]
+unique_name_in_owner = true
+visible = false
+mesh_library = ExtResource("4_8lkvn")
+cell_size = Vector3(1, 1, 1)
+
+[node name="controls" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -3.5, 2, 2.5)
+modulate = Color(0, 0, 0, 1)
+outline_modulate = Color(0, 0, 0, 0)
+text = "[Shift] to raise the forklift
+Drop boxes from a height to rotate them
+Goals require boxes facing the right way up"
+font_size = 96

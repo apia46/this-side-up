@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dsgny7f2ast0y"]
+
+[ext_resource type="Shader" uid="uid://c46mpgbsybxim" path="res://assets/resources/edgeHighlight.gdshader" id="1_j6v2y"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_j6v2y")
+shader_parameter/outline_color = Color(0.864675, 0.864675, 0.864675, 1)

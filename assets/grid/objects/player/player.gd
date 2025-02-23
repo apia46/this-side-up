@@ -1,5 +1,5 @@
 class_name Player
-extends Node3D
+extends GameObject
 
 var level: Level
 
@@ -11,20 +11,17 @@ var holding: bool = false
 var positionTween: Tween
 var rotationTween: Tween
 
-var won = false
+var won: bool = false
 
-var birdseyeCameraPosition = Vector3(0,10,0)
-var birdseyeCamera = false
-const CAMERA_SPEED = 15
+var birdseyeCameraPosition: Vector3 = Vector3(0,10,0)
+var birdseyeCamera: bool = false
+const CAMERA_SPEED: int = 15
 
-const betterControls = true
+const betterControls: bool = true
 
-static func New(_position: Vector3i, _level: Level) -> Player:
-	var _player = preload("res://assets/grid/objects/player/player.tscn").instantiate()
-	_player.level = _level
-	_player.state = ObjectState.new(_position, 0)
-	_player.position = _player.state.getPositionAsVector()
-	_player.rotation = _player.state.getRotationAsVector()
+static func New(_position: Vector3i, _level: Level, _state:=ObjectState.new()) -> Player:
+	var _player = baseNew(preload("res://assets/grid/objects/player/player.tscn").instantiate(), _position, _level, _state)
+	baseNewEnd(_player)
 	return _player
 
 func _ready():
@@ -36,7 +33,21 @@ func _process(delta):
 	if Input.is_action_pressed("left") and birdseyeCameraPosition.x >= level.leftBound: birdseyeCameraPosition -= Vector3(CAMERA_SPEED*delta,0,0)
 	if Input.is_action_pressed("right") and birdseyeCameraPosition.x <= level.rightBound: birdseyeCameraPosition += Vector3(CAMERA_SPEED*delta,0,0)
 	if Input.is_action_pressed("backward") and birdseyeCameraPosition.z <= level.bottomBound: birdseyeCameraPosition += Vector3(0,0,CAMERA_SPEED*delta)
-	%camera.position += ((birdseyeCameraPosition.snapped(Vector3(1,1,1)) + Vector3(0.5,0,1.1) if birdseyeCamera else global_transform.origin + %cameraPosition.position) - %camera.position) * 0.15
+	%camera.position += ((birdseyeCameraPosition.snapped(Vector3(1,1,1)) + Vector3(1.73,0,1.53) if birdseyeCamera else global_transform.origin + %cameraPosition.position) - %camera.position) * 0.15
+	
+	# https://docs.godotengine.org/en/stable/tutorials/physics/ray-casting.html
+	for object in level.allObjects():
+		object.hovered = false
+	
+	var from = %camera.project_ray_origin(get_viewport().get_mouse_position())
+	var to = from + %camera.project_ray_normal(get_viewport().get_mouse_position()) * %camera.far
+	var query = PhysicsRayQueryParameters3D.create(from, to)
+	query.collide_with_areas = true
+	var result = get_world_3d().direct_space_state.intersect_ray(query)
+	if result != {}:
+		result.collider.get_parent().hovered = true
+	for object in level.allObjects():
+		object.processHover()
 
 func _input(event):
 	if won: return
@@ -48,12 +59,15 @@ func _input(event):
 	if event.is_action_pressed("win"):
 		level.toNextLevel()
 	
+	if event.is_action_pressed("restart"):
+		level.restart()
+	
 	if event.is_action_pressed("toggle_camera"):
 		if birdseyeCamera:
 			get_tree().create_tween().tween_property(%camera, "rotation", %cameraPosition.rotation, 0.5).set_trans(Tween.TRANS_QUAD)
 		else:
 			birdseyeCameraPosition = Vector3(state.position) + Vector3(0,10,0)
-			get_tree().create_tween().tween_property(%camera, "rotation", Vector3(-1.5,0,0), 0.5).set_trans(Tween.TRANS_QUAD)
+			get_tree().create_tween().tween_property(%camera, "rotation", Vector3(-1.41421356,0.883136602,-0.883136602), 0.5).set_trans(Tween.TRANS_QUAD)
 		birdseyeCamera = !birdseyeCamera
 	if birdseyeCamera: return
 	
@@ -62,9 +76,9 @@ func _input(event):
 	if event.is_action_pressed("drop"):
 		var objects = 0
 		for object in held:
-			if object.cantInto(state.positionRelative(Vector3i(2,objects,0), fork.high)): return
+			if isTileSolid(state.getTileRelative(Vector3i(2,objects,0), level.stateGrid, fork.high)): return
 		objects = 0
-		var highRelative = Box.cantLandOn(state.getTileRelative(Vector3i(2,-1,0), level.stateGrid, fork.high))
+		var highRelative = isTileNonsolid(state.getTileRelative(Vector3i(2,-1,0), level.stateGrid, fork.high))
 		for object in held:
 			object.drop(state.positionRelative(Vector3i(2 + objects,0,0)))
 			if highRelative: objects += 1
@@ -75,7 +89,7 @@ func _input(event):
 	
 	if level.canLift and event.is_action_pressed("toggle_height"):
 		if fork.high:
-			if cantBodyInto(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
+			if isTileSolid(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
 			fork.high = false
 			fork.moveTo(Vector3(0,0,0))
 			for object in held: object.moveTo(state.positionRelative(Vector3i(0,-1,0)), Vector3i(0,0,0), true)
@@ -84,49 +98,49 @@ func _input(event):
 			fork.moveTo(Vector3(0,1,0))
 			for object in held: object.moveTo(state.positionRelative(Vector3i(0,1,0)), Vector3i(0,0,0), true)
 	
-	if event.is_action_pressed("movement"):
+	if (event.is_action_pressed("movement_better") if betterControls else event.is_action_pressed("movement")):
 		position = state.getPositionAsVector()
 		rotation = state.getRotationAsVector()
 	
 	if (event.is_action_pressed("forward") and Input.is_action_pressed("left") if betterControls else event.is_action_pressed("forward_left")):
-		if cantBodyInto(state.getTileRelative(Vector3i(1,0,-1), level.stateGrid)): return
-		if cantBodyInto(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
+		if isTileSolid(state.getTileRelative(Vector3i(1,0,-1), level.stateGrid)): return
+		if isTileSolid(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
 		if cantForkInto(state.getTileRelative(Vector3i(1,0,-2), level.stateGrid, fork.high)): return
-		if holding and cantBodyInto(state.getTileRelative(Vector3i(1,0,-2), level.stateGrid, fork.high)): return
-		#if holding and cantBodyInto(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, fork.high)): return
-		#if holding and cantBodyInto(state.getTileRelative(Vector3i(2,0,-1), level.stateGrid, fork.high)): return
+		if holding and isTileSolid(state.getTileRelative(Vector3i(1,0,-2), level.stateGrid, fork.high)): return
+		#if holding and isTileSolid(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, fork.high)): return
+		#if holding and isTileSolid(state.getTileRelative(Vector3i(2,0,-1), level.stateGrid, fork.high)): return
 		state.moveRotated(Vector3i(1,0,-1))
 		state.rotation.y += 90
 	elif (event.is_action_pressed("forward") and Input.is_action_pressed("right") if betterControls else event.is_action_pressed("forward_right")):
-		if cantBodyInto(state.getTileRelative(Vector3i(1,0,1), level.stateGrid)): return
-		if cantBodyInto(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
+		if isTileSolid(state.getTileRelative(Vector3i(1,0,1), level.stateGrid)): return
+		if isTileSolid(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
 		if cantForkInto(state.getTileRelative(Vector3i(1,0,2), level.stateGrid, fork.high)): return
-		#if holding and cantBodyInto(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, fork.high)): return
-		if holding and cantBodyInto(state.getTileRelative(Vector3i(1,0,2), level.stateGrid, fork.high)): return
-		#if holding and cantBodyInto(state.getTileRelative(Vector3i(2,0,1), level.stateGrid, fork.high)): return
+		#if holding and isTileSolid(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, fork.high)): return
+		if holding and isTileSolid(state.getTileRelative(Vector3i(1,0,2), level.stateGrid, fork.high)): return
+		#if holding and isTileSolid(state.getTileRelative(Vector3i(2,0,1), level.stateGrid, fork.high)): return
 		state.moveRotated(Vector3i(1,0,1))
 		state.rotation.y += -90
 	elif event.is_action_pressed("forward"):
-		if cantBodyInto(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
+		if isTileSolid(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
 		if cantForkInto(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, fork.high)): return
-		if holding and cantBodyInto(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, fork.high)): return
+		if holding and isTileSolid(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, fork.high)): return
 		state.moveRotated(Vector3i(1,0,0))
 	elif (event.is_action_pressed("backward") and Input.is_action_pressed("left") if betterControls else event.is_action_pressed("backward_left")):
-		if cantBodyInto(state.getTileRelative(Vector3i(-1,0,-1), level.stateGrid)): return
-		if cantBodyInto(state.getTileRelative(Vector3i(-1,0,0), level.stateGrid)): return
-		#if holding and cantBodyInto(state.getTileRelative(Vector3i(0,0,1), level.stateGrid, fork.high)): return
-		#if holding and cantBodyInto(state.getTileRelative(Vector3i(-1,0,1), level.stateGrid, fork.high)): return
+		if isTileSolid(state.getTileRelative(Vector3i(-1,0,-1), level.stateGrid)): return
+		if isTileSolid(state.getTileRelative(Vector3i(-1,0,0), level.stateGrid)): return
+		#if holding and isTileSolid(state.getTileRelative(Vector3i(0,0,1), level.stateGrid, fork.high)): return
+		#if holding and isTileSolid(state.getTileRelative(Vector3i(-1,0,1), level.stateGrid, fork.high)): return
 		state.moveRotated(Vector3i(-1,0,-1))
 		state.rotation.y += -90
 	elif (event.is_action_pressed("backward") and Input.is_action_pressed("right") if betterControls else event.is_action_pressed("backward_right")):
-		if cantBodyInto(state.getTileRelative(Vector3i(-1,0,1), level.stateGrid)): return
-		if cantBodyInto(state.getTileRelative(Vector3i(-1,0,0), level.stateGrid)): return
-		#if holding and cantBodyInto(state.getTileRelative(Vector3i(0,0,-1), level.stateGrid, fork.high)): return
-		#if holding and cantBodyInto(state.getTileRelative(Vector3i(-1,0,-1), level.stateGrid, fork.high)): return
+		if isTileSolid(state.getTileRelative(Vector3i(-1,0,1), level.stateGrid)): return
+		if isTileSolid(state.getTileRelative(Vector3i(-1,0,0), level.stateGrid)): return
+		#if holding and isTileSolid(state.getTileRelative(Vector3i(0,0,-1), level.stateGrid, fork.high)): return
+		#if holding and isTileSolid(state.getTileRelative(Vector3i(-1,0,-1), level.stateGrid, fork.high)): return
 		state.moveRotated(Vector3i(-1,0,1))
 		state.rotation.y += 90
 	elif event.is_action_pressed("backward"):
-		if cantBodyInto(state.getTileRelative(Vector3i(-1,0,0), level.stateGrid)): return
+		if isTileSolid(state.getTileRelative(Vector3i(-1,0,0), level.stateGrid)): return
 		state.moveRotated(Vector3i(-1,0,0))
 	else:
 		return
@@ -157,9 +171,6 @@ func _input(event):
 			offset += Vector3i(0,1,0)
 		else: break
 	endOfTurn()
-
-static func cantBodyInto(checkState:Level.STATES) -> bool:
-	return checkState in [Level.STATES.SOLID, Level.STATES.BOX]
 
 static func cantForkInto(checkState:Level.STATES) -> bool:
 	return checkState == Level.STATES.SOLID

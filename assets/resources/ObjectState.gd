@@ -1,11 +1,11 @@
 class_name ObjectState
 extends Resource
 
-const TAU_OVER_360 = 0.0174532925
+const TAU_OVER_360: float = 0.0174532925
 
-var position = Vector3i(0,0,0)
-@export var rotation = Vector3i(0,0,0)
-var positionOffset = Vector3(0,0,0)
+var position: Vector3i = Vector3i(0,0,0)
+@export var rotation: Vector3i = Vector3i(0,0,0)
+var positionOffset: Vector3 = Vector3(0,0,0)
 
 func _init(_position = Vector3i(0,0,0), _rotation = 0, _positionOffset = Vector3(0,0,0)):
 	position = _position

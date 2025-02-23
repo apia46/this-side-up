@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bcynsbd24ulx6"]
+[gd_scene load_steps=5 format=3 uid="uid://dhegqkwvemhag"]
 
 [ext_resource type="Script" uid="uid://b7nu886vfs1kr" path="res://assets/levels/level.gd" id="1_qfwe2"]
 [ext_resource type="MeshLibrary" uid="uid://3gbxnqp433cm" path="res://assets/grid/tiles/tileGridMesh.tres" id="2_ru3jk"]
@@ -7,7 +7,9 @@
 
 [node name="level" type="Node3D"]
 script = ExtResource("1_qfwe2")
-nextLevel = "res://assets/levels/level2.tscn"
+levelNumber = "1-1"
+nextLevel = "uid://bcynsbd24ulx6"
+canLift = false
 
 [node name="tileGrid" type="GridMap" parent="."]
 unique_name_in_owner = true
