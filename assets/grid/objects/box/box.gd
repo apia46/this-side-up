@@ -1,8 +1,6 @@
 class_name Box
 extends GameObject
 
-var level: Level
-var state: ObjectState
 var held: bool = false
 
 var positionTween: Tween
@@ -19,7 +17,6 @@ func _ready():
 		arrow.play("default")
 
 func hover():
-	print(state.position)
 	super()
 	for arrow in %hoverArrows.get_children():
 		arrow.visible = true

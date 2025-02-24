@@ -1,8 +1,20 @@
-[gd_resource type="MeshLibrary" load_steps=4 format=3 uid="uid://b54wjm1eelmux"]
+[gd_resource type="MeshLibrary" load_steps=7 format=3 uid="uid://b54wjm1eelmux"]
 
 [ext_resource type="PlaneMesh" uid="uid://brg7xeybbrynd" path="res://assets/grid/objects/player/player_placeholder.tres" id="1_5crdj"]
 [ext_resource type="PlaneMesh" uid="uid://bok4qwa5bqbt7" path="res://assets/grid/objects/box/box_placeholder.tres" id="2_h6tbx"]
 [ext_resource type="PlaneMesh" uid="uid://dx7j7ykewb12k" path="res://assets/grid/objects/boxGoal/boxGoal_placeholder.tres" id="3_ldstn"]
+[ext_resource type="Texture2D" uid="uid://b052wuiaidpad" path="res://assets/grid/objects/gate/gate_placeholder.png" id="4_4ambk"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fp1l1"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+albedo_texture = ExtResource("4_4ambk")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_yemm8"]
+material = SubResource("StandardMaterial3D_fp1l1")
+size = Vector2(1, 1)
+center_offset = Vector3(0, -0.3, 0)
 
 [resource]
 item/0/name = "player"
@@ -26,3 +38,10 @@ item/2/mesh_cast_shadow = 1
 item/2/shapes = []
 item/2/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/2/navigation_layers = 1
+item/3/name = "gate"
+item/3/mesh = SubResource("PlaneMesh_yemm8")
+item/3/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/3/mesh_cast_shadow = 1
+item/3/shapes = []
+item/3/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/3/navigation_layers = 1

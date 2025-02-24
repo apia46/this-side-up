@@ -1,6 +1,9 @@
 class_name GameObject
 extends Node3D
 
+var level: Level
+var state: ObjectState
+
 var hovered: bool = false
 var wasHovered: bool = false
 
@@ -26,6 +29,7 @@ func processHover():
 	wasHovered = hovered
 
 func hover():
+	print(state.position)
 	if has_node("outline"): 
 		get_tree().create_tween().tween_property(get_node("outline").get_surface_override_material(0), "albedo_color", Color(1,1,1,1), 0.1)
 		get_tree().create_tween().tween_property(get_node("outline"), "scale", Vector3(0.5,0.5,0.5), 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)

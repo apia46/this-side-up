@@ -15,8 +15,8 @@ enum STATES {
 @export var canLift: bool = true
 @export var data: Dictionary[Vector3i, ObjectState]
 
-var objects: Dictionary = {solid={},goals={}}
-var levelId: String
+var objects: Dictionary = {solid={},goals={},gates={}}
+var currentLoad: String
 
 var topBound = null
 var bottomBound = null
@@ -26,8 +26,8 @@ var rightBound = null
 func _ready():
 	get_node("/root/game/ui/levelNumber").text = levelNumber
 
-func loadLevel(_levelId):
-	levelId = _levelId
+func loadLevel(_currentLoad):
+	currentLoad = _currentLoad
 	for cell in %tileGrid.get_used_cells():
 		match %tileGrid.get_cell_item(cell):
 			0: # wall
@@ -47,14 +47,21 @@ func loadLevel(_levelId):
 			actualCell -= Vector3i(0,1,0)
 		match %objectGrid.get_cell_item(cell):
 			0:
-				object = Player.New(actualCell, self)
+				if cell in data:
+					object = Player.New(actualCell, self, data[cell].duplicate())
+				else: object = Player.New(actualCell, self)
 			1:
-				if cell in data: object = Box.New(actualCell, self, data[cell])
+				if cell in data: object = Box.New(actualCell, self, data[cell].duplicate())
 				else: object = Box.New(actualCell, self)
 				%stateGrid.set_cell_item(actualCell, STATES.BOX)
 			2:
 				object = BoxGoal.New(actualCell, self)
 				layer = "goals"
+			3:
+				if cell in data: object = Gate.New(actualCell, self, data[cell].duplicate())
+				else: object = Gate.New(actualCell, self)
+				%stateGrid.set_cell_item(actualCell, STATES.SOLID)
+				layer = "gates"
 		if object:
 			objects[layer][actualCell] = object
 			add_child(object)
@@ -64,12 +71,13 @@ func loadLevel(_levelId):
 	return self
 
 func toNextLevel():
-	get_node("/root/game").add_child(load(nextLevel).instantiate().loadLevel(nextLevel))
 	queue_free()
+	get_node("/root/game").add_child(load(nextLevel).instantiate().loadLevel(nextLevel))
 
 func restart():
-	get_node("/root/game").add_child(load(levelId).instantiate().loadLevel(levelId))
+	print("yeah")
 	queue_free()
+	get_node("/root/game").add_child(load(currentLoad).instantiate().loadLevel(currentLoad))
 
 func allObjects():
 	var _objects = []

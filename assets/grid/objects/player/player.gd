@@ -1,9 +1,6 @@
 class_name Player
 extends GameObject
 
-var level: Level
-
-var state: ObjectState
 @onready var fork: Fork = %fork
 var held: Array[Box] = []
 var holding: bool = false
@@ -173,18 +170,18 @@ func _input(event):
 		else: break
 	endOfTurn()
 
-static func cantForkInto(checkState:Level.STATES) -> bool:
-	return checkState == Level.STATES.SOLID
+func endOfTurn():
+	for object in level.objects.goals:
+		if !level.objects.goals[object].hasBox(): return
+	win()
 
 func win():
 	won = true
 	await get_tree().create_timer(1.0).timeout
 	level.toNextLevel()
 
-func endOfTurn():
-	for object in level.objects.goals:
-		if !level.objects.goals[object].hasBox(): return
-	win()
+static func cantForkInto(checkState:Level.STATES) -> bool:
+	return checkState == Level.STATES.SOLID
 
 func animateArrow():
 	if Input.is_action_pressed("left"):
