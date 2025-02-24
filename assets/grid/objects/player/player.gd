@@ -33,7 +33,7 @@ func _process(delta):
 	if Input.is_action_pressed("left") and birdseyeCameraPosition.x >= level.leftBound: birdseyeCameraPosition -= Vector3(CAMERA_SPEED*delta,0,0)
 	if Input.is_action_pressed("right") and birdseyeCameraPosition.x <= level.rightBound: birdseyeCameraPosition += Vector3(CAMERA_SPEED*delta,0,0)
 	if Input.is_action_pressed("backward") and birdseyeCameraPosition.z <= level.bottomBound: birdseyeCameraPosition += Vector3(0,0,CAMERA_SPEED*delta)
-	%camera.position += ((birdseyeCameraPosition.snapped(Vector3(1,1,1)) + Vector3(1.73,0,1.53) if birdseyeCamera else global_transform.origin + %cameraPosition.position) - %camera.position) * 0.15
+	%camera.position += ((birdseyeCameraPosition.snapped(Vector3(1,1,1)) + Vector3(0.5,0,1.2) if birdseyeCamera else global_transform.origin + %cameraPosition.position) - %camera.position) * 0.15
 	
 	# https://docs.godotengine.org/en/stable/tutorials/physics/ray-casting.html
 	for object in level.allObjects():
@@ -67,7 +67,8 @@ func _input(event):
 			get_tree().create_tween().tween_property(%camera, "rotation", %cameraPosition.rotation, 0.5).set_trans(Tween.TRANS_QUAD)
 		else:
 			birdseyeCameraPosition = Vector3(state.position) + Vector3(0,10,0)
-			get_tree().create_tween().tween_property(%camera, "rotation", Vector3(-1.41421356,0.883136602,-0.883136602), 0.5).set_trans(Tween.TRANS_QUAD)
+			#get_tree().create_tween().tween_property(%camera, "rotation", Vector3(-1.41421356,0.883136602,-0.883136602), 0.5).set_trans(Tween.TRANS_QUAD)
+			get_tree().create_tween().tween_property(%camera, "rotation", Vector3(-1.5,0,0), 0.5).set_trans(Tween.TRANS_QUAD)
 		birdseyeCamera = !birdseyeCamera
 	if birdseyeCamera: return
 	
