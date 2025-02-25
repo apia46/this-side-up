@@ -2,8 +2,6 @@ class_name Player
 extends GameObject
 
 @onready var fork: Fork = %fork
-var held: Array[Box] = []
-var holding: bool = false
 
 var positionTween: Tween
 var rotationTween: Tween
@@ -11,12 +9,12 @@ var rotationTween: Tween
 var won: bool = false
 
 var birdseyeCameraPosition: Vector3 = Vector3(0,10,0)
-var birdseyeCamera: bool = false
+
 const CAMERA_SPEED: int = 15
 
 const betterControls: bool = true
 
-static func New(_position: Vector3i, _level: Level, _state:=ObjectState.new()) -> Player:
+static func New(_position: Vector3i, _level: Level, _state:=PlayerState.new()) -> Player:
 	var _player = baseNew(preload("res://assets/grid/objects/player/player.tscn").instantiate(), _position, _level, _state)
 	baseNewEnd(_player)
 	return _player
@@ -30,7 +28,7 @@ func _process(delta):
 	if Input.is_action_pressed("left") and birdseyeCameraPosition.x >= level.leftBound: birdseyeCameraPosition -= Vector3(CAMERA_SPEED*delta,0,0)
 	if Input.is_action_pressed("right") and birdseyeCameraPosition.x <= level.rightBound: birdseyeCameraPosition += Vector3(CAMERA_SPEED*delta,0,0)
 	if Input.is_action_pressed("backward") and birdseyeCameraPosition.z <= level.bottomBound: birdseyeCameraPosition += Vector3(0,0,CAMERA_SPEED*delta)
-	%camera.position += ((birdseyeCameraPosition.snapped(Vector3(1,1,1)) + Vector3(0.5,0,1.2) if birdseyeCamera else global_transform.origin + %cameraPosition.position) - %camera.position) * 0.15
+	%camera.position += ((birdseyeCameraPosition.snapped(Vector3(1,1,1)) + Vector3(0.5,0,1.2) if state.birdseyeCamera else global_transform.origin + %cameraPosition.position) - %camera.position) * 0.15
 	
 	# https://docs.godotengine.org/en/stable/tutorials/physics/ray-casting.html
 	for object in level.allObjects():
@@ -60,28 +58,28 @@ func _input(event):
 		level.restart()
 	
 	if event.is_action_pressed("toggle_camera"):
-		if birdseyeCamera:
+		if state.birdseyeCamera:
 			get_tree().create_tween().tween_property(%camera, "rotation", %cameraPosition.rotation, 0.5).set_trans(Tween.TRANS_QUAD)
 		else:
 			birdseyeCameraPosition = Vector3(state.position) + Vector3(0,10,0)
 			#get_tree().create_tween().tween_property(%camera, "rotation", Vector3(-1.41421356,0.883136602,-0.883136602), 0.5).set_trans(Tween.TRANS_QUAD)
 			get_tree().create_tween().tween_property(%camera, "rotation", Vector3(-1.5,0,0), 0.5).set_trans(Tween.TRANS_QUAD)
-		birdseyeCamera = !birdseyeCamera
-	if birdseyeCamera: return
+		state.birdseyeCamera = !state.birdseyeCamera
+	if state.birdseyeCamera: return
 	
 	if event is InputEventKey: animateArrow()
 	
 	if event.is_action_pressed("drop"):
 		var objects = 0
-		for object in held:
+		for object in state.held:
 			if isTileSolid(state.getTileRelative(Vector3i(2,objects,0), level.stateGrid, fork.high)): return
 		objects = 0
 		var highRelative = isTileNonsolid(state.getTileRelative(Vector3i(2,-1,0), level.stateGrid, fork.high))
-		for object in held:
+		for object in state.held:
 			object.drop(state.positionRelative(Vector3i(2 + objects,0,0)))
 			if highRelative: objects += 1
-		held = []
-		holding = false
+		state.held.clear()
+		state.holding = false
 		endOfTurn()
 		return
 	
@@ -90,11 +88,11 @@ func _input(event):
 			if isTileSolid(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
 			fork.high = false
 			fork.moveTo(Vector3(0,0,0))
-			for object in held: object.moveTo(state.positionRelative(Vector3i(0,-1,0)), Vector3i(0,0,0), true)
+			for object in state.held: object.moveTo(state.positionRelative(Vector3i(0,-1,0)), Vector3i(0,0,0), true)
 		else:
 			fork.high = true
 			fork.moveTo(Vector3(0,1,0))
-			for object in held: object.moveTo(state.positionRelative(Vector3i(0,1,0)), Vector3i(0,0,0), true)
+			for object in state.held: object.moveTo(state.positionRelative(Vector3i(0,1,0)), Vector3i(0,0,0), true)
 	
 	if (event.is_action_pressed("movement_better") if betterControls else event.is_action_pressed("movement")):
 		position = state.getPositionAsVector()
@@ -104,7 +102,7 @@ func _input(event):
 		if isTileSolid(state.getTileRelative(Vector3i(1,0,-1), level.stateGrid)): return
 		if isTileSolid(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
 		if cantForkInto(state.getTileRelative(Vector3i(1,0,-2), level.stateGrid, fork.high)): return
-		if holding and isTileSolid(state.getTileRelative(Vector3i(1,0,-2), level.stateGrid, fork.high)): return
+		if state.holding and isTileSolid(state.getTileRelative(Vector3i(1,0,-2), level.stateGrid, fork.high)): return
 		#if holding and isTileSolid(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, fork.high)): return
 		#if holding and isTileSolid(state.getTileRelative(Vector3i(2,0,-1), level.stateGrid, fork.high)): return
 		state.moveRotated(Vector3i(1,0,-1))
@@ -114,14 +112,14 @@ func _input(event):
 		if isTileSolid(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
 		if cantForkInto(state.getTileRelative(Vector3i(1,0,2), level.stateGrid, fork.high)): return
 		#if holding and isTileSolid(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, fork.high)): return
-		if holding and isTileSolid(state.getTileRelative(Vector3i(1,0,2), level.stateGrid, fork.high)): return
+		if state.holding and isTileSolid(state.getTileRelative(Vector3i(1,0,2), level.stateGrid, fork.high)): return
 		#if holding and isTileSolid(state.getTileRelative(Vector3i(2,0,1), level.stateGrid, fork.high)): return
 		state.moveRotated(Vector3i(1,0,1))
 		state.rotation.y += -90
 	elif event.is_action_pressed("forward"):
 		if isTileSolid(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
 		if cantForkInto(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, fork.high)): return
-		if holding and isTileSolid(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, fork.high)): return
+		if state.holding and isTileSolid(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, fork.high)): return
 		state.moveRotated(Vector3i(1,0,0))
 	elif (event.is_action_pressed("backward") and Input.is_action_pressed("left") if betterControls else event.is_action_pressed("backward_left")):
 		if isTileSolid(state.getTileRelative(Vector3i(-1,0,-1), level.stateGrid)): return
@@ -155,7 +153,7 @@ func _input(event):
 	positionTween.tween_property(self, "position", state.getPositionAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	rotationTween.tween_property(self, "rotation", state.getRotationAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	
-	for object in held:
+	for object in state.held:
 		object.moveTo(state.positionRelative(Vector3i(1,0,0)), unfixedRotation - previousRotation)
 	
 	# pick up?
@@ -163,17 +161,26 @@ func _input(event):
 	while state.positionRelative(Vector3i(1,0,0) + offset, fork.high) in level.objects.solid:
 		var object = level.objects.solid[state.positionRelative(Vector3i(1,0,0) + offset, fork.high)]
 		if object is Box and !object.held:
-			held.append(object)
+			state.held.append(object)
 			object.hold()
-			holding = true
+			state.holding = true
 			offset += Vector3i(0,1,0)
 		else: break
 	endOfTurn()
 
 func endOfTurn():
+	var checkGroups = {}
+	for group in level.groups:
+		checkGroups[group] = true
 	for object in level.objects.goals:
-		if !level.objects.goals[object].hasBox(): return
-	win()
+		var goal = level.objects.goals[object]
+		if !goal.hasBox(): checkGroups[goal.state.group] = false
+	for object in level.objects.gates:
+		var gate = level.objects.gates[object]
+		if checkGroups[gate.state.group]: gate.open()
+		else: gate.close()
+	if checkGroups.win: win()
+	print(checkGroups)
 
 func win():
 	won = true

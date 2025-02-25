@@ -1,14 +1,61 @@
-[gd_scene load_steps=5 format=3 uid="uid://bbfbhbl1bgla3"]
+[gd_scene load_steps=14 format=3 uid="uid://bbfbhbl1bgla3"]
 
 [ext_resource type="Script" uid="uid://b7nu886vfs1kr" path="res://assets/levels/level.gd" id="1_yvtuu"]
+[ext_resource type="Script" uid="uid://b5lh1fbsn6mnn" path="res://assets/grid/objects/ObjectState.gd" id="2_cnknb"]
 [ext_resource type="MeshLibrary" uid="uid://3gbxnqp433cm" path="res://assets/grid/tiles/tileGridMesh.tres" id="3_t4soc"]
+[ext_resource type="Script" uid="uid://ocatylxuuv00" path="res://assets/grid/objects/gate/GateState.gd" id="3_vwmcu"]
 [ext_resource type="MeshLibrary" uid="uid://b54wjm1eelmux" path="res://assets/grid/objects/objectsGridMesh.tres" id="4_igd0x"]
+[ext_resource type="Script" uid="uid://ymf4q6fkocgy" path="res://assets/grid/objects/boxGoal/BoxGoalState.gd" id="4_vwmcu"]
 [ext_resource type="MeshLibrary" uid="uid://datu87mb6cyca" path="res://assets/grid/states/stateMeshLibrary.tres" id="5_m2jrs"]
+
+[sub_resource type="Resource" id="Resource_f36gd"]
+script = ExtResource("3_vwmcu")
+group = "set1"
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://ocatylxuuv00"
+
+[sub_resource type="Resource" id="Resource_uytd3"]
+script = ExtResource("3_vwmcu")
+group = "set1"
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://ocatylxuuv00"
+
+[sub_resource type="Resource" id="Resource_ih48o"]
+script = ExtResource("3_vwmcu")
+group = "set1"
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://ocatylxuuv00"
+
+[sub_resource type="Resource" id="Resource_h6cjy"]
+script = ExtResource("4_vwmcu")
+group = "set1"
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://ymf4q6fkocgy"
+
+[sub_resource type="Resource" id="Resource_uqxq1"]
+script = ExtResource("4_vwmcu")
+group = "set1"
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://ymf4q6fkocgy"
+
+[sub_resource type="Resource" id="Resource_npado"]
+script = ExtResource("4_vwmcu")
+group = "win"
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://ymf4q6fkocgy"
 
 [node name="level" type="Node3D"]
 script = ExtResource("1_yvtuu")
 nextLevel = "uid://dhegqkwvemhag"
 canLift = false
+data = Dictionary[Vector3i, ExtResource("2_cnknb")]({
+Vector3i(19, 0, 1): SubResource("Resource_f36gd"),
+Vector3i(20, 0, 1): SubResource("Resource_uytd3"),
+Vector3i(21, 0, 1): SubResource("Resource_ih48o"),
+Vector3i(22, 0, 3): SubResource("Resource_h6cjy"),
+Vector3i(22, 0, 4): SubResource("Resource_uqxq1"),
+Vector3i(22, 0, 5): SubResource("Resource_npado")
+})
 
 [node name="tileGrid" type="GridMap" parent="."]
 unique_name_in_owner = true

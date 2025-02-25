@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ObjectState" load_steps=2 format=3 uid="uid://dktdxfq14ap5j"]
 
-[ext_resource type="Script" uid="uid://b5lh1fbsn6mnn" path="res://assets/resources/ObjectState.gd" id="1_cwv7r"]
+[ext_resource type="Script" uid="uid://b5lh1fbsn6mnn" path="res://assets/grid/objects/ObjectState.gd" id="1_cwv7r"]
 
 [resource]
 script = ExtResource("1_cwv7r")

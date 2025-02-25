@@ -1,19 +1,19 @@
 [gd_scene load_steps=8 format=3 uid="uid://dspwvqxchupnj"]
 
 [ext_resource type="Script" uid="uid://b7nu886vfs1kr" path="res://assets/levels/level.gd" id="1_1aly5"]
-[ext_resource type="Script" uid="uid://b5lh1fbsn6mnn" path="res://assets/resources/ObjectState.gd" id="2_uwnpl"]
+[ext_resource type="Script" uid="uid://b5lh1fbsn6mnn" path="res://assets/grid/objects/ObjectState.gd" id="2_uwnpl"]
 [ext_resource type="MeshLibrary" uid="uid://3gbxnqp433cm" path="res://assets/grid/tiles/tileGridMesh.tres" id="3_ecbye"]
 [ext_resource type="MeshLibrary" uid="uid://b54wjm1eelmux" path="res://assets/grid/objects/objectsGridMesh.tres" id="4_3id0b"]
 [ext_resource type="MeshLibrary" uid="uid://datu87mb6cyca" path="res://assets/grid/states/stateMeshLibrary.tres" id="5_rcf1k"]
 
-[sub_resource type="Resource" id="Resource_fhv7x"]
-script = ExtResource("2_uwnpl")
-rotation = Vector3i(270, 0, 0)
-metadata/_custom_type_script = "uid://b5lh1fbsn6mnn"
-
 [sub_resource type="Resource" id="Resource_1aly5"]
 script = ExtResource("2_uwnpl")
 rotation = Vector3i(0, 0, 270)
+metadata/_custom_type_script = "uid://b5lh1fbsn6mnn"
+
+[sub_resource type="Resource" id="Resource_fhv7x"]
+script = ExtResource("2_uwnpl")
+rotation = Vector3i(270, 0, 0)
 metadata/_custom_type_script = "uid://b5lh1fbsn6mnn"
 
 [node name="level" type="Node3D"]

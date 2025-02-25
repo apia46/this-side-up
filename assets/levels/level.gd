@@ -17,6 +17,7 @@ enum STATES {
 
 var objects: Dictionary = {solid={},goals={},gates={}}
 var currentLoad: String
+var groups: Array[String] = []
 
 var topBound = null
 var bottomBound = null
@@ -55,7 +56,8 @@ func loadLevel(_currentLoad):
 				else: object = Box.New(actualCell, self)
 				%stateGrid.set_cell_item(actualCell, STATES.BOX)
 			2:
-				object = BoxGoal.New(actualCell, self)
+				if cell in data: object = BoxGoal.New(actualCell, self, data[cell].duplicate())
+				else: object = BoxGoal.New(actualCell, self)
 				layer = "goals"
 			3:
 				if cell in data: object = Gate.New(actualCell, self, data[cell].duplicate())
@@ -63,11 +65,13 @@ func loadLevel(_currentLoad):
 				%stateGrid.set_cell_item(actualCell, STATES.SOLID)
 				layer = "gates"
 		if object:
+			if "group" in object.state and object.state.group not in groups:
+				groups.append(object.state.group)
 			objects[layer][actualCell] = object
 			add_child(object)
 	
 	%objectGrid.visible = false
-	
+	print(groups)
 	return self
 
 func toNextLevel():
