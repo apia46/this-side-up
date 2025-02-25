@@ -22,10 +22,10 @@ func getRotationAsVector() -> Vector3:
 	return Vector3(rotation) * TAU_OVER_360
  
 func getTileRelative(location:Vector3i, stateGrid:GridMap, lifted:=false) -> Level.STATES:
-	return max(0, stateGrid.get_cell_item(positionRelative(location, lifted))) as Level.STATES
+	return stateGrid.get_cell_item(positionRelative(location, lifted)) as Level.STATES
 
 func getTile(location:Vector3i, stateGrid:GridMap) -> Level.STATES:
-	return max(0, stateGrid.get_cell_item(location)) as Level.STATES
+	return stateGrid.get_cell_item(location) as Level.STATES
 
 func rotatePosition(vector:Vector3i) -> Vector3i:
 	var result = Vector3i(0,0,0)

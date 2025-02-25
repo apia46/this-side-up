@@ -6,5 +6,5 @@ static func New(_position: Vector3i, _level: Level, _state:=BoxGoalState.new()) 
 	baseNewEnd(_boxGoal)
 	return _boxGoal
 
-func hasBox():
-	return state.getTileRelative(Vector3i(0,0,0), level.stateGrid) in [Level.STATES.BOX] and level.objects.solid[state.position].state.facingUp()
+func getBox():
+	return level.objects.solid[state.position] if (state.getTileRelative(Vector3i(0,0,0), level.stateGrid) in [Level.STATES.BOX] and level.objects.solid[state.position].state.facingUp()) else false

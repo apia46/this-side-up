@@ -1,7 +1,0 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://c1rnonk6eqw3b"]
-
-[ext_resource type="Script" uid="uid://ocatylxuuv00" path="res://assets/grid/objects/gate/GateState.gd" id="1_b1ljn"]
-
-[resource]
-script = ExtResource("1_b1ljn")
-rotation = Vector3i(0, 0, 0)

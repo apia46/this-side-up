@@ -1,12 +1,10 @@
 class_name Box
 extends GameObject
 
-var held: bool = false
-
 var positionTween: Tween
 var rotationTween: Tween
 
-static func New(_position: Vector3i, _level: Level, _state:=ObjectState.new()) -> Box:
+static func New(_position: Vector3i, _level: Level, _state:BoxState=BoxState.new()) -> Box:
 	var _box = baseNew(preload("res://assets/grid/objects/box/box.tscn").instantiate(), _position, _level, _state)
 	_box.state.positionOffset = Vector3(0, 0.5, 0)
 	baseNewEnd(_box)
@@ -27,7 +25,7 @@ func unhover():
 		arrow.visible = false
 
 func hold():
-	held = true
+	state.held = true
 	state.positionOffset = Vector3(0,0.6,0)
 	rotation = state.getRotationAsVector()
 	
@@ -52,7 +50,7 @@ func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false
 		state.position.z = _position.z
 	state.rotation += _rotation
 	
-	if !held and isTileNonsolid(state.getTileRelative(Vector3i(0,-1,0), level.stateGrid)):
+	if !state.held and isTileNonsolid(state.getTileRelative(Vector3i(0,-1,0), level.stateGrid)):
 		while state.position.y > -5 and isTileNonsolid(state.getTileRelative(Vector3i(0,-1,0), level.stateGrid)):
 			state.position.y -= 1
 		var toRotate = Vector3i(0,0,0)
@@ -85,7 +83,7 @@ func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false
 	level.objects.solid[state.position] = self
 
 func drop(_position: Vector3i):
-	held = false
+	state.held = false
 	state.positionOffset = Vector3(0,0.5,0)
 	if rotationTween and rotationTween.is_running(): rotationTween.kill()
 	rotation = state.getRotationAsVector()

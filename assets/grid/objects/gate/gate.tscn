@@ -119,12 +119,13 @@ mesh = SubResource("ArrayMesh_np553")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("3_xm17x")
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="collision" type="Area3D" parent="."]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 monitoring = false
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="collision"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.063, 0)
 shape = SubResource("BoxShape3D_xm17x")
 
@@ -144,5 +145,5 @@ remote_path = NodePath("../../outline")
 update_scale = false
 
 [node name="remoteTransformCollision" type="RemoteTransform3D" parent="gate"]
-remote_path = NodePath("../../Area3D")
+remote_path = NodePath("../../collision")
 update_scale = false

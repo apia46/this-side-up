@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="BoxGoalState" load_steps=2 format=3 uid="uid://dtnvgw7rm8j4s"]
-
-[ext_resource type="Script" uid="uid://ymf4q6fkocgy" path="res://assets/grid/objects/boxGoal/BoxGoalState.gd" id="1_ss5pc"]
-
-[resource]
-script = ExtResource("1_ss5pc")
-group = 0
-rotation = Vector3i(0, 0, 0)

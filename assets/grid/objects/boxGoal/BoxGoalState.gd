@@ -1,4 +1,4 @@
 class_name BoxGoalState
 extends ObjectState
 
-@export var group: String = "win"
+@export var condition: String = "win"

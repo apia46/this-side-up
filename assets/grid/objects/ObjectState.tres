@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="ObjectState" load_steps=2 format=3 uid="uid://dktdxfq14ap5j"]
-
-[ext_resource type="Script" uid="uid://b5lh1fbsn6mnn" path="res://assets/grid/objects/ObjectState.gd" id="1_cwv7r"]
-
-[resource]
-script = ExtResource("1_cwv7r")
-position = Vector3i(0, 0, 0)
-rotation = Vector3i(0, 0, 0)
-positionOffset = Vector3(0, 0, 0)

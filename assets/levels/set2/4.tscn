@@ -1,27 +1,28 @@
-[gd_scene load_steps=8 format=3 uid="uid://cwhies8ww30c8"]
+[gd_scene load_steps=9 format=3 uid="uid://cwhies8ww30c8"]
 
 [ext_resource type="Script" uid="uid://b7nu886vfs1kr" path="res://assets/levels/level.gd" id="1_r76c2"]
 [ext_resource type="Script" uid="uid://b5lh1fbsn6mnn" path="res://assets/grid/objects/ObjectState.gd" id="2_gnkg7"]
 [ext_resource type="MeshLibrary" uid="uid://3gbxnqp433cm" path="res://assets/grid/tiles/tileGridMesh.tres" id="3_gfjxt"]
+[ext_resource type="Script" uid="uid://cebsuitwtsmgp" path="res://assets/grid/objects/box/BoxState.gd" id="3_gnkg7"]
 [ext_resource type="MeshLibrary" uid="uid://b54wjm1eelmux" path="res://assets/grid/objects/objectsGridMesh.tres" id="4_bxlp8"]
 [ext_resource type="MeshLibrary" uid="uid://datu87mb6cyca" path="res://assets/grid/states/stateMeshLibrary.tres" id="5_7f7gl"]
 
-[sub_resource type="Resource" id="Resource_1aly5"]
-script = ExtResource("2_gnkg7")
+[sub_resource type="Resource" id="Resource_gfjxt"]
+script = ExtResource("3_gnkg7")
 rotation = Vector3i(0, 0, 270)
-metadata/_custom_type_script = "uid://b5lh1fbsn6mnn"
+metadata/_custom_type_script = "uid://cebsuitwtsmgp"
 
-[sub_resource type="Resource" id="Resource_fhv7x"]
-script = ExtResource("2_gnkg7")
+[sub_resource type="Resource" id="Resource_bxlp8"]
+script = ExtResource("3_gnkg7")
 rotation = Vector3i(270, 0, 0)
-metadata/_custom_type_script = "uid://b5lh1fbsn6mnn"
+metadata/_custom_type_script = "uid://cebsuitwtsmgp"
 
 [node name="level" type="Node3D"]
 script = ExtResource("1_r76c2")
 levelNumber = "2-4"
 data = Dictionary[Vector3i, ExtResource("2_gnkg7")]({
-Vector3i(-3, 1, -1): SubResource("Resource_1aly5"),
-Vector3i(-1, 1, 0): SubResource("Resource_fhv7x")
+Vector3i(-3, 1, -1): SubResource("Resource_gfjxt"),
+Vector3i(-1, 1, 0): SubResource("Resource_bxlp8")
 })
 
 [node name="tileGrid" type="GridMap" parent="."]

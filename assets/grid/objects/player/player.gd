@@ -16,6 +16,7 @@ const betterControls: bool = true
 
 static func New(_position: Vector3i, _level: Level, _state:=PlayerState.new()) -> Player:
 	var _player = baseNew(preload("res://assets/grid/objects/player/player.tscn").instantiate(), _position, _level, _state)
+	if _level.levelData.spawnRotation != Vector3i(0,-1,0): _player.state.rotation = _level.levelData.spawnRotation
 	baseNewEnd(_player)
 	return _player
 
@@ -55,9 +56,10 @@ func _input(event):
 		level.toNextLevel()
 	
 	if event.is_action_pressed("restart"):
+		print("restarting!")
 		level.restart()
 	
-	if event.is_action_pressed("toggle_camera"):
+	if event.is_action_pressed("toggle_camera") and level.canFreecam:
 		if state.birdseyeCamera:
 			get_tree().create_tween().tween_property(%camera, "rotation", %cameraPosition.rotation, 0.5).set_trans(Tween.TRANS_QUAD)
 		else:
@@ -160,32 +162,13 @@ func _input(event):
 	var offset = Vector3i(0,0,0)
 	while state.positionRelative(Vector3i(1,0,0) + offset, fork.high) in level.objects.solid:
 		var object = level.objects.solid[state.positionRelative(Vector3i(1,0,0) + offset, fork.high)]
-		if object is Box and !object.held:
+		if object is Box and !object.state.held:
 			state.held.append(object)
 			object.hold()
 			state.holding = true
 			offset += Vector3i(0,1,0)
 		else: break
 	endOfTurn()
-
-func endOfTurn():
-	var checkGroups = {}
-	for group in level.groups:
-		checkGroups[group] = true
-	for object in level.objects.goals:
-		var goal = level.objects.goals[object]
-		if !goal.hasBox(): checkGroups[goal.state.group] = false
-	for object in level.objects.gates:
-		var gate = level.objects.gates[object]
-		if checkGroups[gate.state.group]: gate.open()
-		else: gate.close()
-	if checkGroups.win: win()
-	print(checkGroups)
-
-func win():
-	won = true
-	await get_tree().create_timer(1.0).timeout
-	level.toNextLevel()
 
 static func cantForkInto(checkState:Level.STATES) -> bool:
 	return checkState == Level.STATES.SOLID
@@ -221,4 +204,39 @@ func animateArrow():
 				else: %arrow.play_backwards("turn_right")
 			"idle_left": %arrow.play_backwards("turn_left")
 			"idle_right": %arrow.play_backwards("turn_right")
-	
+
+func endOfTurn():
+	processConditions()
+	processTriggers()
+
+func processConditions():
+	var conditions = {}
+	for condition in level.conditions:
+		conditions[condition] = true
+	for object in level.objects.goals:
+		var goal = level.objects.goals[object]
+		if goal is SelectGoal:
+			var box = goal.getBox()
+			if box is SelectBox:
+				win(box.state.levelFile)
+		else:
+			if !goal.getBox(): conditions[goal.state.condition] = false
+	for object in level.objects.gates:
+		var gate = level.objects.gates[object]
+		if conditions[gate.state.condition]: gate.open()
+		else: gate.close()
+	if conditions.win: win()
+
+func processTriggers():
+	for object in level.objects.triggers:
+		var trigger = level.objects.triggers[object]
+		if trigger.inRange(state.position):
+			if trigger.state is TriggerSetSpawn:
+				level.levelData.spawnLocation = trigger.state.position
+				level.levelData.spawnRotation = trigger.state.rotation
+
+func win(override:=""):
+	won = true
+	await get_tree().create_timer(1.0).timeout
+	if override == "": level.toNextLevel()
+	else: level.loadLevel(override)

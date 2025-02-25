@@ -1,5 +1,7 @@
-class_name game
+class_name Game
 extends Node3D
 
+var levelData = {}
+
 func _ready():
-	add_child(preload("res://assets/levels/map.tscn").instantiate().loadLevel("res://assets/levels/map.tscn"))
+	add_child(preload("res://assets/levels/map.tscn").instantiate().init("res://assets/levels/map.tscn", self))
