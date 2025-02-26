@@ -2,11 +2,14 @@ class_name Player
 extends GameObject
 
 @onready var fork: Fork = %fork
+@onready var game: Game = get_node("/root/game")
+@onready var confirmCircle = get_node("/root/game/ui/confirmCircle")
 
 var positionTween: Tween
 var rotationTween: Tween
 
-var won: bool = false
+var inputOverride: bool = false
+var confirmStatus: String = "escape"
 
 var birdseyeCameraPosition: Vector3 = Vector3(0,10,0)
 
@@ -44,20 +47,35 @@ func _process(delta):
 		result.collider.get_parent().hovered = true
 	for object in level.allObjects():
 		object.processHover()
+	
+	if confirmStatus != "confirmed":
+		if Input.is_action_pressed("escape"):
+			if confirmStatus != "escape": confirmCircle.value = 0
+			confirmStatus = "escape"
+		elif Input.is_action_pressed("restart"):
+			if confirmStatus != "restart": confirmCircle.value = 0
+			confirmStatus = "restart"
+	if confirmStatus == "escape":
+		if Input.is_action_pressed("escape"): confirmCircle.value += delta * 100
+		else: confirmCircle.value -= delta*500
+		if confirmCircle.value == 100:
+			confirmStatus = "confirmed"
+			changeLevel("map")
+	elif confirmStatus == "restart":
+		if Input.is_action_pressed("restart"): confirmCircle.value += delta * 100
+		else: confirmCircle.value -= delta*500
+		if confirmCircle.value == 100:
+			confirmStatus = "confirmed"
+			level.restart()
 
 func _input(event):
-	if won: return
+	if inputOverride: return
 	var previousRotation = state.rotation
 	
 	if event.is_action_pressed("debug"):
 		level.stateGrid.visible = !level.stateGrid.visible
 	
-	if event.is_action_pressed("win"):
-		level.toNextLevel()
-	
-	if event.is_action_pressed("restart"):
-		print("restarting!")
-		level.restart()
+	if event.is_action_pressed("win"): win()
 	
 	if event.is_action_pressed("toggle_camera") and level.canFreecam:
 		if state.birdseyeCamera:
@@ -213,19 +231,23 @@ func processConditions():
 	var conditions = {}
 	for condition in level.conditions:
 		conditions[condition] = true
+	for levelData in game.levelData:
+		if game.levelData[levelData].won:
+			conditions[levelData] = true 
 	for object in level.objects.goals:
 		var goal = level.objects.goals[object]
 		if goal is SelectGoal:
 			var box = goal.getBox()
 			if box is SelectBox:
-				win(box.state.levelFile)
+				changeLevel(box.state.levelFile)
 		else:
 			if !goal.getBox(): conditions[goal.state.condition] = false
 	for object in level.objects.gates:
 		var gate = level.objects.gates[object]
-		if conditions[gate.state.condition]: gate.open()
+		if gate.state.condition in conditions and conditions[gate.state.condition]: gate.open()
 		else: gate.close()
 	if conditions.win: win()
+	print(conditions)
 
 func processTriggers():
 	for object in level.objects.triggers:
@@ -235,8 +257,11 @@ func processTriggers():
 				level.levelData.spawnLocation = trigger.state.position
 				level.levelData.spawnRotation = trigger.state.rotation
 
-func win(override:=""):
-	won = true
-	await get_tree().create_timer(1.0).timeout
-	if override == "": level.toNextLevel()
-	else: level.loadLevel(override)
+func win():
+	level.levelData.won = true
+	changeLevel("map")
+
+func changeLevel(to):
+	inputOverride = true
+	await get_tree().create_timer(0.5).timeout
+	level.loadLevel(to)

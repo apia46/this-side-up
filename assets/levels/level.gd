@@ -14,7 +14,6 @@ var game: Game
 @export var levelData: LevelData # reference 
 
 @export var levelNumber: String
-@export_file("*.tscn") var nextLevel: String
 @export var canLift: bool = true
 @export var canFreecam: bool = true
 @export var data: Dictionary[Vector3i, ObjectState]
@@ -84,7 +83,7 @@ func init(_currentFile, _game):
 			var object
 			if cell in data: object = objectType.New(actualCell, self, data[cell].duplicate())
 			else: object = objectType.New(actualCell, self)
-			if "condition" in object.state and object.state.condition not in conditions:
+			if object is not Gate and "condition" in object.state and object.state.condition not in conditions:
 				conditions.append(object.state.condition)
 			objects[layer][actualCell] = object
 			add_child(object)
@@ -94,9 +93,8 @@ func init(_currentFile, _game):
 
 func loadLevel(level):
 	queue_free()
-	get_node("/root/game").add_child(load(level).instantiate().init(level, game))
+	get_node("/root/game").add_child(load("res://assets/levels/"+level+".tscn").instantiate().init(level, game))
 
-func toNextLevel(): loadLevel(nextLevel)
 func restart(): loadLevel(currentFile)
 
 func allObjects():

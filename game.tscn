@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dvh8iipea8odv"]
+[gd_scene load_steps=3 format=3 uid="uid://dvh8iipea8odv"]
 
 [ext_resource type="Script" uid="uid://cqfax3b5u1tan" path="res://game.gd" id="1_2cxbc"]
+[ext_resource type="Texture2D" uid="uid://dpg4vfg6yqrrv" path="res://assets/ui/confirmCircle.png" id="2_e2o6t"]
 
 [node name="game" type="Node3D"]
 script = ExtResource("1_2cxbc")
@@ -12,19 +13,27 @@ shadow_normal_bias = 1.404
 shadow_opacity = 0.75
 shadow_blur = 0.202
 
-[node name="ui" type="Control" parent="."]
-layout_mode = 3
+[node name="ui" type="MarginContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
 [node name="levelNumber" type="Label" parent="ui"]
-layout_mode = 0
-offset_left = 4.0
-offset_top = 4.0
-offset_right = 275.0
-offset_bottom = 59.0
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
 theme_override_font_sizes/font_size = 40
 text = "Level Number"
+
+[node name="confirmCircle" type="TextureProgressBar" parent="ui"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+fill_mode = 4
+texture_progress = ExtResource("2_e2o6t")
