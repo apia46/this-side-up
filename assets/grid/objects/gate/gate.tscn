@@ -114,14 +114,14 @@ shadow_mesh = SubResource("ArrayMesh_upvnp")
 script = ExtResource("1_gsgoq")
 
 [node name="outline" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.5, 0)
+transform = Transform3D(0.500001, 0, -1.49012e-08, 0, 0.5, 0, 1.49012e-08, 0, 0.500001, 0, 0.5, 0)
 mesh = SubResource("ArrayMesh_np553")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("3_xm17x")
 
 [node name="collision" type="Area3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+transform = Transform3D(1, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, 1, 0, 0.5, 0)
 monitoring = false
 monitorable = false
 
@@ -142,8 +142,10 @@ skeleton = NodePath("")
 
 [node name="remoteTransformOutline" type="RemoteTransform3D" parent="gate"]
 remote_path = NodePath("../../outline")
+update_rotation = false
 update_scale = false
 
 [node name="remoteTransformCollision" type="RemoteTransform3D" parent="gate"]
 remote_path = NodePath("../../collision")
+update_rotation = false
 update_scale = false

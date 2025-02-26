@@ -4,8 +4,8 @@
 [ext_resource type="PlaneMesh" uid="uid://bok4qwa5bqbt7" path="res://assets/grid/objects/box/box_placeholder.tres" id="2_h6tbx"]
 [ext_resource type="PlaneMesh" uid="uid://dx7j7ykewb12k" path="res://assets/grid/objects/boxGoal/boxGoal_placeholder.tres" id="3_ldstn"]
 [ext_resource type="Texture2D" uid="uid://b052wuiaidpad" path="res://assets/grid/objects/gate/gate_placeholder.png" id="4_4ambk"]
-[ext_resource type="PlaneMesh" uid="uid://xxkkygv70cru" path="res://assets/grid/objects/selectGoal/selectGoal_placeholder.tres" id="5_fp1l1"]
-[ext_resource type="PlaneMesh" uid="uid://bamyw724p4rdp" path="res://assets/grid/objects/selectBox/selectBox_placeholder.tres" id="6_yemm8"]
+[ext_resource type="PlaneMesh" uid="uid://xxkkygv70cru" path="res://assets/grid/objects/boxGoal/selectGoal/selectGoal_placeholder.tres" id="5_fp1l1"]
+[ext_resource type="PlaneMesh" uid="uid://bamyw724p4rdp" path="res://assets/grid/objects/box/selectBox/selectBox_placeholder.tres" id="6_yemm8"]
 [ext_resource type="PlaneMesh" uid="uid://comcdsqqu558x" path="res://assets/grid/objects/trigger/selectGoal_placeholder.tres" id="7_neuav"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fp1l1"]

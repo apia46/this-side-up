@@ -7,8 +7,6 @@
 
 [node name="level" type="Node3D"]
 script = ExtResource("1_qfwe2")
-levelNumber = "1-1"
-nextLevel = "uid://bcynsbd24ulx6"
 canLift = false
 
 [node name="tileGrid" type="GridMap" parent="."]
@@ -34,3 +32,17 @@ unique_name_in_owner = true
 visible = false
 mesh_library = ExtResource("4_s3h8j")
 cell_size = Vector3(1, 1, 1)
+
+[node name="controls" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -8.5, 2, -0.5)
+modulate = Color(0, 0, 0, 1)
+outline_modulate = Color(0, 0, 0, 0)
+text = "Hold [R] to restart"
+font_size = 96
+
+[node name="controls2" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -8.5, 2, 5.5)
+modulate = Color(0, 0, 0, 1)
+outline_modulate = Color(0, 0, 0, 0)
+text = "Hold [Escape] to return to map"
+font_size = 96

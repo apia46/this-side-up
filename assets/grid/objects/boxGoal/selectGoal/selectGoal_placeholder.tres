@@ -1,12 +1,12 @@
-[gd_resource type="PlaneMesh" load_steps=3 format=3 uid="uid://bamyw724p4rdp"]
+[gd_resource type="PlaneMesh" load_steps=3 format=3 uid="uid://xxkkygv70cru"]
 
-[ext_resource type="Texture2D" uid="uid://cmc1sm6rdrelb" path="res://assets/grid/objects/selectBox/selectBox_placeholder.png" id="1_qo1dh"]
+[ext_resource type="Texture2D" uid="uid://bqxlduccgx1s7" path="res://assets/grid/objects/boxGoal/selectGoal/selectGoal_placeholder.png" id="1_7qlyv"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_orwn5"]
 transparency = 2
 alpha_scissor_threshold = 0.5
 alpha_antialiasing_mode = 0
-albedo_texture = ExtResource("1_qo1dh")
+albedo_texture = ExtResource("1_7qlyv")
 
 [resource]
 material = SubResource("StandardMaterial3D_orwn5")

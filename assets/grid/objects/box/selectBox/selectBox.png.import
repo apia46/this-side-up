@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cmc1sm6rdrelb"
-path.s3tc="res://.godot/imported/selectBox_placeholder.png-e57bc75e2ebdb53937ff2a98e0a68447.s3tc.ctex"
+uid="uid://crt7kb2cjkxxc"
+path.s3tc="res://.godot/imported/selectBox.png-9224ebf90b9a6be72306ed7627989ef2.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/grid/objects/selectBox/selectBox_placeholder.png"
-dest_files=["res://.godot/imported/selectBox_placeholder.png-e57bc75e2ebdb53937ff2a98e0a68447.s3tc.ctex"]
+source_file="res://assets/grid/objects/box/selectBox/selectBox.png"
+dest_files=["res://.godot/imported/selectBox.png-9224ebf90b9a6be72306ed7627989ef2.s3tc.ctex"]
 
 [params]
 

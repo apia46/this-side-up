@@ -2,6 +2,7 @@ class_name ObjectState
 extends Resource
 
 const TAU_OVER_360: float = 0.0174532925
+enum FACING {UP, DOWN, NORTH, EAST, SOUTH, WEST}
 
 var position: Vector3i = Vector3i(0,0,0)
 @export var rotation: Vector3i = Vector3i(0,0,0)
@@ -101,4 +102,18 @@ func mod180(_rotation:int) -> int:
 	return (_rotation % 180 + 180) % 180
 
 func facingUp() -> bool:
-	return mod360(rotation.x) == mod360(rotation.z) and mod180(rotation.x) == 0
+	return facing() == FACING.UP
+
+func facing() -> FACING:
+	if mod180(rotation.x) == 0 and mod180(rotation.z) == 0:
+		return FACING.UP if (rotation.x == rotation.z) else FACING.DOWN
+	var dir = -rotation.y
+	if mod180(rotation.z) == 90:
+		if rotation.z == 90: dir -= 90
+		else: dir += 90
+	elif (rotation.x < 180) == (rotation.z < 180): dir += 180
+	match mod360(dir):
+		0: return FACING.NORTH
+		90: return FACING.EAST
+		180: return FACING.SOUTH
+		_: return FACING.WEST

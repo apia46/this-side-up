@@ -1,7 +1,7 @@
 [gd_scene load_steps=17 format=4 uid="uid://g8ygbg2iactk"]
 
-[ext_resource type="Script" uid="uid://42st1w1trgrq" path="res://assets/grid/objects/selectBox/selectBox.gd" id="1_nol4f"]
-[ext_resource type="Texture2D" uid="uid://crt7kb2cjkxxc" path="res://assets/grid/objects/selectBox/selectBox.png" id="2_2hrcx"]
+[ext_resource type="Script" uid="uid://42st1w1trgrq" path="res://assets/grid/objects/box/selectBox/selectBox.gd" id="1_nol4f"]
+[ext_resource type="Texture2D" uid="uid://crt7kb2cjkxxc" path="res://assets/grid/objects/box/selectBox/selectBox.png" id="2_2hrcx"]
 [ext_resource type="Material" uid="uid://bb2lej0w18r7q" path="res://assets/resources/outlineMaterial.tres" id="3_2hrcx"]
 [ext_resource type="Texture2D" uid="uid://c45iytxddclqm" path="res://assets/grid/objects/box/hover.png" id="3_f4dgy"]
 [ext_resource type="FontFile" uid="uid://cwlarvo4i0hrb" path="res://assets/resources/SpaceMono-Bold.woff" id="5_f4dgy"]

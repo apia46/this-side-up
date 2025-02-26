@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bgq60fqvu4xx6"
-path.s3tc="res://.godot/imported/selectGoal.png-60cebec25b53c83b068f84c60775db57.s3tc.ctex"
+uid="uid://cmc1sm6rdrelb"
+path.s3tc="res://.godot/imported/selectBox_placeholder.png-652ca635e77b56acd75e50e56c7659dd.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/grid/objects/selectGoal/selectGoal.png"
-dest_files=["res://.godot/imported/selectGoal.png-60cebec25b53c83b068f84c60775db57.s3tc.ctex"]
+source_file="res://assets/grid/objects/box/selectBox/selectBox_placeholder.png"
+dest_files=["res://.godot/imported/selectBox_placeholder.png-652ca635e77b56acd75e50e56c7659dd.s3tc.ctex"]
 
 [params]
 

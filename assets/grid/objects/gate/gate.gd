@@ -19,3 +19,8 @@ func close():
 	get_tree().create_tween().tween_property(%gate, "position:y", 0.5, 0.1)
 	level.stateGrid.set_cell_item(state.position, Level.STATES.SOLID)
 	%collision.set_collision_layer_value(1, true)
+
+func getHoverTitleText(): return "Gate"
+func getHoverBodyText():
+	return super() +\
+	"Condition:" + state.condition

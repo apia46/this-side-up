@@ -7,8 +7,6 @@
 
 [node name="level" type="Node3D"]
 script = ExtResource("1_wrks3")
-levelNumber = "1-4"
-nextLevel = "uid://d25ayg6d6snd1"
 canLift = false
 
 [node name="tileGrid" type="GridMap" parent="."]

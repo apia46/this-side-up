@@ -40,7 +40,7 @@ func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false
 	rotation = state.getRotationAsVector()
 	
 	level.stateGrid.set_cell_item(state.position, -1)
-	level.objects.solid.erase(state.position)
+	if level.objects.solid[state.position] == self: level.objects.solid.erase(state.position)
 	var relativePosition = _position - state.position
 	
 	if changeHeight:
@@ -90,3 +90,6 @@ func drop(_position: Vector3i):
 	level.stateGrid.set_cell_item(state.position, -1)
 	moveTo(_position)
 	level.stateGrid.set_cell_item(state.position, Level.STATES.BOX)
+
+func getHoverTitleText(): return "Box"
+func getHoverBodyText(): return super() + "Facing:" + ["up","down","north","east","south","west"][state.facing()]

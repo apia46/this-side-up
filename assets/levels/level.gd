@@ -13,7 +13,6 @@ enum STATES {
 var game: Game
 @export var levelData: LevelData # reference 
 
-@export var levelNumber: String
 @export var canLift: bool = true
 @export var canFreecam: bool = true
 @export var data: Dictionary[Vector3i, ObjectState]
@@ -28,7 +27,7 @@ var leftBound = null
 var rightBound = null
 
 func _ready():
-	get_node("/root/game/ui/levelNumber").text = levelNumber
+	get_node("/root/game/ui/levelName").text = game.LEVEL_NAMES[currentFile]
 
 func init(_currentFile, _game):
 	currentFile = _currentFile
@@ -47,7 +46,8 @@ func init(_currentFile, _game):
 		if leftBound == null or leftBound > cell.x: leftBound = cell.x
 		if rightBound == null or rightBound < cell.x: rightBound = cell.x
 	
-	for cell in %objectGrid .get_used_cells():
+	var id = 0
+	for cell in %objectGrid.get_used_cells():
 		var objectType
 		var layer = "solid"
 		var actualCell = cell
@@ -86,7 +86,9 @@ func init(_currentFile, _game):
 			if object is not Gate and "condition" in object.state and object.state.condition not in conditions:
 				conditions.append(object.state.condition)
 			objects[layer][actualCell] = object
+			object.id = str(id)
 			add_child(object)
+			id += 1
 	
 	%objectGrid.visible = false
 	return self

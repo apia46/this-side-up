@@ -7,8 +7,6 @@
 
 [node name="level" type="Node3D"]
 script = ExtResource("1_wrks3")
-levelNumber = "1-2"
-nextLevel = "uid://34xpksrvyth4"
 canLift = false
 
 [node name="tileGrid" type="GridMap" parent="."]
@@ -25,7 +23,7 @@ unique_name_in_owner = true
 mesh_library = ExtResource("3_khru6")
 cell_size = Vector3(1, 1, 1)
 data = {
-"cells": PackedInt32Array(6, 65534, 2, 1, 65534, 2, 2, 65534, 0, 9, 65534, 1, 8, 65534, 1, 10, 65534, 1, 11, 65534, 2)
+"cells": PackedInt32Array(6, 65534, 2, 1, 65534, 2, 2, 65534, 0, 11, 65534, 2, 5, 65534, 1, 65542, 65534, 1, 7, 65534, 1)
 }
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 

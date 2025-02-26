@@ -2,14 +2,15 @@ class_name Player
 extends GameObject
 
 @onready var fork: Fork = %fork
-@onready var game: Game = get_node("/root/game")
 @onready var confirmCircle = get_node("/root/game/ui/confirmCircle")
 
 var positionTween: Tween
 var rotationTween: Tween
 
 var inputOverride: bool = false
-var confirmStatus: String = "escape"
+var confirmStatus: String = "restart"
+
+var hoveringAnything: bool = false
 
 var birdseyeCameraPosition: Vector3 = Vector3(0,10,0)
 
@@ -24,6 +25,7 @@ static func New(_position: Vector3i, _level: Level, _state:=PlayerState.new()) -
 	return _player
 
 func _ready():
+	if Input.is_action_pressed("restart"): confirmStatus = "held"
 	%arrow.play("idle")
 	%camera.position = global_transform.origin + %cameraPosition.position
 
@@ -37,7 +39,6 @@ func _process(delta):
 	# https://docs.godotengine.org/en/stable/tutorials/physics/ray-casting.html
 	for object in level.allObjects():
 		object.hovered = false
-	
 	var from = %camera.project_ray_origin(get_viewport().get_mouse_position())
 	var to = from + %camera.project_ray_normal(get_viewport().get_mouse_position()) * %camera.far
 	var query = PhysicsRayQueryParameters3D.create(from, to)
@@ -47,9 +48,15 @@ func _process(delta):
 		result.collider.get_parent().hovered = true
 	for object in level.allObjects():
 		object.processHover()
+	if hoveringAnything or hoverPopup.modulate.a == 1: if result == {}: get_tree().create_tween().tween_property(hoverPopup, "modulate:a", 0, 0.2).set_ease(Tween.EASE_OUT)
+	elif result != {}: get_tree().create_tween().tween_property(hoverPopup, "modulate:a", 1, 0.2).set_ease(Tween.EASE_OUT)
+	hoveringAnything = result != {}
 	
-	if confirmStatus != "confirmed":
-		if Input.is_action_pressed("escape"):
+	if confirmStatus == "held":
+		confirmCircle.value -= delta*500
+		if !Input.is_action_pressed("restart"): confirmStatus = "restart"
+	elif confirmStatus != "confirmed":
+		if Input.is_action_pressed("escape") and level.currentFile != "map":
 			if confirmStatus != "escape": confirmCircle.value = 0
 			confirmStatus = "escape"
 		elif Input.is_action_pressed("restart"):
@@ -62,7 +69,7 @@ func _process(delta):
 			confirmStatus = "confirmed"
 			changeLevel("map")
 	elif confirmStatus == "restart":
-		if Input.is_action_pressed("restart"): confirmCircle.value += delta * 100
+		if Input.is_action_pressed("restart"): confirmCircle.value += delta * 250
 		else: confirmCircle.value -= delta*500
 		if confirmCircle.value == 100:
 			confirmStatus = "confirmed"
@@ -72,12 +79,12 @@ func _input(event):
 	if inputOverride: return
 	var previousRotation = state.rotation
 	
-	if event.is_action_pressed("debug"):
+	if event.is_action_pressed("toggle_states"):
 		level.stateGrid.visible = !level.stateGrid.visible
 	
 	if event.is_action_pressed("win"): win()
 	
-	if event.is_action_pressed("toggle_camera") and level.canFreecam:
+	if event.is_action_pressed("toggle_camera") and (level.canFreecam or game.debug):
 		if state.birdseyeCamera:
 			get_tree().create_tween().tween_property(%camera, "rotation", %cameraPosition.rotation, 0.5).set_trans(Tween.TRANS_QUAD)
 		else:
@@ -236,17 +243,18 @@ func processConditions():
 			conditions[levelData] = true 
 	for object in level.objects.goals:
 		var goal = level.objects.goals[object]
+		var box = goal.getBox()
 		if goal is SelectGoal:
-			var box = goal.getBox()
 			if box is SelectBox:
-				changeLevel(box.state.levelFile)
+				changeLevel(goal.state.levelSet + "/" + box.state.levelFile)
 		else:
-			if !goal.getBox(): conditions[goal.state.condition] = false
+			if !box: conditions[goal.state.condition] = false
+			elif box is SelectBox and !box.state.won: conditions[goal.state.condition] = false
 	for object in level.objects.gates:
 		var gate = level.objects.gates[object]
 		if gate.state.condition in conditions and conditions[gate.state.condition]: gate.open()
 		else: gate.close()
-	if conditions.win: win()
+	if "win" in conditions and conditions.win: win()
 	print(conditions)
 
 func processTriggers():
@@ -265,3 +273,20 @@ func changeLevel(to):
 	inputOverride = true
 	await get_tree().create_timer(0.5).timeout
 	level.loadLevel(to)
+
+func getHoverTitleText(): return "Player"
+func getHoverBodyText(): return super()\
+	+ "Facing:" + ["up","down","north","east","south","west"][state.facing()]\
+	+ ("\nFork:" + ("lifted" if fork.high else "lowered") if "set2" in game.levelData.map.flags else "")\
+	+ ("\nHeld:nothing" if len(state.held) == 0 else "\nHeld:" + getHeldAsText())
+
+func getHeldAsText() -> String:
+	var objects = []
+	if len(state.held) == 1: return state.held[0].getHoverTitleText()
+	for object in state.held:
+		if len(objects) == 0 or objects[-1][1] != object.getHoverTitleText(): objects.append([1, object.getHoverTitleText()])
+		else: objects[-1][0] += 1
+	var toReturn = ""
+	for object in objects:
+		toReturn += "\n - " + str(object[0]) + "x " + object[1]
+	return toReturn
