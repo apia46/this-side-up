@@ -4,6 +4,9 @@ extends Node3D
 var level: Level
 var state: ObjectState
 
+var positionTween: Tween
+var rotationTween: Tween
+
 @onready var game: Game = get_node("/root/game")
 @onready var hoverPopup = get_node("/root/game/hover")
 var hovered: bool = false
@@ -47,3 +50,11 @@ func unhover():
 
 func getHoverTitleText(): return "unset hover text error"
 func getHoverBodyText(): return ("Id:" + id + "\nPosition:" + str(state.position) + "\nRotation:" + str(state.rotation) + "\n" if game.debug else "")
+
+func undoed(_property, _propertyWas):
+	if positionTween and positionTween.is_running(): positionTween.kill()
+	if rotationTween and rotationTween.is_running(): rotationTween.kill()
+	position = state.getPositionAsVector()
+	rotation = state.getRotationAsVector()
+func specialUndo(_event): pass
+func undoCleanup(): pass

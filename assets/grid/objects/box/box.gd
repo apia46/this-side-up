@@ -1,9 +1,6 @@
 class_name Box
 extends GameObject
 
-var positionTween: Tween
-var rotationTween: Tween
-
 static func New(_position: Vector3i, _level: Level, _state:BoxState=BoxState.new()) -> Box:
 	var _box = baseNew(preload("res://assets/grid/objects/box/box.tscn").instantiate(), _position, _level, _state)
 	_box.state.positionOffset = Vector3(0, 0.5, 0)
@@ -25,6 +22,7 @@ func unhover():
 		arrow.visible = false
 
 func hold():
+	if state.held: return false
 	state.held = true
 	state.positionOffset = Vector3(0,0.6,0)
 	rotation = state.getRotationAsVector()
@@ -34,8 +32,12 @@ func hold():
 	positionTween.tween_property(self, "position", state.getPositionAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	
 	level.stateGrid.set_cell_item(state.position, Level.STATES.BOX_HELD)
+	return true
 
 func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false):
+	var previousPosition = state.position
+	var previousRotation = state.rotation
+	
 	position = state.getPositionAsVector()
 	rotation = state.getRotationAsVector()
 	
@@ -68,6 +70,9 @@ func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false
 		rotation += Vector3i(aWantForBetterSyntax[1]) * ObjectState.TAU_OVER_360
 		#print("rotated", state.rotation)
 	
+	if state.position != previousPosition: level.addChangeToStack(id, 0, previousPosition)
+	if state.rotation != previousRotation: level.addChangeToStack(id, 1, previousRotation)
+	
 	if positionTween and positionTween.is_running(): positionTween.kill()
 	if rotationTween and rotationTween.is_running(): rotationTween.kill()
 	
@@ -85,11 +90,17 @@ func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false
 func drop(_position: Vector3i):
 	state.held = false
 	state.positionOffset = Vector3(0,0.5,0)
-	if rotationTween and rotationTween.is_running(): rotationTween.kill()
-	rotation = state.getRotationAsVector()
 	level.stateGrid.set_cell_item(state.position, -1)
 	moveTo(_position)
 	level.stateGrid.set_cell_item(state.position, Level.STATES.BOX)
 
 func getHoverTitleText(): return "Box"
 func getHoverBodyText(): return super() + "Facing:" + ["up","down","north","east","south","west"][state.facing()]
+
+func undoed(property, propertyWas):
+	super(property, propertyWas)
+	if property == "position":
+		level.stateGrid.set_cell_item(propertyWas, -1)
+		if level.objects.solid[propertyWas] == self: level.objects.solid.erase(propertyWas)
+		level.stateGrid.set_cell_item(state.position, Level.STATES.BOX_HELD)
+		level.objects.solid[state.position] = self

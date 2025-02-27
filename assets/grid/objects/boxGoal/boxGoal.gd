@@ -12,4 +12,4 @@ func getBox():
 func getHoverTitleText(): return "Goal"
 func getHoverBodyText():
 	return super() +\
-	("Effect:" + state.condition if state.condition != "none" else "")
+	("Effect:" + state.condition + "["+str(level.currentConditions[state.condition])+"/"+str(level.conditions[state.condition])+"]" if state.condition != "none" else "")
