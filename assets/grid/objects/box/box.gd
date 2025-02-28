@@ -42,7 +42,6 @@ func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false
 	rotation = state.getRotationAsVector()
 	
 	level.stateGrid.set_cell_item(state.position, -1)
-	if level.objects.solid[state.position] == self: level.objects.solid.erase(state.position)
 	var relativePosition = _position - state.position
 	
 	if changeHeight:
@@ -85,7 +84,6 @@ func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false
 	rotationTween.tween_property(self, "rotation", state.getRotationAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	
 	level.stateGrid.set_cell_item(state.position, Level.STATES.BOX_HELD)
-	level.objects.solid[state.position] = self
 
 func drop(_position: Vector3i):
 	state.held = false
@@ -101,6 +99,4 @@ func undoed(property, propertyWas):
 	super(property, propertyWas)
 	if property == "position":
 		level.stateGrid.set_cell_item(propertyWas, -1)
-		if level.objects.solid[propertyWas] == self: level.objects.solid.erase(propertyWas)
 		level.stateGrid.set_cell_item(state.position, Level.STATES.BOX_HELD)
-		level.objects.solid[state.position] = self

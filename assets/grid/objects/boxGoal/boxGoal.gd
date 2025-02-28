@@ -7,7 +7,9 @@ static func New(_position: Vector3i, _level: Level, _state:BoxGoalState=BoxGoalS
 	return _boxGoal
 
 func getBox():
-	return level.objects.solid[state.position] if (state.getTileRelative(Vector3i(0,0,0), level.stateGrid) in [Level.STATES.BOX] and level.objects.solid[state.position].state.facingUp()) else false
+	var box = level.getObject("solid", state.position)
+	if !box or box is not Box or box.state.held or !box.state.facingUp(): return false
+	return box
 
 func getHoverTitleText(): return "Goal"
 func getHoverBodyText():

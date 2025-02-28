@@ -57,4 +57,8 @@ func undoed(_property, _propertyWas):
 	position = state.getPositionAsVector()
 	rotation = state.getRotationAsVector()
 func specialUndo(_event): pass
-func undoCleanup(): pass
+func undoCleanup():
+	if positionTween and positionTween.is_running(): positionTween.kill()
+	if rotationTween and rotationTween.is_running(): rotationTween.kill()
+	position = state.getPositionAsVector()
+	rotation = state.getRotationAsVector()

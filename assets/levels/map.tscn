@@ -187,7 +187,6 @@ metadata/_custom_type_script = "uid://ymf4q6fkocgy"
 
 [node name="level" type="Node3D"]
 script = ExtResource("1_yvtuu")
-conditions = null
 canFreecam = false
 data = Dictionary[Vector3i, ExtResource("2_cnknb")]({
 Vector3i(11, 0, -10): SubResource("Resource_xwvqj"),

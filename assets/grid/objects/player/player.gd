@@ -102,9 +102,9 @@ func _input(event):
 		for object in state.held:
 			object.drop(state.positionRelative(Vector3i(2 + objects,0,0)))
 			if highRelative: objects += 1
-			level.addChangeToStack(id, 2, ["drop", object.id])
+		state.held.reverse()
+		for object in state.held: level.addChangeToStack(id, 2, ["drop", object.id])
 		state.held.clear()
-		state.holding = false
 		endOfTurn()
 		return
 	
@@ -132,37 +132,37 @@ func _input(event):
 		if isTileSolid(state.getTileRelative(Vector3i(1,0,-1), level.stateGrid)): return
 		if isTileSolid(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
 		if cantForkInto(state.getTileRelative(Vector3i(1,0,-2), level.stateGrid, state.high)): return
-		if state.holding and isTileSolid(state.getTileRelative(Vector3i(1,0,-2), level.stateGrid, state.high)): return
-		#if holding and isTileSolid(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, state.high)): return
-		#if holding and isTileSolid(state.getTileRelative(Vector3i(2,0,-1), level.stateGrid, state.high)): return
+		if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(1,0,-2), level.stateGrid, state.high)): return
+		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, state.high)): return
+		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(2,0,-1), level.stateGrid, state.high)): return
 		state.moveRotated(Vector3i(1,0,-1))
 		state.rotation.y += 90
 	elif (event.is_action_pressed("forward") and Input.is_action_pressed("right") if betterControls else event.is_action_pressed("forward_right")):
 		if isTileSolid(state.getTileRelative(Vector3i(1,0,1), level.stateGrid)): return
 		if isTileSolid(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
 		if cantForkInto(state.getTileRelative(Vector3i(1,0,2), level.stateGrid, state.high)): return
-		#if holding and isTileSolid(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, state.high)): return
-		if state.holding and isTileSolid(state.getTileRelative(Vector3i(1,0,2), level.stateGrid, state.high)): return
-		#if holding and isTileSolid(state.getTileRelative(Vector3i(2,0,1), level.stateGrid, state.high)): return
+		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, state.high)): return
+		if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(1,0,2), level.stateGrid, state.high)): return
+		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(2,0,1), level.stateGrid, state.high)): return
 		state.moveRotated(Vector3i(1,0,1))
 		state.rotation.y += -90
 	elif event.is_action_pressed("forward"):
 		if isTileSolid(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
 		if cantForkInto(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, state.high)): return
-		if state.holding and isTileSolid(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, state.high)): return
+		if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, state.high)): return
 		state.moveRotated(Vector3i(1,0,0))
 	elif (event.is_action_pressed("backward") and Input.is_action_pressed("left") if betterControls else event.is_action_pressed("backward_left")):
 		if isTileSolid(state.getTileRelative(Vector3i(-1,0,-1), level.stateGrid)): return
 		if isTileSolid(state.getTileRelative(Vector3i(-1,0,0), level.stateGrid)): return
-		#if holding and isTileSolid(state.getTileRelative(Vector3i(0,0,1), level.stateGrid, state.high)): return
-		#if holding and isTileSolid(state.getTileRelative(Vector3i(-1,0,1), level.stateGrid, state.high)): return
+		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(0,0,1), level.stateGrid, state.high)): return
+		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(-1,0,1), level.stateGrid, state.high)): return
 		state.moveRotated(Vector3i(-1,0,-1))
 		state.rotation.y += -90
 	elif (event.is_action_pressed("backward") and Input.is_action_pressed("right") if betterControls else event.is_action_pressed("backward_right")):
 		if isTileSolid(state.getTileRelative(Vector3i(-1,0,1), level.stateGrid)): return
 		if isTileSolid(state.getTileRelative(Vector3i(-1,0,0), level.stateGrid)): return
-		#if holding and isTileSolid(state.getTileRelative(Vector3i(0,0,-1), level.stateGrid, state.high)): return
-		#if holding and isTileSolid(state.getTileRelative(Vector3i(-1,0,-1), level.stateGrid, state.high)): return
+		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(0,0,-1), level.stateGrid, state.high)): return
+		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(-1,0,-1), level.stateGrid, state.high)): return
 		state.moveRotated(Vector3i(-1,0,1))
 		state.rotation.y += 90
 	elif event.is_action_pressed("backward"):
@@ -193,12 +193,11 @@ func _input(event):
 	
 	# pick up?
 	var offset = Vector3i(0,0,0)
-	while state.positionRelative(Vector3i(1,0,0) + offset, state.high) in level.objects.solid:
-		var object = level.objects.solid[state.positionRelative(Vector3i(1,0,0) + offset, state.high)]
+	while level.getObject("solid", state.positionRelative(Vector3i(1,0,0) + offset, state.high)):
+		var object = level.getObject("solid", state.positionRelative(Vector3i(1,0,0) + offset, state.high))
 		if object is Box and !object.state.held:
 			state.held.append(object)
 			if (object.hold()): level.addChangeToStack(id, 2, ["hold", object.id])
-			state.holding = true
 			offset += Vector3i(0,1,0)
 		else: break
 	endOfTurn()
@@ -244,8 +243,7 @@ func endOfTurn():
 	#print(game.undoStack)
 
 func processTriggers():
-	for object in level.objects.triggers:
-		var trigger = level.objects.triggers[object]
+	for trigger in level.objects.triggers:
 		if trigger.inRange(state.position):
 			if trigger.state is TriggerSetSpawn:
 				level.levelData.spawnLocation = trigger.state.position
@@ -277,19 +275,21 @@ func specialUndo(event):
 	match event[0]:
 		"hold":
 			for index in len(state.held):
-				if state.held[index].id == event[1]:
+				if state.held[index] and state.held[index].id == event[1]:
 					var object = state.held[index]
 					state.held[index] = false
 					object.drop(object.state.position)
-			if len(state.held) - state.held.count(false) == 0: state.holding = false
 		"drop":
 			var object = level.allObjects[int(event[1])]
 			state.held.append(object)
 			object.hold()
-			state.holding = true
 
 func undoCleanup():
-	for index in len(state.held):
-		if !state.held[index]: state.held.pop_at(index)
+	super()
+	var iter = 0
+	while iter < len(state.held):
+		if !state.held[iter]:
+			state.held.pop_at(iter)
+			iter -= 1
+		iter += 1
 	state.held.sort_custom(func(a,b): return a.state.position.y < b.state.position.y)
-	

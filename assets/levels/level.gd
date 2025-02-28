@@ -19,7 +19,7 @@ var currentConditions: Dictionary[String, Variant] = {}
 @export var canFreecam: bool = true
 @export var data: Dictionary[Vector3i, ObjectState]
 
-var objects: Dictionary = {solid={},goals={},gates={},triggers={}}
+var objects: Dictionary[String, Array] = {solid=[],goals=[],gates=[],triggers=[]}
 var allObjects: Array = []
 var currentFile: String
 
@@ -61,70 +61,61 @@ func init(_currentFile, _game):
 		var actualCell = cell
 		while %stateGrid.get_cell_item(actualCell - Vector3i(0,1,0)) == STATES.NONE:
 			actualCell -= Vector3i(0,1,0)
-		match %objectGrid.get_cell_item(cell):
-			0:
+		var objectSlug = %objectGrid.get_cell_item(cell)
+		if objectSlug < len(game.OBJECT_CLASSES): objectType = game.OBJECT_CLASSES[%objectGrid.get_cell_item(cell)]
+		else: assert(false)
+		match objectType:
+			Player:
 				if levelData.spawnLocation != Vector3i(0,-1,0):
 					actualCell = levelData.spawnLocation
 					while %stateGrid.get_cell_item(actualCell - Vector3i(0,1,0)) == STATES.NONE:
 						actualCell -= Vector3i(0,1,0)
-				objectType = Player
-			1:
-				objectType = Box
+			Box, SelectBox:
 				%stateGrid.set_cell_item(actualCell, STATES.BOX)
-			2:
-				objectType = BoxGoal
+			BoxGoal, SelectGoal:
 				layer = "goals"
-			3:
-				objectType = Gate
+			Gate:
 				%stateGrid.set_cell_item(actualCell, STATES.SOLID)
 				layer = "gates"
-			4:
-				objectType = SelectGoal
-				layer = "goals"
-			5:
-				objectType = SelectBox
-				%stateGrid.set_cell_item(actualCell, STATES.BOX)
-			6:
-				objectType = Trigger
+			Trigger:
 				layer = "triggers"
-		if objectType:
-			var object
-			if cell in data: object = objectType.New(actualCell, self, data[cell].duplicate())
-			else: object = objectType.New(actualCell, self)
-			if object is BoxGoal and object.state.condition != "none":
-				if object.state.condition in conditions: conditions[object.state.condition] += 1
-				else:
-					currentConditions[object.state.condition] = 0
-					conditions[object.state.condition] = 1
-			objects[layer][actualCell] = object
-			object.id = str(id)
-			add_child(object)
-			allObjects.append(object)
-			id += 1
+		var object
+		if cell in data: object = objectType.New(actualCell, self, data[cell].duplicate())
+		else: object = objectType.New(actualCell, self)
+		if object is BoxGoal and object.state.condition != "none":
+			if object.state.condition in conditions: conditions[object.state.condition] += 1
+			else:
+				currentConditions[object.state.condition] = 0
+				conditions[object.state.condition] = 1
+		objects[layer].append(object)
+		object.id = str(id)
+		add_child(object)
+		allObjects.append(object)
+		id += 1
 	
 	%objectGrid.visible = false
 	return self
 
-func loadLevel(level):
+func loadLevel(level, undoing:=false):
 	queue_free()
-	addAllToStack()
-	get_node("/root/game").add_child(load("res://assets/levels/"+level+".tscn").instantiate().init(level, game))
+	if !undoing: addAllToStack()
+	var _level = load("res://assets/levels/"+level+".tscn").instantiate().init(level, game)
+	game.add_child(_level)
+	return _level
 
 func restart(): loadLevel(currentFile)
 
 func processConditions():
 	for condition in conditions:
 		currentConditions[condition] = 0
-	for object in objects.goals:
-		var goal = objects.goals[object]
+	for goal in objects.goals:
 		var box = goal.getBox()
 		if goal is SelectGoal:
 			if box is SelectBox:
 				changeLevel(goal.state.levelSet + "/" + box.state.levelFile)
 		else:
 			if box and (box is not SelectBox or box.state.won): currentConditions[goal.state.condition] += 1
-	for object in objects.gates:
-		var gate = objects.gates[object]
+	for gate in objects.gates:
 		if checkCondition(gate.state.condition): gate.open()
 		else: gate.close()
 	if checkCondition("win"): win()
@@ -146,12 +137,18 @@ func addRawChangeToStack(change):
 	print("turncount", turnCount)
 	if len(game.undoStack) == 0 or game.undoStack[-1][0] != currentFile or len(game.undoStack[-1][1]) > turnCount:
 		game.undoStack.append([currentFile, []])
-	if len(game.undoStack[-1][1]) < turnCount:
+	if len(game.undoStack[-1][1]) < turnCount or len(game.undoStack[-1][1]) == 0:
 		game.undoStack[-1][1].append([])
 	game.undoStack[-1][1][-1].append(change)
 
 func addChangeToStack(id:String, property:int, value): addRawChangeToStack([id, property, value])
 
 func addAllToStack():
-	print("hi")
-	addRawChangeToStack(["all"])
+	var all = []
+	for object in allObjects:
+		all.append([object.id, object.state.serialise()])
+	addRawChangeToStack(["all", turnCount, all])
+
+func getObject(layer, location):
+	for object in objects[layer]: if object.state.position == location: return object
+	return false

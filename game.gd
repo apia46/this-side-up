@@ -15,6 +15,15 @@ const STACK_VALUE_IDS = [
 	"special",
 	"high"
 ]
+var OBJECT_CLASSES = [
+	Player,
+	Box,
+	BoxGoal,
+	Gate,
+	SelectGoal,
+	SelectBox,
+	Trigger
+]
 
 var levelData = {}
 @export var undoStack = []
@@ -37,15 +46,24 @@ func undo():
 	actions.reverse()
 	print(actions)
 	for action in actions:
-		if action[0] == "all": print("well shit")
-		assert(action[0].is_valid_int())
-		var object = level.allObjects[int(action[0])]
-		if STACK_VALUE_IDS[action[1]] == "special":
-			object.specialUndo(action[2])
+		if action[0] == "all":
+			level.queue_free()
+			level =  level.loadLevel(undoStack[-1][0], true)
+			level.turnCount = action[1]
+			
+			for serial in action[2]:
+				var object = level.allObjects[int(serial[0])]
+				object.state.deserialise(serial[1])
 		else:
-			var propertyWas = object.state[STACK_VALUE_IDS[action[1]]]
-			object.state[STACK_VALUE_IDS[action[1]]] = action[2]
-			object.undoed(STACK_VALUE_IDS[action[1]], propertyWas)
+			assert(action[0].is_valid_int())
+			var object = level.allObjects[int(action[0])]
+			if STACK_VALUE_IDS[action[1]] == "special":
+				object.specialUndo(action[2])
+			else:
+				var propertyWas = object.state[STACK_VALUE_IDS[action[1]]]
+				object.state[STACK_VALUE_IDS[action[1]]] = action[2]
+				object.undoed(STACK_VALUE_IDS[action[1]], propertyWas)
 	if len(undoStack[-1][1]) == 0: undoStack.pop_back()
 	level.turnCount -= 1
 	for object in level.allObjects: object.undoCleanup()
+	level.processConditions()

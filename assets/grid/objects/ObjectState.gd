@@ -117,3 +117,9 @@ func facing() -> FACING:
 		90: return FACING.EAST
 		180: return FACING.SOUTH
 		_: return FACING.WEST
+
+func serialise(): return [position, rotation, positionOffset]
+func deserialise(values):
+	position = values[0]
+	rotation = values[1]
+	positionOffset = values[2]
