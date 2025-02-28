@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://bbfbhbl1bgla3"]
+[gd_scene load_steps=38 format=3 uid="uid://bbfbhbl1bgla3"]
 
 [ext_resource type="Script" uid="uid://b7nu886vfs1kr" path="res://assets/levels/level.gd" id="1_yvtuu"]
 [ext_resource type="Script" uid="uid://b5lh1fbsn6mnn" path="res://assets/grid/objects/ObjectState.gd" id="2_cnknb"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://ymf4q6fkocgy" path="res://assets/grid/objects/boxGoal/BoxGoalState.gd" id="4_vwmcu"]
 [ext_resource type="Script" uid="uid://b7wnio6cceo8p" path="res://assets/grid/objects/box/selectBox/SelectBoxState.gd" id="5_f36gd"]
 [ext_resource type="MeshLibrary" uid="uid://datu87mb6cyca" path="res://assets/grid/states/stateMeshLibrary.tres" id="5_m2jrs"]
+[ext_resource type="Script" uid="uid://dn1shw5u8soef" path="res://assets/grid/objects/trigger/set_spawn/TriggerSetSpawn.gd" id="6_ih48o"]
 [ext_resource type="Script" uid="uid://dcrrmp5dlahvf" path="res://assets/grid/objects/boxGoal/selectGoal/SelectGoalState.gd" id="7_h6cjy"]
 [ext_resource type="FontFile" uid="uid://cwlarvo4i0hrb" path="res://assets/resources/SpaceMono-Bold.woff" id="9_uytd3"]
 
@@ -117,6 +118,13 @@ won = false
 rotation = Vector3i(0, 0, 0)
 metadata/_custom_type_script = "uid://b7wnio6cceo8p"
 
+[sub_resource type="Resource" id="Resource_g1bvv"]
+script = ExtResource("6_ih48o")
+detectRange = 1
+checkYAxis = false
+rotation = Vector3i(0, 90, 0)
+metadata/_custom_type_script = "uid://dn1shw5u8soef"
+
 [sub_resource type="Resource" id="Resource_uytd3"]
 script = ExtResource("3_vwmcu")
 condition = "pass_tutorial"
@@ -198,6 +206,7 @@ Vector3i(19, 0, 1): SubResource("Resource_f36gd"),
 Vector3i(20, 0, -12): SubResource("Resource_nk2hg"),
 Vector3i(20, 0, -9): SubResource("Resource_myptr"),
 Vector3i(20, 0, -7): SubResource("Resource_6kyek"),
+Vector3i(20, 0, -4): SubResource("Resource_g1bvv"),
 Vector3i(20, 0, 1): SubResource("Resource_uytd3"),
 Vector3i(21, 0, -12): SubResource("Resource_aqk56"),
 Vector3i(21, 0, 1): SubResource("Resource_ih48o"),
@@ -224,7 +233,7 @@ unique_name_in_owner = true
 mesh_library = ExtResource("4_igd0x")
 cell_size = Vector3(1, 1, 1)
 data = {
-"cells": PackedInt32Array(18, 4, 1, 10, 4, 1, 22, 3, 2, 22, 5, 2, 16, 4, 1, 22, 4, 2, 21, 1, 3, 20, 1, 3, 19, 1, 3, 19, 65524, 3, 20, 65524, 3, 21, 65524, 3, 20, 65527, 4, 20, 65529, 5, 17, 65528, 1048579, 17, 65527, 1048579, 17, 65526, 1048579, 15, 65526, 5, 15, 65528, 5, 13, 65526, 1048579, 13, 65527, 1048579, 13, 65528, 1048579, 22, 65525, 2, 22, 65526, 2, 22, 65528, 2, 22, 65529, 2, 11, 65526, 5, 11, 65528, 5, 65512, 6, 0)
+"cells": PackedInt32Array(18, 4, 1, 10, 4, 1, 22, 3, 2, 22, 5, 2, 16, 4, 1, 22, 4, 2, 21, 1, 3, 20, 1, 3, 19, 1, 3, 19, 65524, 3, 20, 65524, 3, 21, 65524, 3, 20, 65527, 4, 20, 65529, 5, 17, 65528, 1048579, 17, 65527, 1048579, 17, 65526, 1048579, 15, 65526, 5, 15, 65528, 5, 13, 65526, 1048579, 13, 65527, 1048579, 13, 65528, 1048579, 22, 65525, 2, 22, 65526, 2, 22, 65528, 2, 22, 65529, 2, 20, 65532, 6, 11, 65526, 5, 11, 65528, 5, 65512, 6, 0)
 }
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 

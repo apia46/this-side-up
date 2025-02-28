@@ -31,7 +31,7 @@ func hold():
 	positionTween = get_tree().create_tween()
 	positionTween.tween_property(self, "position", state.getPositionAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	
-	level.stateGrid.set_cell_item(state.position, Level.STATES.BOX_HELD)
+	level.promiseState(id, state.position, Level.STATES.BOX_HELD)
 	return true
 
 func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false):
@@ -41,7 +41,7 @@ func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false
 	position = state.getPositionAsVector()
 	rotation = state.getRotationAsVector()
 	
-	level.stateGrid.set_cell_item(state.position, -1)
+	level.stateGrid.set_cell_item(state.position, Level.STATES.NONE)
 	var relativePosition = _position - state.position
 	
 	if changeHeight:
@@ -83,20 +83,20 @@ func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false
 	positionTween.tween_property(self, "position", state.getPositionAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	rotationTween.tween_property(self, "rotation", state.getRotationAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	
-	level.stateGrid.set_cell_item(state.position, Level.STATES.BOX_HELD)
+	level.promiseState(id, state.position, Level.STATES.BOX_HELD)
 
 func drop(_position: Vector3i):
 	state.held = false
 	state.positionOffset = Vector3(0,0.5,0)
-	level.stateGrid.set_cell_item(state.position, -1)
+	level.stateGrid.set_cell_item(state.position, Level.STATES.NONE)
 	moveTo(_position)
-	level.stateGrid.set_cell_item(state.position, Level.STATES.BOX)
+	level.promiseState(id, state.position, Level.STATES.BOX)
 
 func getHoverTitleText(): return "Box"
-func getHoverBodyText(): return super() + "Facing:" + ["up","down","north","east","south","west"][state.facing()]
+func getHoverBodyText(): return super() + "Held:" + str(state.held) + "\nFacing:" + ["up","down","north","east","south","west"][state.facing()]
 
 func undoed(property, propertyWas):
 	super(property, propertyWas)
 	if property == "position":
-		level.stateGrid.set_cell_item(propertyWas, -1)
-		level.stateGrid.set_cell_item(state.position, Level.STATES.BOX_HELD)
+		level.stateGrid.set_cell_item(propertyWas, Level.STATES.NONE)
+		level.promiseState(id, state.position, Level.STATES.BOX_HELD)

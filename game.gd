@@ -32,38 +32,37 @@ var level: Level
 var debug: bool = false
 
 func _ready():
-	add_child(preload("res://assets/levels/map.tscn").instantiate().init("map", self))
+	level = preload("res://assets/levels/map.tscn").instantiate().init("map", self)
+	add_child(level)
 
 func _input(event):
 	if event.is_action_pressed("toggle_debug"):
 		debug = !debug
 
 func undo():
-	print("========")
-	print(undoStack)
+	#print("========")
+	#print(undoStack)
 	if len(undoStack) == 0: return
 	var actions : Array = undoStack[-1][1].pop_back()
 	actions.reverse()
-	print(actions)
+	#print(actions)
 	for action in actions:
-		if action[0] == "all":
-			level.queue_free()
-			level =  level.loadLevel(undoStack[-1][0], true)
-			level.turnCount = action[1]
-			
-			for serial in action[2]:
-				var object = level.allObjects[int(serial[0])]
-				object.state.deserialise(serial[1])
-		else:
-			assert(action[0].is_valid_int())
-			var object = level.allObjects[int(action[0])]
-			if STACK_VALUE_IDS[action[1]] == "special":
-				object.specialUndo(action[2])
-			else:
-				var propertyWas = object.state[STACK_VALUE_IDS[action[1]]]
-				object.state[STACK_VALUE_IDS[action[1]]] = action[2]
-				object.undoed(STACK_VALUE_IDS[action[1]], propertyWas)
+		match action[0]:
+			"all":
+				level.queue_free()
+				level = level.loadLevel(undoStack[-1][0], "undo")
+				level.unmakeCereal(action, "undo")
+			_:
+				assert(action[0].is_valid_int())
+				var object = level.allObjects[int(action[0])]
+				if STACK_VALUE_IDS[action[1]] == "special":
+					object.specialUndo(action[2])
+				else:
+					var propertyWas = object.state[STACK_VALUE_IDS[action[1]]]
+					object.state[STACK_VALUE_IDS[action[1]]] = action[2]
+					object.undoed(STACK_VALUE_IDS[action[1]], propertyWas)
 	if len(undoStack[-1][1]) == 0: undoStack.pop_back()
 	level.turnCount -= 1
 	for object in level.allObjects: object.undoCleanup()
+	level.fulfillStatePromises()
 	level.processConditions()

@@ -17,6 +17,7 @@ var currentConditions: Dictionary[String, Variant] = {}
 
 @export var canLift: bool = true
 @export var canFreecam: bool = true
+@export var saveState: bool = false
 @export var data: Dictionary[Vector3i, ObjectState]
 
 var objects: Dictionary[String, Array] = {solid=[],goals=[],gates=[],triggers=[]}
@@ -32,6 +33,8 @@ var inputOverride: bool = false
 
 var turnCount: int = 0
 
+var statePromises: Array = []
+
 func _ready():
 	get_node("/root/game/ui/levelName").text = game.LEVEL_NAMES[currentFile]
 	processConditions()
@@ -39,7 +42,6 @@ func _ready():
 func init(_currentFile, _game):
 	currentFile = _currentFile
 	game = _game
-	game.level = self
 	if currentFile not in game.levelData: game.levelData[currentFile] = LevelData.new()
 	levelData = game.levelData[currentFile]
 	
@@ -96,14 +98,24 @@ func init(_currentFile, _game):
 	%objectGrid.visible = false
 	return self
 
-func loadLevel(level, undoing:=false):
-	queue_free()
-	if !undoing: addAllToStack()
-	var _level = load("res://assets/levels/"+level+".tscn").instantiate().init(level, game)
+func loadLevel(levelFile, pretense:String):
+	if pretense == "enter" and saveState:
+		#print("making cereal!")
+		game.undo() # so that the cereal made isnt a softlock
+		levelData.serial = makeCereal()
+	var _level = load("res://assets/levels/"+levelFile+".tscn").instantiate().init(levelFile, game)
 	game.add_child(_level)
+	if _level.saveState and (pretense == "win" or pretense == "escape" or pretense == "restart"):
+		#print("unmaking cereal!")
+		_level.unmakeCereal(_level.levelData.serial, "change")
+	if pretense != "undo" and turnCount > 0:
+		turnCount += 1
+		addRawChangeToStack(makeCereal())
+	game.level = _level
+	queue_free()
 	return _level
 
-func restart(): loadLevel(currentFile)
+func restart(): loadLevel(currentFile, "restart")
 
 func processConditions():
 	for condition in conditions:
@@ -112,7 +124,7 @@ func processConditions():
 		var box = goal.getBox()
 		if goal is SelectGoal:
 			if box is SelectBox:
-				changeLevel(goal.state.levelSet + "/" + box.state.levelFile)
+				changeLevel(goal.state.levelSet + "/" + box.state.levelFile, "enter")
 		else:
 			if box and (box is not SelectBox or box.state.won): currentConditions[goal.state.condition] += 1
 	for gate in objects.gates:
@@ -126,15 +138,14 @@ func checkCondition(condition):
 
 func win():
 	levelData.won = true
-	changeLevel("map")
+	changeLevel("map", "win")
 
-func changeLevel(to):
+func changeLevel(to, pretense:String):
 	inputOverride = true
 	await get_tree().create_timer(0.5).timeout
-	loadLevel(to)
+	loadLevel(to, pretense)
 
 func addRawChangeToStack(change):
-	print("turncount", turnCount)
 	if len(game.undoStack) == 0 or game.undoStack[-1][0] != currentFile or len(game.undoStack[-1][1]) > turnCount:
 		game.undoStack.append([currentFile, []])
 	if len(game.undoStack[-1][1]) < turnCount or len(game.undoStack[-1][1]) == 0:
@@ -143,12 +154,35 @@ func addRawChangeToStack(change):
 
 func addChangeToStack(id:String, property:int, value): addRawChangeToStack([id, property, value])
 
-func addAllToStack():
+func makeCereal():
 	var all = []
 	for object in allObjects:
 		all.append([object.id, object.state.serialise()])
-	addRawChangeToStack(["all", turnCount, all])
+	return ["all", turnCount, all]
+
+func unmakeCereal(cereal, pretense):
+	assert(cereal[0] == "all")
+	if pretense == "undo": turnCount = cereal[1]
+	for serial in cereal[2]:
+		var object = allObjects[int(serial[0])]
+		object.state.deserialise(serial[1], object)
+		object.undoCleanup()
+	fulfillStatePromises()
 
 func getObject(layer, location):
 	for object in objects[layer]: if object.state.position == location: return object
 	return false
+
+func promiseState(id, _position:Vector3i, state:STATES):
+	var newPromise: bool = true
+	for promise in statePromises:
+		if id == promise[0]:
+			promise[1] = _position
+			promise[2] = state
+			newPromise = false
+	if newPromise: statePromises.append([id, _position, state])
+
+func fulfillStatePromises():
+	for change in statePromises:
+		%stateGrid.set_cell_item(change[1], change[2])
+	statePromises.clear()

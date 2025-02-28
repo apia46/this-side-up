@@ -63,12 +63,14 @@ func _process(delta):
 		else: confirmCircle.value -= delta*500
 		if confirmCircle.value == 100:
 			confirmStatus = "confirmed"
-			level.changeLevel("map")
+			print("ACTION:escape")
+			level.changeLevel("map", "escape")
 	elif confirmStatus == "restart":
-		if Input.is_action_pressed("restart"): confirmCircle.value += delta * 250
+		if Input.is_action_pressed("restart"): confirmCircle.value += delta * 200
 		else: confirmCircle.value -= delta*500
 		if confirmCircle.value == 100:
 			confirmStatus = "confirmed"
+			print("ACTION:restart")
 			level.restart()
 
 func _input(event):
@@ -77,11 +79,15 @@ func _input(event):
 	var previousRotation = state.rotation
 	
 	if event.is_action_pressed("toggle_states"):
+		print("ACTION:toggle_states")
 		level.stateGrid.visible = !level.stateGrid.visible
 	
-	if event.is_action_pressed("win"): level.win()
+	if event.is_action_pressed("win"):
+		print("ACTION:win")
+		level.win()
 	
 	if event.is_action_pressed("toggle_camera") and (level.canFreecam or game.debug):
+		print("ACTION:toggle_camera")
 		if state.birdseyeCamera:
 			get_tree().create_tween().tween_property(%camera, "rotation", %cameraPosition.rotation, 0.5).set_trans(Tween.TRANS_QUAD)
 		else:
@@ -94,6 +100,7 @@ func _input(event):
 	if event is InputEventKey: animateArrow()
 	
 	if event.is_action_pressed("drop"):
+		print("ACTION:drop")
 		var objects = 0
 		for object in state.held:
 			if isTileSolid(state.getTileRelative(Vector3i(2,objects,0), level.stateGrid, state.high)): return
@@ -109,6 +116,7 @@ func _input(event):
 		return
 	
 	if level.canLift and event.is_action_pressed("toggle_height"):
+		print("ACTION:toggle_height")
 		if state.high:
 			if isTileSolid(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
 			state.high = false
@@ -121,7 +129,9 @@ func _input(event):
 		level.addChangeToStack(id, 3, !state.high)
 		return
 	
-	if event.is_action_pressed("undo"): game.undo()
+	if event.is_action_pressed("undo"):
+		print("ACTION:undo")
+		game.undo()
 	
 	if (event.is_action_pressed("movement_better") if betterControls else event.is_action_pressed("movement")):
 		position = state.getPositionAsVector()
@@ -135,6 +145,7 @@ func _input(event):
 		if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(1,0,-2), level.stateGrid, state.high)): return
 		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, state.high)): return
 		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(2,0,-1), level.stateGrid, state.high)): return
+		print("ACTION:forward_left")
 		state.moveRotated(Vector3i(1,0,-1))
 		state.rotation.y += 90
 	elif (event.is_action_pressed("forward") and Input.is_action_pressed("right") if betterControls else event.is_action_pressed("forward_right")):
@@ -144,18 +155,21 @@ func _input(event):
 		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, state.high)): return
 		if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(1,0,2), level.stateGrid, state.high)): return
 		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(2,0,1), level.stateGrid, state.high)): return
+		print("ACTION:forward_right")
 		state.moveRotated(Vector3i(1,0,1))
 		state.rotation.y += -90
 	elif event.is_action_pressed("forward"):
 		if isTileSolid(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
 		if cantForkInto(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, state.high)): return
 		if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, state.high)): return
+		print("ACTION:forward")
 		state.moveRotated(Vector3i(1,0,0))
 	elif (event.is_action_pressed("backward") and Input.is_action_pressed("left") if betterControls else event.is_action_pressed("backward_left")):
 		if isTileSolid(state.getTileRelative(Vector3i(-1,0,-1), level.stateGrid)): return
 		if isTileSolid(state.getTileRelative(Vector3i(-1,0,0), level.stateGrid)): return
 		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(0,0,1), level.stateGrid, state.high)): return
 		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(-1,0,1), level.stateGrid, state.high)): return
+		print("ACTION:backward_left")
 		state.moveRotated(Vector3i(-1,0,-1))
 		state.rotation.y += -90
 	elif (event.is_action_pressed("backward") and Input.is_action_pressed("right") if betterControls else event.is_action_pressed("backward_right")):
@@ -163,10 +177,12 @@ func _input(event):
 		if isTileSolid(state.getTileRelative(Vector3i(-1,0,0), level.stateGrid)): return
 		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(0,0,-1), level.stateGrid, state.high)): return
 		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(-1,0,-1), level.stateGrid, state.high)): return
+		print("ACTION:backward_right")
 		state.moveRotated(Vector3i(-1,0,1))
 		state.rotation.y += 90
 	elif event.is_action_pressed("backward"):
 		if isTileSolid(state.getTileRelative(Vector3i(-1,0,0), level.stateGrid)): return
+		print("ACTION:backward")
 		state.moveRotated(Vector3i(-1,0,0))
 	else:
 		return
@@ -238,6 +254,8 @@ func animateArrow():
 			"idle_right": %arrow.play_backwards("turn_right")
 
 func endOfTurn():
+	print("ACTION:end_of_turn")
+	level.fulfillStatePromises()
 	level.processConditions()
 	processTriggers()
 	#print(game.undoStack)

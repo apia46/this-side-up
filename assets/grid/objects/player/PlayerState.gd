@@ -11,3 +11,14 @@ func facing() -> FACING:
 		90: return FACING.NORTH
 		180: return FACING.WEST
 		_: return FACING.SOUTH
+
+func serialise():
+	var heldSerial = []
+	for object in held:
+		heldSerial.append(object.id)
+	return [super(), heldSerial]
+
+func deserialise(values, object):
+	super(values[0], object)
+	for id in values[1]:
+		held.append(object.level.allObjects[int(id)])
