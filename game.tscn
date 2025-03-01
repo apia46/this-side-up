@@ -1,13 +1,21 @@
-[gd_scene load_steps=6 format=3 uid="uid://dvh8iipea8odv"]
+[gd_scene load_steps=9 format=3 uid="uid://dvh8iipea8odv"]
 
 [ext_resource type="Script" uid="uid://cqfax3b5u1tan" path="res://game.gd" id="1_2cxbc"]
 [ext_resource type="Texture2D" uid="uid://dpg4vfg6yqrrv" path="res://assets/ui/confirmCircle.png" id="2_e2o6t"]
+[ext_resource type="Script" uid="uid://b0qcojqhxnbb5" path="res://assets/resources/Flags.gd" id="2_ryrav"]
 [ext_resource type="Script" uid="uid://cw1qymrv1gj1b" path="res://assets/ui/hover.gd" id="3_7jktm"]
+[ext_resource type="Script" uid="uid://56hcfbj08sy3" path="res://assets/ui/ui.gd" id="3_eow3j"]
 [ext_resource type="FontFile" uid="uid://cwlarvo4i0hrb" path="res://assets/resources/SpaceMono-Bold.woff" id="4_ryrav"]
 [ext_resource type="FontFile" uid="uid://bfamskbaca6r" path="res://assets/resources/SpaceMono-Regular.woff" id="5_eow3j"]
 
+[sub_resource type="Resource" id="Resource_eow3j"]
+script = ExtResource("2_ryrav")
+unlockLift = false
+metadata/_custom_type_script = "uid://b0qcojqhxnbb5"
+
 [node name="game" type="Node3D"]
 script = ExtResource("1_2cxbc")
+flags = SubResource("Resource_eow3j")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.431865, -0.885274, 0.172575, -0.0717353, 0.224445, 0.971843, -0.899081, 0.407325, -0.160436, 0, 10, 0)
@@ -26,13 +34,25 @@ theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
+script = ExtResource("3_eow3j")
 
-[node name="levelName" type="Label" parent="ui"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ui"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="levelName" type="Label" parent="ui/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 40
 text = "Level Number"
+
+[node name="author" type="Label" parent="ui/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 20
+text = "by Author"
 
 [node name="confirmCircle" type="TextureProgressBar" parent="ui"]
 layout_mode = 2

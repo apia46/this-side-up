@@ -2,7 +2,7 @@ class_name Player
 extends GameObject
 
 @onready var fork: Fork = %fork
-@onready var confirmCircle = get_node("/root/game/ui/confirmCircle")
+@onready var confirmCircle = get_node("/root/game/ui").confirmCircle
 
 var confirmStatus: String = "restart"
 
@@ -78,11 +78,11 @@ func _input(event):
 	var previousPosition = state.position
 	var previousRotation = state.rotation
 	
-	if event.is_action_pressed("toggle_states"):
+	if event.is_action_pressed("toggle_states") and game.debug:
 		print("ACTION:toggle_states")
 		level.stateGrid.visible = !level.stateGrid.visible
 	
-	if event.is_action_pressed("win"):
+	if event.is_action_pressed("win") and game.debug:
 		print("ACTION:win")
 		level.win()
 	
@@ -115,7 +115,7 @@ func _input(event):
 		endOfTurn()
 		return
 	
-	if level.canLift and event.is_action_pressed("toggle_height"):
+	if (level.canLift or level.currentFile == "map" and game.flags.unlockLift) and event.is_action_pressed("toggle_height"):
 		print("ACTION:toggle_height")
 		if state.high:
 			if isTileSolid(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
@@ -270,7 +270,7 @@ func processTriggers():
 func getHoverTitleText(): return "Player"
 func getHoverBodyText(): return super()\
 	+ "Facing:" + ["up","down","north","east","south","west"][state.facing()]\
-	+ ("\nFork:" + ("lifted" if state.high else "lowered") if "set2" in game.levelData.map.flags else "")\
+	+ ("\nFork:" + ("lifted" if state.high else "lowered") if game.flags.unlockLift else "")\
 	+ ("\nHeld:nothing" if len(state.held) == 0 else "\nHeld:" + getHeldAsText())
 
 func getHeldAsText() -> String:
@@ -304,6 +304,7 @@ func specialUndo(event):
 
 func undoCleanup():
 	super()
+	%camera.position = global_transform.origin + %cameraPosition.position
 	var iter = 0
 	while iter < len(state.held):
 		if !state.held[iter]:

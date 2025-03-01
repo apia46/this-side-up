@@ -15,8 +15,13 @@ func _ready():
 func getHoverTitleText(): return "Box[Select]"
 func getHoverBodyText():
 	return super()\
-	+ "\nLevel:" + levelNames()\
+	+ "\nLevel" + ("s?:" if len(level.levelData.selectBoxLevels[id]) > 1 else ":") + levelNames()\
 	+ ("\nCleared" if state.won else "")
 
-func levelNames() -> String: return game.LEVEL_NAMES[getLevelFile()]
+func levelNames() -> String:
+	var levels = []
+	for _level in level.levelData.selectBoxLevels[id]:
+		if _level in game.LEVEL_INFO: levels.append(game.LEVEL_INFO[_level][0])
+		else: levels.append(level.generateLevelNumber(_level))
+	return ", ".join(levels)
 func getLevelFile() -> String: return state.defaultSet + "/" + state.levelFile

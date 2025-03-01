@@ -14,8 +14,6 @@ metadata/_custom_type_script = "uid://cebsuitwtsmgp"
 
 [node name="level" type="Node3D"]
 script = ExtResource("1_fhv7x")
-levelNumber = "2-1"
-nextLevel = "uid://0bgtcnsdkanx"
 data = Dictionary[Vector3i, ExtResource("2_bbgc6")]({
 Vector3i(-3, 0, 0): SubResource("Resource_kxm0q")
 })

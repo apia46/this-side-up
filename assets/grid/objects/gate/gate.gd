@@ -23,5 +23,5 @@ func close():
 func getHoverTitleText(): return "Gate"
 func getHoverBodyText():
 	return super() +\
-	"Condition:" + ( "level[" + Game.LEVEL_NAMES[state.condition] + "]" if state.condition in Game.LEVEL_NAMES\
+	"Condition:" + ( "level[" + Game.LEVEL_INFO[state.condition][0] + "]" if state.condition in Game.LEVEL_INFO\
 	else state.condition + "["+str(level.currentConditions[state.condition])+"/"+str(level.conditions[state.condition])+"]")

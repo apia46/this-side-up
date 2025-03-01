@@ -1,13 +1,19 @@
 class_name Game
 extends Node3D
 
-const LEVEL_NAMES = {
-	"map": "",
-	"set1/1": "1-1",
-	"set1/2": "1-2",
-	"set1/3": "1-3",
-	"set1/4": "1-4",
-	"set1/5": "1-5",
+const LEVEL_INFO = {
+	"map": ["", ""],
+	"set1/1": ["1-1", "Boxed In"],
+	"set1/2": ["1-2", "Spread Out"],
+	"set1/3": ["1-3", "Micro"],
+	"set1/4": ["1-4", "Shuriken"],
+	"set1/5": ["1-5", "Lane Change"],
+	
+	"set2/1": ["2-1", "Boxed In Again"],
+	"set2/2": ["2-2", "Orientation Cube"],
+	"set2/3": ["2-3", "Parallel Parking"],
+	"set2/A": ["2-A", "Hammerhead", "Dr. Koffee"],
+	"set2/4": ["2-4!", "Magic Trick", "Something"]
 }
 const STACK_VALUE_IDS = [
 	"position",
@@ -28,6 +34,7 @@ var OBJECT_CLASSES = [
 var levelData = {}
 @export var undoStack = []
 var level: Level
+@export var flags: Flags
 
 var debug: bool = false
 

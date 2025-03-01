@@ -9,11 +9,13 @@ enum STATES {
 	BOX_HELD
 }
 
+@onready var ui: UI = get_node("/root/game/ui")
 @onready var stateGrid: GridMap = %stateGrid
 var game: Game
-@export var levelData: LevelData # reference 
-@export var conditions: Dictionary[String, int] = {}
+var levelData: LevelData # reference 
+var conditions: Dictionary[String, int] = {}
 var currentConditions: Dictionary[String, Variant] = {}
+var subsitute : Variant = false
 
 @export var canLift: bool = true
 @export var canFreecam: bool = true
@@ -36,10 +38,16 @@ var turnCount: int = 0
 var statePromises: Array = []
 
 func _ready():
-	get_node("/root/game/ui/levelName").text = game.LEVEL_NAMES[currentFile]
+	if subsitute:
+		ui.levelName.text = generateLevelNumber(subsitute)
+		ui.author.text = ""
+	else:
+		ui.levelName.text = game.LEVEL_INFO[currentFile][0] + ": " + game.LEVEL_INFO[currentFile][1] if game.LEVEL_INFO[currentFile][0] != "" else ""
+		ui.author.text = "by " + game.LEVEL_INFO[currentFile][2] if len(game.LEVEL_INFO[currentFile]) > 2 else ""
 	processConditions()
 
-func init(_currentFile, _game):
+func init(_currentFile, _game, _subsitute:Variant=false):
+	subsitute = _subsitute
 	currentFile = _currentFile
 	game = _game
 	if currentFile not in game.levelData: game.levelData[currentFile] = LevelData.new()
@@ -60,17 +68,19 @@ func init(_currentFile, _game):
 	for cell in %objectGrid.get_used_cells():
 		var objectType
 		var layer = "solid"
-		var actualCell = cell
-		while %stateGrid.get_cell_item(actualCell - Vector3i(0,1,0)) == STATES.NONE:
-			actualCell -= Vector3i(0,1,0)
 		var objectSlug = %objectGrid.get_cell_item(cell)
-		if objectSlug < len(game.OBJECT_CLASSES): objectType = game.OBJECT_CLASSES[%objectGrid.get_cell_item(cell)]
-		else: assert(false)
+		assert(objectSlug < len(game.OBJECT_CLASSES))
+		objectType = game.OBJECT_CLASSES[objectSlug]
+		var actualCell = cell
+		
+		if objectType != BoxGoal:
+			while %stateGrid.get_cell_item(actualCell - Vector3i(0,1,0)) == STATES.NONE:
+				actualCell -= Vector3i(0,1,0)
 		match objectType:
 			Player:
-				if levelData.spawnLocation != Vector3i(0,-1,0):
+				if levelData.spawnLocation != Vector3i(0,-1,0): # defined spawn location
 					actualCell = levelData.spawnLocation
-					while %stateGrid.get_cell_item(actualCell - Vector3i(0,1,0)) == STATES.NONE:
+					while %stateGrid.get_cell_item(actualCell - Vector3i(0,1,0)) == STATES.NONE: # snap to floor again
 						actualCell -= Vector3i(0,1,0)
 			Box, SelectBox:
 				%stateGrid.set_cell_item(actualCell, STATES.BOX)
@@ -89,11 +99,15 @@ func init(_currentFile, _game):
 			else:
 				currentConditions[object.state.condition] = 0
 				conditions[object.state.condition] = 1
+		if object is SelectBox and str(id) not in levelData.selectBoxLevels: levelData.selectBoxLevels[str(id)] = [object.state.defaultSet + "/" + object.state.levelFile]
 		objects[layer].append(object)
 		object.id = str(id)
 		add_child(object)
 		allObjects.append(object)
 		id += 1
+	
+	conditions.none = 1
+	currentConditions.none = 0
 	
 	%objectGrid.visible = false
 	return self
@@ -103,7 +117,13 @@ func loadLevel(levelFile, pretense:String):
 		#print("making cereal!")
 		game.undo() # so that the cereal made isnt a softlock
 		levelData.serial = makeCereal()
-	var _level = load("res://assets/levels/"+levelFile+".tscn").instantiate().init(levelFile, game)
+	
+	var _level
+	if FileAccess.file_exists("res://assets/levels/"+levelFile+".tscn"):
+		_level = load("res://assets/levels/"+levelFile+".tscn").instantiate().init(levelFile, game)
+	else:
+		_level = load("res://assets/levels/placeholder.tscn").instantiate().init("placeholder", game, levelFile)
+	
 	game.add_child(_level)
 	if _level.saveState and (pretense == "win" or pretense == "escape" or pretense == "restart"):
 		#print("unmaking cereal!")
@@ -124,12 +144,17 @@ func processConditions():
 		var box = goal.getBox()
 		if goal is SelectGoal:
 			if box is SelectBox:
-				changeLevel(goal.state.levelSet + "/" + box.state.levelFile, "enter")
+				var levelFile = goal.state.levelSet + "/" + box.state.levelFile
+				if levelFile not in levelData.selectBoxLevels[box.id]: # havent seen before; add level
+					print("jere")
+					levelData.selectBoxLevels[box.id].append(levelFile)
+				changeLevel(levelFile, "enter")
 		else:
 			if box and (box is not SelectBox or box.state.won): currentConditions[goal.state.condition] += 1
 	for gate in objects.gates:
 		if checkCondition(gate.state.condition): gate.open()
 		else: gate.close()
+	if !game.flags.unlockLift and checkCondition("pass_set1"): game.flags.unlockLift = true
 	if checkCondition("win"): win()
 
 func checkCondition(condition):
@@ -186,3 +211,6 @@ func fulfillStatePromises():
 	for change in statePromises:
 		%stateGrid.set_cell_item(change[1], change[2])
 	statePromises.clear()
+
+func generateLevelNumber(file):
+	return file[3] + "-" + (file[5] if len(file) > 5 else "0") + "?"
