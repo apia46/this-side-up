@@ -53,8 +53,8 @@ func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false
 		state.position.z = _position.z
 	state.rotation += _rotation
 	
-	if !state.held and isTileNonsolid(state.getTileRelative(Vector3i(0,-1,0), level.stateGrid)):
-		while state.position.y > -5 and isTileNonsolid(state.getTileRelative(Vector3i(0,-1,0), level.stateGrid)):
+	if !state.held and isTileNonsolid(getStateOfCellIncludingPromises(state.positionRelative(Vector3i(0,-1,0)))):
+		while state.position.y > -5 and isTileNonsolid(getStateOfCellIncludingPromises(state.positionRelative(Vector3i(0,-1,0)))):
 			state.position.y -= 1
 		var toRotate = Vector3i(0,0,0)
 		match sign(relativePosition.x):
@@ -103,3 +103,8 @@ func undoed(property, propertyWas):
 	if property == "position":
 		level.stateGrid.set_cell_item(propertyWas, Level.STATES.NONE)
 		level.promiseState(id, state.position, Level.STATES.BOX_HELD)
+
+func getStateOfCellIncludingPromises(cell:Vector3i) -> Level.STATES:
+	for promise in level.statePromises:
+		if promise[1] == cell: return promise[2]  as Level.STATES
+	return level.stateGrid.get_cell_item(cell) as Level.STATES

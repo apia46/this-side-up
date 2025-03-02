@@ -47,7 +47,7 @@ func setUiText():
 		ui.author.text = ""
 	else:
 		ui.levelName.text = game.LEVEL_INFO[currentFile][0] + ": " + game.LEVEL_INFO[currentFile][1] if game.LEVEL_INFO[currentFile][0] != "" else ""
-		ui.author.text = "by " + game.LEVEL_INFO[currentFile][3] if len(game.LEVEL_INFO[currentFile]) > 3 else ""
+		ui.author.text = "by " + game.LEVEL_INFO[currentFile][2] if len(game.LEVEL_INFO[currentFile]) > 2 else ""
 
 func init(_currentFile, _game, _subsitute:Variant=false):
 	subsitute = _subsitute
