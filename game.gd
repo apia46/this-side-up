@@ -1,6 +1,8 @@
 class_name Game
 extends Node3D
 
+@onready var ui : UI = get_node("ui")
+
 const LEVEL_INFO = {
 	"map": ["", ""],
 	"placeholder": ["", ""], # before it loads the subsitute from the cereal, just so it doesnt crash
@@ -46,16 +48,19 @@ func _ready():
 func _input(event):
 	if event.is_action_pressed("toggle_debug"):
 		debug = !debug
+		ui.debug.visible = debug
 
 func undo():
 	#print("========")
 	#print(undoStack)
 	if len(undoStack) == 0: return
-	var actions : Array = undoStack[-1][1].pop_back()
+	var actions: Array = undoStack[-1][1].pop_back()
+	var doItAgain: bool = false
 	actions.reverse()
 	#print(actions)
 	for action in actions:
 		match action[0]:
+			"dummy": doItAgain = true
 			"all":
 				level.queue_free()
 				level = level.loadLevel(undoStack[-1][0], "undo")
@@ -74,3 +79,4 @@ func undo():
 	for object in level.allObjects: object.undoCleanup()
 	level.fulfillStatePromises()
 	level.processConditions()
+	if doItAgain: undo()

@@ -33,13 +33,16 @@ var rightBound = null
 
 var inputOverride: bool = false
 
-var turnCount: int = 0
+var turnCount: int = 1
 
 var statePromises: Array = []
 
 func _ready():
 	setUiText()
 	processConditions()
+
+func _process(_delta):
+	ui.turnCount.text = "turncount: " + str(turnCount)
 
 func setUiText():
 	if subsitute:
@@ -131,10 +134,11 @@ func loadLevel(levelFile, pretense:String):
 	if _level.saveState and (pretense == "win" or pretense == "escape" or pretense == "restart"):
 		#print("unmaking cereal!")
 		_level.unmakeCereal(_level.levelData.serial, "change")
-	if pretense != "undo" and turnCount > 0:
-		turnCount += 1 # why are we doing this
-		if !(pretense == "enter" and saveState): game.undo() # so that the undo-cereal made isnt a softlock
-		addRawChangeToStack(makeCereal())
+		if turnCount > 0:
+			#turnCount += 1 # why are we doing this # why were we doing this
+			if !(pretense == "enter" and saveState): game.undo() # so that the undo-cereal made isnt a softlock
+			addRawChangeToStack(makeCereal())
+		_level.addRawChangeToStack(["dummy"])
 	game.level = _level
 	queue_free()
 	return _level
@@ -187,17 +191,18 @@ func makeCereal():
 	var all = []
 	for object in allObjects:
 		all.append([object.id, object.state.serialise()])
-	return ["all", turnCount, all, subsitute]
+	return ["all", all, subsitute]
 
 func unmakeCereal(cereal, pretense):
 	assert(cereal[0] == "all")
-	if pretense == "undo": turnCount = cereal[1]
-	for serial in cereal[2]:
+	print(game.undoStack[-1])
+	if pretense == "undo": turnCount = len(game.undoStack[-1][1]) + 1
+	for serial in cereal[1]:
 		var object = allObjects[int(serial[0])]
 		object.state.deserialise(serial[1], object)
 		object.undoCleanup()
-	if cereal[3]:
-		subsitute = cereal[3]
+	if cereal[2]:
+		subsitute = cereal[2]
 		setUiText()
 	fulfillStatePromises()
 	processConditions()
