@@ -2,7 +2,8 @@ class_name Game
 extends Node3D
 
 const LEVEL_INFO = {
-	"map": ["", ""],
+	"map": ["", "", preload("res://assets/levels/map.tscn")],
+	"placeholder": ["", ""], # before it loads the subsitute from the cereal, just so it doesnt crash
 	"set1/1": ["1-1", "Boxed In"],
 	"set1/2": ["1-2", "Spread Out"],
 	"set1/3": ["1-3", "Micro"],
@@ -12,8 +13,8 @@ const LEVEL_INFO = {
 	"set2/1": ["2-1", "Boxed In Again"],
 	"set2/2": ["2-2", "Orientation Cube"],
 	"set2/3": ["2-3", "Parallel Parking"],
+	"set2/4": ["2-4!", "Magic Trick", "Something"],
 	"set2/A": ["2-A", "Hammerhead", "Dr. Koffee"],
-	"set2/4": ["2-4!", "Magic Trick", "Something"]
 }
 const STACK_VALUE_IDS = [
 	"position",

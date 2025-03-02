@@ -38,13 +38,16 @@ var turnCount: int = 0
 var statePromises: Array = []
 
 func _ready():
+	setUiText()
+	processConditions()
+
+func setUiText():
 	if subsitute:
 		ui.levelName.text = generateLevelNumber(subsitute)
 		ui.author.text = ""
 	else:
 		ui.levelName.text = game.LEVEL_INFO[currentFile][0] + ": " + game.LEVEL_INFO[currentFile][1] if game.LEVEL_INFO[currentFile][0] != "" else ""
-		ui.author.text = "by " + game.LEVEL_INFO[currentFile][2] if len(game.LEVEL_INFO[currentFile]) > 2 else ""
-	processConditions()
+		ui.author.text = "by " + game.LEVEL_INFO[currentFile][3] if len(game.LEVEL_INFO[currentFile]) > 3 else ""
 
 func init(_currentFile, _game, _subsitute:Variant=false):
 	subsitute = _subsitute
@@ -119,7 +122,7 @@ func loadLevel(levelFile, pretense:String):
 		levelData.serial = makeCereal()
 	
 	var _level
-	if FileAccess.file_exists("res://assets/levels/"+levelFile+".tscn"):
+	if (levelFile) in game.LEVEL_INFO:
 		_level = load("res://assets/levels/"+levelFile+".tscn").instantiate().init(levelFile, game)
 	else:
 		_level = load("res://assets/levels/placeholder.tscn").instantiate().init("placeholder", game, levelFile)
@@ -129,7 +132,8 @@ func loadLevel(levelFile, pretense:String):
 		#print("unmaking cereal!")
 		_level.unmakeCereal(_level.levelData.serial, "change")
 	if pretense != "undo" and turnCount > 0:
-		turnCount += 1
+		turnCount += 1 # why are we doing this
+		if !(pretense == "enter" and saveState): game.undo() # so that the undo-cereal made isnt a softlock
 		addRawChangeToStack(makeCereal())
 	game.level = _level
 	queue_free()
@@ -183,7 +187,7 @@ func makeCereal():
 	var all = []
 	for object in allObjects:
 		all.append([object.id, object.state.serialise()])
-	return ["all", turnCount, all]
+	return ["all", turnCount, all, subsitute]
 
 func unmakeCereal(cereal, pretense):
 	assert(cereal[0] == "all")
@@ -192,7 +196,11 @@ func unmakeCereal(cereal, pretense):
 		var object = allObjects[int(serial[0])]
 		object.state.deserialise(serial[1], object)
 		object.undoCleanup()
+	if cereal[3]:
+		subsitute = cereal[3]
+		setUiText()
 	fulfillStatePromises()
+	processConditions()
 
 func getObject(layer, location):
 	for object in objects[layer]: if object.state.position == location: return object

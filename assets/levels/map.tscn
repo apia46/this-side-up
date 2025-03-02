@@ -96,6 +96,24 @@ condition = "pass_tutorial"
 rotation = Vector3i(0, 0, 0)
 metadata/_custom_type_script = "uid://ocatylxuuv00"
 
+[sub_resource type="Resource" id="Resource_pa3sl"]
+script = ExtResource("5_f36gd")
+levelText = "1"
+levelFile = "1"
+defaultSet = "set2"
+won = false
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://b7wnio6cceo8p"
+
+[sub_resource type="Resource" id="Resource_img7e"]
+script = ExtResource("5_f36gd")
+levelText = "2"
+levelFile = "2"
+defaultSet = "set2"
+won = false
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://b7wnio6cceo8p"
+
 [sub_resource type="Resource" id="Resource_nk2hg"]
 script = ExtResource("3_vwmcu")
 condition = "pass_set1"
@@ -124,6 +142,18 @@ condition = "pass_tutorial"
 rotation = Vector3i(0, 0, 0)
 metadata/_custom_type_script = "uid://ocatylxuuv00"
 
+[sub_resource type="Resource" id="Resource_h7wg1"]
+script = ExtResource("4_vwmcu")
+condition = "pass_set2"
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://ymf4q6fkocgy"
+
+[sub_resource type="Resource" id="Resource_1yild"]
+script = ExtResource("4_vwmcu")
+condition = "pass_set2"
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://ymf4q6fkocgy"
+
 [sub_resource type="Resource" id="Resource_aqk56"]
 script = ExtResource("3_vwmcu")
 condition = "pass_set1"
@@ -133,6 +163,18 @@ metadata/_custom_type_script = "uid://ocatylxuuv00"
 [sub_resource type="Resource" id="Resource_ih48o"]
 script = ExtResource("3_vwmcu")
 condition = "pass_tutorial"
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://ocatylxuuv00"
+
+[sub_resource type="Resource" id="Resource_b7vk2"]
+script = ExtResource("3_vwmcu")
+condition = "pass_set2"
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://ocatylxuuv00"
+
+[sub_resource type="Resource" id="Resource_uuyt0"]
+script = ExtResource("3_vwmcu")
+condition = "pass_tutorial2"
 rotation = Vector3i(0, 0, 0)
 metadata/_custom_type_script = "uid://ocatylxuuv00"
 
@@ -178,38 +220,9 @@ condition = "pass_tutorial"
 rotation = Vector3i(0, 0, 0)
 metadata/_custom_type_script = "uid://ymf4q6fkocgy"
 
-[sub_resource type="Resource" id="Resource_g1bvv"]
-script = ExtResource("7_uqxq1")
-rotation = Vector3i(270, 0, 0)
-metadata/_custom_type_script = "uid://cebsuitwtsmgp"
-
-[sub_resource type="Resource" id="Resource_x0idy"]
-script = ExtResource("4_vwmcu")
-condition = "pass_tutorial2"
-rotation = Vector3i(0, 0, 0)
-metadata/_custom_type_script = "uid://ymf4q6fkocgy"
-
-[sub_resource type="Resource" id="Resource_4xn1q"]
-script = ExtResource("4_vwmcu")
-condition = "pass_tutorial2"
-rotation = Vector3i(0, 0, 0)
-metadata/_custom_type_script = "uid://ymf4q6fkocgy"
-
-[sub_resource type="Resource" id="Resource_uuyt0"]
+[sub_resource type="Resource" id="Resource_xf6me"]
 script = ExtResource("3_vwmcu")
-condition = "pass_tutorial2"
-rotation = Vector3i(0, 0, 0)
-metadata/_custom_type_script = "uid://ocatylxuuv00"
-
-[sub_resource type="Resource" id="Resource_oeejv"]
-script = ExtResource("3_vwmcu")
-condition = "pass_tutorial2"
-rotation = Vector3i(0, 0, 0)
-metadata/_custom_type_script = "uid://ocatylxuuv00"
-
-[sub_resource type="Resource" id="Resource_f8aig"]
-script = ExtResource("3_vwmcu")
-condition = "pass_tutorial2"
+condition = "pass_set2"
 rotation = Vector3i(0, 0, 0)
 metadata/_custom_type_script = "uid://ocatylxuuv00"
 
@@ -220,23 +233,41 @@ condition = "none"
 rotation = Vector3i(0, 0, 0)
 metadata/_custom_type_script = "uid://dcrrmp5dlahvf"
 
-[sub_resource type="Resource" id="Resource_pa3sl"]
-script = ExtResource("5_f36gd")
-levelText = "1"
-levelFile = "1"
-defaultSet = "set2"
-won = false
+[sub_resource type="Resource" id="Resource_oeejv"]
+script = ExtResource("3_vwmcu")
+condition = "pass_tutorial2"
 rotation = Vector3i(0, 0, 0)
-metadata/_custom_type_script = "uid://b7wnio6cceo8p"
+metadata/_custom_type_script = "uid://ocatylxuuv00"
 
-[sub_resource type="Resource" id="Resource_img7e"]
-script = ExtResource("5_f36gd")
-levelText = "2"
-levelFile = "2"
-defaultSet = "set2"
-won = false
+[sub_resource type="Resource" id="Resource_x0idy"]
+script = ExtResource("4_vwmcu")
+condition = "pass_tutorial2"
 rotation = Vector3i(0, 0, 0)
-metadata/_custom_type_script = "uid://b7wnio6cceo8p"
+metadata/_custom_type_script = "uid://ymf4q6fkocgy"
+
+[sub_resource type="Resource" id="Resource_k6o4q"]
+script = ExtResource("3_vwmcu")
+condition = "pass_set2"
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://ocatylxuuv00"
+
+[sub_resource type="Resource" id="Resource_f8aig"]
+script = ExtResource("3_vwmcu")
+condition = "pass_tutorial2"
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://ocatylxuuv00"
+
+[sub_resource type="Resource" id="Resource_vr3kq"]
+script = ExtResource("4_vwmcu")
+condition = "pass_set2"
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://ymf4q6fkocgy"
+
+[sub_resource type="Resource" id="Resource_qdgu7"]
+script = ExtResource("4_vwmcu")
+condition = "pass_set2"
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://ymf4q6fkocgy"
 
 [sub_resource type="Resource" id="Resource_bihab"]
 script = ExtResource("5_f36gd")
@@ -256,47 +287,16 @@ won = false
 rotation = Vector3i(0, 0, 0)
 metadata/_custom_type_script = "uid://b7wnio6cceo8p"
 
-[sub_resource type="Resource" id="Resource_h7wg1"]
+[sub_resource type="Resource" id="Resource_g1bvv"]
+script = ExtResource("7_uqxq1")
+rotation = Vector3i(270, 0, 0)
+metadata/_custom_type_script = "uid://cebsuitwtsmgp"
+
+[sub_resource type="Resource" id="Resource_4xn1q"]
 script = ExtResource("4_vwmcu")
-condition = "pass_set2"
+condition = "pass_tutorial2"
 rotation = Vector3i(0, 0, 0)
 metadata/_custom_type_script = "uid://ymf4q6fkocgy"
-
-[sub_resource type="Resource" id="Resource_vr3kq"]
-script = ExtResource("4_vwmcu")
-condition = "pass_set2"
-rotation = Vector3i(0, 0, 0)
-metadata/_custom_type_script = "uid://ymf4q6fkocgy"
-
-[sub_resource type="Resource" id="Resource_1yild"]
-script = ExtResource("4_vwmcu")
-condition = "pass_set2"
-rotation = Vector3i(0, 0, 0)
-metadata/_custom_type_script = "uid://ymf4q6fkocgy"
-
-[sub_resource type="Resource" id="Resource_qdgu7"]
-script = ExtResource("4_vwmcu")
-condition = "pass_set2"
-rotation = Vector3i(0, 0, 0)
-metadata/_custom_type_script = "uid://ymf4q6fkocgy"
-
-[sub_resource type="Resource" id="Resource_b7vk2"]
-script = ExtResource("3_vwmcu")
-condition = "pass_set2"
-rotation = Vector3i(0, 0, 0)
-metadata/_custom_type_script = "uid://ocatylxuuv00"
-
-[sub_resource type="Resource" id="Resource_xf6me"]
-script = ExtResource("3_vwmcu")
-condition = "pass_set2"
-rotation = Vector3i(0, 0, 0)
-metadata/_custom_type_script = "uid://ocatylxuuv00"
-
-[sub_resource type="Resource" id="Resource_k6o4q"]
-script = ExtResource("3_vwmcu")
-condition = "pass_set2"
-rotation = Vector3i(0, 0, 0)
-metadata/_custom_type_script = "uid://ocatylxuuv00"
 
 [node name="level" type="Node3D"]
 script = ExtResource("1_yvtuu")

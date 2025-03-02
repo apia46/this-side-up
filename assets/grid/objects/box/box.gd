@@ -35,13 +35,15 @@ func hold():
 	return true
 
 func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false):
+	print("going to " + str(_position))
 	var previousPosition = state.position
 	var previousRotation = state.rotation
 	
 	position = state.getPositionAsVector()
 	rotation = state.getRotationAsVector()
 	
-	level.stateGrid.set_cell_item(state.position, Level.STATES.NONE)
+	# we have to check because of gate bumping. fuckk
+	if state.getTileRelative(Vector3i(0,0,0), level.stateGrid) != Level.STATES.SOLID: level.stateGrid.set_cell_item(state.position, Level.STATES.NONE)
 	var relativePosition = _position - state.position
 	
 	if changeHeight:
@@ -84,6 +86,7 @@ func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false
 	rotationTween.tween_property(self, "rotation", state.getRotationAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	
 	level.promiseState(id, state.position, Level.STATES.BOX_HELD)
+	print("went to " + str(state.position))
 
 func drop(_position: Vector3i):
 	state.held = false

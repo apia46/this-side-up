@@ -11,6 +11,8 @@ func open():
 	state.open = true
 	get_tree().create_tween().tween_property(%gate, "position:y", -0.5, 0.1)
 	level.stateGrid.set_cell_item(state.position, Level.STATES.NONE)
+	var overlap = level.getObject("solid", state.position + Vector3i(0,1,0))
+	if overlap and overlap is Box: overlap.moveTo(Vector3i(0,-1,0), Vector3i(0,0,0), true)
 	%collision.set_collision_layer_value(1, false)
 
 func close():
@@ -18,6 +20,8 @@ func close():
 	state.open = false
 	get_tree().create_tween().tween_property(%gate, "position:y", 0.5, 0.1)
 	level.stateGrid.set_cell_item(state.position, Level.STATES.SOLID)
+	var overlap = level.getObject("solid", state.position)
+	if overlap and overlap is Box: overlap.moveTo(Vector3i(0,1,0), Vector3i(0,0,0), true)
 	%collision.set_collision_layer_value(1, true)
 
 func getHoverTitleText(): return "Gate"
