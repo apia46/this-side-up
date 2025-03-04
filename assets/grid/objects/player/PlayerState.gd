@@ -22,3 +22,6 @@ func deserialise(values, object):
 	super(values[0], object)
 	for id in values[1]:
 		held.append(object.level.allObjects[int(id)])
+
+func occupiedPositions() -> Dictionary[Vector3i,Level.COLLISION_TYPES]:
+	return {position:Level.COLLISION_TYPES.SOLID, positionRelative(Vector3i(1,0,0), high):Level.COLLISION_TYPES.FORK}

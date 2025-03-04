@@ -93,7 +93,7 @@ func wrapSelfRotation(vector) -> Vector3i:
 	return fixed - vector
 
 func positionRelative(location:Vector3i, lifted:=false) -> Vector3i:
-	return rotatePosition(location) + position  + (Vector3i(0,0,0) if !lifted else Vector3i(0,1,0))
+	return rotatePosition(location) + position + (Vector3i(0,0,0) if !lifted else Vector3i(0,1,0))
 
 func mod360(_rotation:int) -> int:
 	return (_rotation % 360 + 360) % 360
@@ -123,3 +123,5 @@ func deserialise(values, _object):
 	position = values[0]
 	rotation = values[1]
 	positionOffset = values[2]
+
+func occupiedPositions() -> Dictionary[Vector3i,Level.COLLISION_TYPES]: return {position:Level.COLLISION_TYPES.NON_SOLID}
