@@ -19,6 +19,7 @@ enum COLLISION_TYPES {
 
 @onready var ui: UI = get_node("/root/game/ui")
 @onready var stateGrid: GridMap = %stateGrid
+@onready var tileGrid: GridMap = %tileGrid
 var game: Game
 var levelData: LevelData # reference 
 var conditions: Dictionary[String, int] = {}
@@ -31,7 +32,7 @@ var subsitute : Variant = false
 @export var data: Dictionary[Vector3i, ObjectState]
 
 var objects: Dictionary[String, Array] = {solid=[],goals=[],gates=[],triggers=[]}
-var allObjects: Array = []
+var allObjects: Array[GameObject] = []
 var currentFile: String
 
 var topBound = null

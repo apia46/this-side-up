@@ -138,6 +138,10 @@ func _input(event):
 		rotation = state.getRotationAsVector()
 	else: return
 	
+	var ownObjects: Array[GameObject] = state.held.duplicate()
+	ownObjects.append(self)
+	var collisionCheck = CollisionCheck.new(level.tileGrid, level.allObjects, ownObjects)
+	print(collisionCheck.checkStraight(Vector3i(1,0,0)))
 	if (event.is_action_pressed("forward") and Input.is_action_pressed("left") if betterControls else event.is_action_pressed("forward_left")):
 		if isTileSolid(state.getTileRelative(Vector3i(1,0,-1), level.stateGrid)): return
 		if isTileSolid(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return

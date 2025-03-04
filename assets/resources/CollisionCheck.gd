@@ -3,15 +3,17 @@ extends Resource
 
 var tiles: Array[Array] = []
 var tileGrid: GridMap
-var checkObjects: Array[GameObject]
+var allObjects: Array[GameObject]
+var ownObjects: Array[GameObject]
 
-func _init(_tileGrid, _checkObjects):
+func _init(_tileGrid:GridMap, _allObjects:Array[GameObject]):
 	tileGrid = _tileGrid
-	checkObjects = _checkObjects
+	allObjects = _allObjects
 
-func addTiles(type, positions): # tiles to yourself
-	for position in positions:
-		tiles.append([position, type])
+func addObjects(objects): # tiles to yourself
+	for object in objects:
+		ownObjects.append(objects)
+		tiles
 
 func checkStraight(vector:Vector3i):
 	# can only move one axis at a time
@@ -43,7 +45,8 @@ func getPosition(position:Vector3i):
 	var gridTile = tileGrid.get_cell_item(position)
 	if gridTile != -1: return "tile"
 	var toReturn = []
-	for object in checkObjects:
+	for object in allObjects:
+		if object in ownObjects: continue
 		var occupiedPositions = object.state.occupiedPositions()
 		if position in occupiedPositions:
 			toReturn.append(occupiedPositions[position])
