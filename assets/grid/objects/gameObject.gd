@@ -64,3 +64,8 @@ func undoCleanup():
 	if rotationTween and rotationTween.is_running(): rotationTween.kill()
 	position = state.getPositionAsVector()
 	rotation = state.getRotationAsVector()
+
+func occupiedTiles() -> Array[CollisionCheck.CollisionTile]:
+	return [
+		CollisionCheck.Tile(position, CollisionCheck.COLLISION_TYPES.NON_SOLID, self)
+	]

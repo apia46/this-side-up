@@ -138,10 +138,11 @@ func _input(event):
 		rotation = state.getRotationAsVector()
 	else: return
 	
-	var ownObjects: Array[GameObject] = state.held.duplicate()
-	ownObjects.append(self)
-	var collisionCheck = CollisionCheck.new(level.tileGrid, level.allObjects, ownObjects)
-	print(collisionCheck.checkStraight(Vector3i(1,0,0)))
+	var collisionCheck = CollisionCheck.new(level.tileGrid, level.allObjects)
+	collisionCheck.addObjects(state.held)
+	collisionCheck.addObject(self)
+	print("collided with:", collisionCheck.checkStraight(state.positionRotated(Vector3i(1,0,0))))
+	
 	if (event.is_action_pressed("forward") and Input.is_action_pressed("left") if betterControls else event.is_action_pressed("forward_left")):
 		if isTileSolid(state.getTileRelative(Vector3i(1,0,-1), level.stateGrid)): return
 		if isTileSolid(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
@@ -316,3 +317,9 @@ func undoCleanup():
 			iter -= 1
 		iter += 1
 	state.held.sort_custom(func(a,b): return a.state.position.y < b.state.position.y)
+
+func occupiedTiles() -> Array[CollisionCheck.CollisionTile]:
+	return [
+		CollisionCheck.Tile(state.position, CollisionCheck.COLLISION_TYPES.SOLID, self),
+		CollisionCheck.Tile(state.positionRelative(Vector3i(1,0,0), state.high), CollisionCheck.COLLISION_TYPES.FORK, self),
+	]

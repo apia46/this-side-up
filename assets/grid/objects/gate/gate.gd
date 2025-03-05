@@ -29,3 +29,8 @@ func getHoverBodyText():
 	return super() +\
 	"Condition:" + ( "level[" + Game.LEVEL_INFO[state.condition][0] + "]" if state.condition in Game.LEVEL_INFO\
 	else state.condition + "["+str(level.currentConditions[state.condition])+"/"+str(level.conditions[state.condition])+"]")
+
+func occupiedTiles() -> Array[CollisionCheck.CollisionTile]:
+	return [
+		CollisionCheck.Tile(position, CollisionCheck.COLLISION_TYPES.SOLID, self)
+	]

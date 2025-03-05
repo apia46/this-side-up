@@ -10,5 +10,3 @@ func deserialise(values, object):
 	super(values[0], object)
 	held = values[1]
 	object.level.promiseState(object.id, position, Level.STATES.BOX_HELD if held else Level.STATES.BOX)
-
-func occupiedPositions() -> Dictionary[Vector3i,Level.COLLISION_TYPES]: return {position:Level.COLLISION_TYPES.SOLID}

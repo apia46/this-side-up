@@ -108,3 +108,8 @@ func getStateOfCellIncludingPromises(cell:Vector3i) -> Level.STATES:
 	for promise in level.statePromises:
 		if promise[1] == cell: return promise[2]  as Level.STATES
 	return level.stateGrid.get_cell_item(cell) as Level.STATES
+
+func occupiedTiles() -> Array[CollisionCheck.CollisionTile]:
+	return [
+		CollisionCheck.Tile(position, CollisionCheck.COLLISION_TYPES.HELD if state.held else CollisionCheck.COLLISION_TYPES.HOLDABLE, self)
+	]

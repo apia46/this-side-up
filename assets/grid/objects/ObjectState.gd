@@ -14,7 +14,7 @@ func _init(_position = Vector3i(0,0,0), _rotation = 0, _positionOffset = Vector3
 	positionOffset = _positionOffset
 
 func moveRotated(vector:Vector3i) -> void:
-	position += rotatePosition(vector)
+	position += positionRotated(vector)
 
 func getPositionAsVector() -> Vector3:
 	return Vector3(position) + Vector3(0.5, 0, 0.5) + positionOffset
@@ -28,7 +28,7 @@ func getTileRelative(location:Vector3i, stateGrid:GridMap, lifted:=false) -> Lev
 func getTile(location:Vector3i, stateGrid:GridMap) -> Level.STATES:
 	return stateGrid.get_cell_item(location) as Level.STATES
 
-func rotatePosition(vector:Vector3i) -> Vector3i:
+func positionRotated(vector:Vector3i) -> Vector3i:
 	var result = Vector3i(0,0,0)
 	result.y = vector.y
 	match rotation.y:
@@ -93,7 +93,7 @@ func wrapSelfRotation(vector) -> Vector3i:
 	return fixed - vector
 
 func positionRelative(location:Vector3i, lifted:=false) -> Vector3i:
-	return rotatePosition(location) + position + (Vector3i(0,0,0) if !lifted else Vector3i(0,1,0))
+	return positionRotated(location) + position + (Vector3i(0,0,0) if !lifted else Vector3i(0,1,0))
 
 func mod360(_rotation:int) -> int:
 	return (_rotation % 360 + 360) % 360
@@ -123,5 +123,3 @@ func deserialise(values, _object):
 	position = values[0]
 	rotation = values[1]
 	positionOffset = values[2]
-
-func occupiedPositions() -> Dictionary[Vector3i,Level.COLLISION_TYPES]: return {position:Level.COLLISION_TYPES.NON_SOLID}

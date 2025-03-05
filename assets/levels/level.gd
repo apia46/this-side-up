@@ -6,16 +6,9 @@ enum STATES {
 	INVALID,
 	SOLID,
 	BOX,
-	BOX_HELD, # remove
-	FORK
+	BOX_HELD
 }
 
-enum COLLISION_TYPES {
-	NON_SOLID,
-	SOLID,
-	PICKUPABLE,
-	FORK,
-}
 
 @onready var ui: UI = get_node("/root/game/ui")
 @onready var stateGrid: GridMap = %stateGrid
