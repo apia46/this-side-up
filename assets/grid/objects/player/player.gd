@@ -141,7 +141,7 @@ func _input(event):
 	var collisionCheck = CollisionCheck.new(level.tileGrid, level.allObjects)
 	collisionCheck.addObjects(state.held)
 	collisionCheck.addObject(self)
-	print("collided with:", collisionCheck.checkStraight(state.positionRotated(Vector3i(1,0,0))))
+	print("collided with:", collisionCheck.checkDir(state.positionRotated(Vector3i(1,0,0))))
 	
 	if (event.is_action_pressed("forward") and Input.is_action_pressed("left") if betterControls else event.is_action_pressed("forward_left")):
 		if isTileSolid(state.getTileRelative(Vector3i(1,0,-1), level.stateGrid)): return
