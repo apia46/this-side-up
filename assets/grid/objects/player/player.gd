@@ -192,8 +192,6 @@ func _input(event):
 	else:
 		return
 	
-	level.turnCount += 1
-	
 	if state.position != previousPosition: level.addChangeToStack(id, 0, previousPosition)
 	if state.rotation != previousRotation: level.addChangeToStack(id, 1, previousRotation)
 	
@@ -259,6 +257,7 @@ func animateArrow():
 			"idle_right": %arrow.play_backwards("turn_right")
 
 func endOfTurn():
+	level.turnCount += 1
 	print("ACTION:end_of_turn")
 	level.fulfillStatePromises()
 	level.processConditions()
@@ -300,7 +299,7 @@ func specialUndo(event):
 			for index in len(state.held):
 				if state.held[index] and state.held[index].id == event[1]:
 					var object = state.held[index]
-					state.held[index] = false
+					state.held[index] = null
 					object.drop(object.state.position)
 		"drop":
 			var object = level.allObjects[int(event[1])]

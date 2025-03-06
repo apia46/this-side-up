@@ -1,7 +1,7 @@
 class_name PlayerState
 extends ObjectState
 
-var held: Array[GameObject] = []
+var held: Array = []
 @export var birdseyeCamera: bool = false
 @export var high: bool = false
 

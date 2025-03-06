@@ -20,6 +20,7 @@ func _init(_tileGrid:GridMap, _allObjects:Array[GameObject]):
 
 ## add tile to yourself
 func addObject(object):
+	if !object: return # the bullshit player held undo ass thing
 	ownObjects.append(object)
 	ownTiles.append_array(object.occupiedTiles())
 	#print(object.occupiedTiles())
@@ -29,20 +30,31 @@ func addObjects(objects):
 	for object in objects:
 		addObject(object)
 
-## check in a straight line
+func rotateEverything(angle:Vector3i, center:Vector3i):
+	assert((1 if angle.x else 0) + (1 if angle.y else 0) + (1 if angle.z else 0) == 1)
+	for tile in ownTiles:
+		var diff = tile.position - center
+		var wasPosition = tile.position
+		if angle.x:
+			tile.position.y
+		elif angle.y:
+			pass
+		else:
+			pass
+
+## move everything
+func moveAll(vector:Vector3i):
+	for tile in ownTiles:
+		tile.position += vector
+
+## try moving everything in a direction and see what collides
 ## can only move one axis at a time
-func checkStraight(vector:Vector3i) -> Array[CollisionTile]:
+func checkDir(vector:Vector3i) -> Array[CollisionTile]:
 	assert((1 if vector.x else 0) + (1 if vector.y else 0) + (1 if vector.z else 0) == 1)
 	print("checking!")
-	var direction = sign(vector)
-	var magnitude = abs(vector.x+vector.y+vector.z)
 	var collisions:Array[CollisionTile] = []
-	var workingOffset = Vector3i(0,0,0)
-	for step in magnitude:
-		workingOffset += direction
-		for ownTile in ownTiles:
-			collisions.append_array(getCollides(ownTile, ownTile.position + workingOffset))
-		if len(collisions) > 0: return collisions # we return early so there arent weird stuff
+	for ownTile in ownTiles:
+		collisions.append_array(getCollides(ownTile, ownTile.position + vector))
 	return collisions
 
 ## get array of things colliding with
