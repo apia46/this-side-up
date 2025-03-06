@@ -32,5 +32,5 @@ func getHoverBodyText():
 
 func occupiedTiles() -> Array[CollisionCheck.CollisionTile]:
 	return [
-		CollisionCheck.Tile(position, CollisionCheck.COLLISION_TYPES.SOLID, self)
+		CollisionCheck.Tile(state.position, CollisionCheck.COLLISION_TYPES.SOLID, self)
 	]

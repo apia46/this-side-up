@@ -141,9 +141,11 @@ func _input(event):
 	var collisionCheck = CollisionCheck.new(level.tileGrid, level.allObjects)
 	collisionCheck.addObjects(state.held)
 	collisionCheck.addObject(self)
-	print("collided with:", collisionCheck.checkDir(state.positionRotated(Vector3i(1,0,0))))
 	
 	if (event.is_action_pressed("forward") and Input.is_action_pressed("left") if betterControls else event.is_action_pressed("forward_left")):
+		print("collide 1:", collisionCheck.checkDir(state.positionRotated(Vector3i(1,0,0))))
+		print("collide 2:", collisionCheck.checkRotate(Vector3i(0,90,0), state.position))
+		print("collide 3:", collisionCheck.checkDir(state.positionRotated(Vector3i(0,0,-1))))
 		if isTileSolid(state.getTileRelative(Vector3i(1,0,-1), level.stateGrid)): return
 		if isTileSolid(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
 		if cantForkInto(state.getTileRelative(Vector3i(1,0,-2), level.stateGrid, state.high)): return

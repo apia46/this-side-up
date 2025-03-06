@@ -18,17 +18,17 @@ script = ExtResource("3_ie71m")
 rotation = Vector3i(270, 0, 0)
 metadata/_custom_type_script = "uid://cebsuitwtsmgp"
 
-[sub_resource type="Resource" id="Resource_r72ex"]
-script = ExtResource("3_ie71m")
-rotation = Vector3i(90, 0, 0)
-metadata/_custom_type_script = "uid://cebsuitwtsmgp"
-
 [sub_resource type="Resource" id="Resource_vlob3"]
 script = ExtResource("3_vlob3")
 birdseyeCamera = false
 high = false
 rotation = Vector3i(0, 90, 0)
 metadata/_custom_type_script = "uid://d1widc8uko0ir"
+
+[sub_resource type="Resource" id="Resource_r72ex"]
+script = ExtResource("3_ie71m")
+rotation = Vector3i(90, 0, 0)
+metadata/_custom_type_script = "uid://cebsuitwtsmgp"
 
 [node name="level" type="Node3D"]
 script = ExtResource("1_r72ex")

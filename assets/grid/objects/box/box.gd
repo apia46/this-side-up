@@ -111,5 +111,5 @@ func getStateOfCellIncludingPromises(cell:Vector3i) -> Level.STATES:
 
 func occupiedTiles() -> Array[CollisionCheck.CollisionTile]:
 	return [
-		CollisionCheck.Tile(position, CollisionCheck.COLLISION_TYPES.HELD if state.held else CollisionCheck.COLLISION_TYPES.HOLDABLE, self)
+		CollisionCheck.Tile(state.position, CollisionCheck.COLLISION_TYPES.HELD if state.held else CollisionCheck.COLLISION_TYPES.HOLDABLE, self)
 	]

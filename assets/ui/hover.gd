@@ -10,8 +10,8 @@ func _ready():
 
 func _process(_delta):
 	position = get_viewport().get_mouse_position() + Vector2(10, 0)
-	if get_viewport().get_mouse_position().x + size.x + 10 > ui.size.x:
+	if get_viewport().get_mouse_position().x > size.x and get_viewport().get_mouse_position().x + size.x + 10 > ui.size.x:
 		position.x -= size.x + 10
-	if get_viewport().get_mouse_position().y + size.y > ui.size.y:
+	if get_viewport().get_mouse_position().y > size.y and get_viewport().get_mouse_position().y + size.y > ui.size.y:
 		position.y -= size.y
 	size = Vector2(0,0)

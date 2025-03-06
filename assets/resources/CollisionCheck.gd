@@ -30,31 +30,39 @@ func addObjects(objects):
 	for object in objects:
 		addObject(object)
 
-func rotateEverything(angle:Vector3i, center:Vector3i):
+## really janky rotate check
+## cant rotate 180 degrees.
+## returns an array of fails
+func checkRotate(angle:Vector3i, center:Vector3i) -> Array[CollisionTile]:
 	assert((1 if angle.x else 0) + (1 if angle.y else 0) + (1 if angle.z else 0) == 1)
-	for tile in ownTiles:
-		var diff = tile.position - center
-		var wasPosition = tile.position
+	var collisions: Array[CollisionTile] = []
+	var direction = 1 if angle.x+angle.y+angle.z == 90 else -1
+	for ownTile in ownTiles:
+		var diff = (ownTile.position - center) * direction
+		var checkPosition = center
 		if angle.x:
-			tile.position.y
+			checkPosition.y += diff.z
+			checkPosition.z += diff.y
 		elif angle.y:
-			pass
+			checkPosition.x += diff.z
+			checkPosition.z += diff.x
 		else:
-			pass
+			checkPosition.x += diff.y
+			checkPosition.y += diff.x
+		ownTile.position = checkPosition
+		collisions.append_array(getCollides(ownTile, ownTile.position))
+	return collisions
 
-## move everything
-func moveAll(vector:Vector3i):
-	for tile in ownTiles:
-		tile.position += vector
-
-## try moving everything in a direction and see what collides
+## moves everything in a direction and see what collides
 ## can only move one axis at a time
+## returns an array of fails
 func checkDir(vector:Vector3i) -> Array[CollisionTile]:
 	assert((1 if vector.x else 0) + (1 if vector.y else 0) + (1 if vector.z else 0) == 1)
 	print("checking!")
 	var collisions:Array[CollisionTile] = []
 	for ownTile in ownTiles:
-		collisions.append_array(getCollides(ownTile, ownTile.position + vector))
+		ownTile.position += vector
+		collisions.append_array(getCollides(ownTile, ownTile.position))
 	return collisions
 
 ## get array of things colliding with

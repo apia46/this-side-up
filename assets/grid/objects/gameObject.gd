@@ -49,7 +49,12 @@ func unhover():
 		get_tree().create_tween().tween_property(get_node("outline"), "scale", Vector3(0.45,0.45,0.45), 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 func getHoverTitleText(): return "unset hover text error"
-func getHoverBodyText(): return ("Id:" + id + "\nPosition:" + str(state.position) + "\nRotation:" + str(state.rotation) + "\n" if game.debug else "")
+func getHoverBodyText():
+	return ("Id:" + id +
+		"\nPosition:" + str(state.position) +
+		"\nRotation:" + str(state.rotation) +
+		"\nTiles:" + "\n".join(occupiedTiles()) +
+		"\n" if game.debug else "")
 
 func undoed(_property, _propertyWas):
 	if positionTween and positionTween.is_running(): positionTween.kill()
@@ -67,5 +72,5 @@ func undoCleanup():
 
 func occupiedTiles() -> Array[CollisionCheck.CollisionTile]:
 	return [
-		CollisionCheck.Tile(position, CollisionCheck.COLLISION_TYPES.NON_SOLID, self)
+		CollisionCheck.Tile(state.position, CollisionCheck.COLLISION_TYPES.NON_SOLID, self)
 	]
