@@ -1,0 +1,14 @@
+[gd_resource type="PlaneMesh" load_steps=3 format=3 uid="uid://bamyw724p4rdp"]
+
+[ext_resource type="Texture2D" uid="uid://cmc1sm6rdrelb" path="res://assets/objects/box/selectBox/selectBox_placeholder.png" id="1_qo1dh"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_orwn5"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+albedo_texture = ExtResource("1_qo1dh")
+
+[resource]
+material = SubResource("StandardMaterial3D_orwn5")
+size = Vector2(1, 1)
+center_offset = Vector3(0, -0.3, 0)

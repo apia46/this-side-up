@@ -1,0 +1,20 @@
+[gd_resource type="MeshLibrary" load_steps=3 format=3 uid="uid://3gbxnqp433cm"]
+
+[ext_resource type="BoxMesh" uid="uid://cns3lnyqhktgo" path="res://assets/tiles/wall/wall.tres" id="1_j1hx0"]
+[ext_resource type="BoxMesh" uid="uid://djsiai7uwsh34" path="res://assets/tiles/halfWall/halfWall.tres" id="2_45j7s"]
+
+[resource]
+item/0/name = "wall"
+item/0/mesh = ExtResource("1_j1hx0")
+item/0/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/0/mesh_cast_shadow = 1
+item/0/shapes = []
+item/0/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/0/navigation_layers = 1
+item/1/name = "halfWall"
+item/1/mesh = ExtResource("2_45j7s")
+item/1/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+item/1/mesh_cast_shadow = 1
+item/1/shapes = []
+item/1/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/1/navigation_layers = 1

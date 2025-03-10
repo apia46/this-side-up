@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://dhegqkwvemhag"]
 
 [ext_resource type="Script" uid="uid://b7nu886vfs1kr" path="res://assets/levels/level.gd" id="1_qfwe2"]
-[ext_resource type="MeshLibrary" uid="uid://3gbxnqp433cm" path="res://assets/grid/tiles/tileGridMesh.tres" id="2_ru3jk"]
-[ext_resource type="MeshLibrary" uid="uid://b54wjm1eelmux" path="res://assets/grid/objects/objectsGridMesh.tres" id="3_e0pm5"]
-[ext_resource type="MeshLibrary" uid="uid://datu87mb6cyca" path="res://assets/grid/states/stateMeshLibrary.tres" id="4_s3h8j"]
+[ext_resource type="MeshLibrary" uid="uid://3gbxnqp433cm" path="res://assets/tiles/tileGridMesh.tres" id="2_ru3jk"]
+[ext_resource type="MeshLibrary" uid="uid://b54wjm1eelmux" path="res://assets/objects/objectsGridMesh.tres" id="3_e0pm5"]
+[ext_resource type="MeshLibrary" uid="uid://datu87mb6cyca" path="res://assets/states/stateMeshLibrary.tres" id="4_s3h8j"]
 
 [node name="level" type="Node3D"]
 script = ExtResource("1_qfwe2")

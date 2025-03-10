@@ -1,11 +1,11 @@
 [gd_scene load_steps=8 format=3 uid="uid://cjbuu0xi8ic5a"]
 
 [ext_resource type="Script" uid="uid://b7nu886vfs1kr" path="res://assets/levels/level.gd" id="1_r76c2"]
-[ext_resource type="Script" uid="uid://b5lh1fbsn6mnn" path="res://assets/grid/objects/ObjectState.gd" id="2_gnkg7"]
-[ext_resource type="MeshLibrary" uid="uid://3gbxnqp433cm" path="res://assets/grid/tiles/tileGridMesh.tres" id="3_gfjxt"]
-[ext_resource type="Script" uid="uid://d1widc8uko0ir" path="res://assets/grid/objects/player/PlayerState.gd" id="3_gnkg7"]
-[ext_resource type="MeshLibrary" uid="uid://b54wjm1eelmux" path="res://assets/grid/objects/objectsGridMesh.tres" id="4_bxlp8"]
-[ext_resource type="MeshLibrary" uid="uid://datu87mb6cyca" path="res://assets/grid/states/stateMeshLibrary.tres" id="5_7f7gl"]
+[ext_resource type="Script" uid="uid://b5lh1fbsn6mnn" path="res://assets/objects/ObjectState.gd" id="2_gnkg7"]
+[ext_resource type="MeshLibrary" uid="uid://3gbxnqp433cm" path="res://assets/tiles/tileGridMesh.tres" id="3_gfjxt"]
+[ext_resource type="Script" uid="uid://d1widc8uko0ir" path="res://assets/objects/player/PlayerState.gd" id="3_gnkg7"]
+[ext_resource type="MeshLibrary" uid="uid://b54wjm1eelmux" path="res://assets/objects/objectsGridMesh.tres" id="4_bxlp8"]
+[ext_resource type="MeshLibrary" uid="uid://datu87mb6cyca" path="res://assets/states/stateMeshLibrary.tres" id="5_7f7gl"]
 
 [sub_resource type="Resource" id="Resource_gfjxt"]
 script = ExtResource("3_gnkg7")

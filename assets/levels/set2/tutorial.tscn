@@ -1,11 +1,11 @@
 [gd_scene load_steps=9 format=3 uid="uid://d25ayg6d6snd1"]
 
 [ext_resource type="Script" uid="uid://b7nu886vfs1kr" path="res://assets/levels/level.gd" id="1_3y7cm"]
-[ext_resource type="MeshLibrary" uid="uid://3gbxnqp433cm" path="res://assets/grid/tiles/tileGridMesh.tres" id="2_40n3b"]
-[ext_resource type="Script" uid="uid://b5lh1fbsn6mnn" path="res://assets/grid/objects/ObjectState.gd" id="2_fhv7x"]
-[ext_resource type="Script" uid="uid://cebsuitwtsmgp" path="res://assets/grid/objects/box/BoxState.gd" id="3_47tia"]
-[ext_resource type="MeshLibrary" uid="uid://b54wjm1eelmux" path="res://assets/grid/objects/objectsGridMesh.tres" id="3_rf8ro"]
-[ext_resource type="MeshLibrary" uid="uid://datu87mb6cyca" path="res://assets/grid/states/stateMeshLibrary.tres" id="4_8lkvn"]
+[ext_resource type="MeshLibrary" uid="uid://3gbxnqp433cm" path="res://assets/tiles/tileGridMesh.tres" id="2_40n3b"]
+[ext_resource type="Script" uid="uid://b5lh1fbsn6mnn" path="res://assets/objects/ObjectState.gd" id="2_fhv7x"]
+[ext_resource type="Script" uid="uid://cebsuitwtsmgp" path="res://assets/objects/box/BoxState.gd" id="3_47tia"]
+[ext_resource type="MeshLibrary" uid="uid://b54wjm1eelmux" path="res://assets/objects/objectsGridMesh.tres" id="3_rf8ro"]
+[ext_resource type="MeshLibrary" uid="uid://datu87mb6cyca" path="res://assets/states/stateMeshLibrary.tres" id="4_8lkvn"]
 
 [sub_resource type="Resource" id="Resource_1ichb"]
 script = ExtResource("3_47tia")

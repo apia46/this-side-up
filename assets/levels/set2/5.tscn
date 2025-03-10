@@ -1,12 +1,12 @@
 [gd_scene load_steps=12 format=3 uid="uid://b46whdnunoxxb"]
 
 [ext_resource type="Script" uid="uid://b7nu886vfs1kr" path="res://assets/levels/level.gd" id="1_r72ex"]
-[ext_resource type="Script" uid="uid://b5lh1fbsn6mnn" path="res://assets/grid/objects/ObjectState.gd" id="2_vlob3"]
-[ext_resource type="Script" uid="uid://cebsuitwtsmgp" path="res://assets/grid/objects/box/BoxState.gd" id="3_ie71m"]
-[ext_resource type="Script" uid="uid://d1widc8uko0ir" path="res://assets/grid/objects/player/PlayerState.gd" id="3_vlob3"]
-[ext_resource type="MeshLibrary" uid="uid://3gbxnqp433cm" path="res://assets/grid/tiles/tileGridMesh.tres" id="4_4kttw"]
-[ext_resource type="MeshLibrary" uid="uid://b54wjm1eelmux" path="res://assets/grid/objects/objectsGridMesh.tres" id="5_j75ia"]
-[ext_resource type="MeshLibrary" uid="uid://datu87mb6cyca" path="res://assets/grid/states/stateMeshLibrary.tres" id="6_oyujv"]
+[ext_resource type="Script" uid="uid://b5lh1fbsn6mnn" path="res://assets/objects/ObjectState.gd" id="2_vlob3"]
+[ext_resource type="Script" uid="uid://cebsuitwtsmgp" path="res://assets/objects/box/BoxState.gd" id="3_ie71m"]
+[ext_resource type="Script" uid="uid://d1widc8uko0ir" path="res://assets/objects/player/PlayerState.gd" id="3_vlob3"]
+[ext_resource type="MeshLibrary" uid="uid://3gbxnqp433cm" path="res://assets/tiles/tileGridMesh.tres" id="4_4kttw"]
+[ext_resource type="MeshLibrary" uid="uid://b54wjm1eelmux" path="res://assets/objects/objectsGridMesh.tres" id="5_j75ia"]
+[ext_resource type="MeshLibrary" uid="uid://datu87mb6cyca" path="res://assets/states/stateMeshLibrary.tres" id="6_oyujv"]
 
 [sub_resource type="Resource" id="Resource_j75ia"]
 script = ExtResource("3_ie71m")
@@ -44,7 +44,7 @@ unique_name_in_owner = true
 mesh_library = ExtResource("4_4kttw")
 cell_size = Vector3(1, 1, 1)
 data = {
-"cells": PackedInt32Array(-4, 0, 0, -4, 1, 0, -3, 1, 0, -2, 0, 0, -1, 0, 0, -1, 1, 0, -2, 1, 0, -3, 0, 0, -4, 65535, 0, -3, 65535, 0, -2, 65535, 0, -1, 65535, 0, -4, 2, 0, -3, 2, 0, -2, 2, 0, -1, 2, 0, -1, 3, 0, -2, 3, 0, -3, 3, 0, -4, 3, 0, -5, 3, 0, -5, 2, 0, -5, 1, 0, -5, 0, 0, -5, 65535, 0, 65535, 65535, 0, 65535, 0, 0, 65535, 1, 0, 65535, 2, 0, 65535, 3, 0, 65533, 3, 0, 65532, 3, 0, 65531, 3, 0, 65531, 2, 0, 65531, 1, 0, 65531, 0, 0, 65531, 65535, 0, 65532, 65535, 0, 65533, 65535, 0, 65534, 65535, 0, 131071, 3, 1, 131071, 2, 1, 131071, 1, 1, 131071, 0, 1, 131071, 65535, 1, 131070, 65535, 1, 131069, 65535, 1, 131068, 65535, 1, 131067, 65535, 1, 131067, 0, 1, 131067, 1, 1, 131067, 2, 1, 131067, 3, 1, 131068, 3, 1, 131069, 3, 1, -3, 4, 0, -2, 4, 0, -1, 4, 0, 65533, 4, 0, 65535, 4, 0, 131069, 4, 1, 131071, 4, 1, 65533, 1, 0, 131069, 1, 1, 65534, 4, 0, 131070, 4, 1)
+"cells": PackedInt32Array(-4, 0, 0, -4, 1, 0, -3, 1, 0, -2, 0, 0, -1, 0, 0, -1, 1, 0, -2, 1, 0, -3, 0, 0, -4, 65535, 0, -3, 65535, 0, -2, 65535, 0, -1, 65535, 0, -4, 2, 0, -3, 2, 0, -2, 2, 0, -1, 2, 0, -1, 3, 0, -2, 3, 0, -3, 3, 0, -4, 3, 0, -5, 3, 0, -5, 2, 0, -5, 1, 0, -5, 0, 0, -5, 65535, 0, 65535, 65535, 0, 65535, 0, 0, 65535, 1, 0, 65535, 2, 0, 65535, 3, 0, 65533, 3, 0, 65532, 3, 0, 65531, 3, 0, 65531, 2, 0, 65531, 1, 0, 65531, 0, 0, 65531, 65535, 0, 65533, 65535, 0, 65534, 65535, 0, 131071, 3, 1, 131071, 2, 1, 131071, 1, 1, 131071, 0, 1, 131071, 65535, 1, 131070, 65535, 1, 131069, 65535, 1, 131067, 65535, 1, 131067, 0, 1, 131067, 1, 1, 131067, 2, 1, 131067, 3, 1, 131068, 3, 1, 131069, 3, 1, -3, 4, 0, -2, 4, 0, -1, 4, 0, 65533, 4, 0, 65535, 4, 0, 131069, 4, 1, 131071, 4, 1, 65533, 1, 0, 131069, 1, 1, 65534, 4, 0, 131070, 4, 1, -3, 65534, 0, -4, 65534, 0, -5, 65534, 0, 65531, 65534, 0, 65532, 65534, 0, 65533, 65534, 0, 131069, 65534, 1, 131068, 65534, 1, 131067, 65534, 1)
 }
 metadata/_editor_floor_ = Vector3(0, 1, 0)
 
@@ -53,7 +53,7 @@ unique_name_in_owner = true
 mesh_library = ExtResource("5_j75ia")
 cell_size = Vector3(1, 1, 1)
 data = {
-"cells": PackedInt32Array(65534, 0, 2, 65532, 0, 1, 65532, 2, 1, 65534, 3, 0, 65534, 1, 2, 65533, 0, 2, 131070, 0, 1)
+"cells": PackedInt32Array(65534, 0, 2, 65532, 0, 1, 65532, 2, 1, 65534, 3, 0, 65534, 1, 2, 131070, 0, 1, 65534, 2, 2)
 }
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 

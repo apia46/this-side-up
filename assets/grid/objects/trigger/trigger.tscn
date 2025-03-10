@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://se72nky6niml"]
-
-[ext_resource type="Script" uid="uid://j8xx5aekmpcs" path="res://assets/grid/objects/trigger/trigger.gd" id="1_pfsgg"]
-
-[node name="trigger" type="Node3D"]
-script = ExtResource("1_pfsgg")
