@@ -136,10 +136,11 @@ func loadLevel(levelFile, pretense:String):
 	if _level.saveState and (pretense == "win" or pretense == "escape" or pretense == "restart"):
 		#print("unmaking cereal!")
 		_level.unmakeCereal(_level.levelData.serial, "change")
-		if turnCount > 0:
-			#turnCount += 1 # why are we doing this # why were we doing this
-			if !(pretense == "enter" and saveState): game.undo() # so that the undo-cereal made isnt a softlock
-			addRawChangeToStack(makeCereal())
+	if turnCount > 0 and pretense != "undo":
+		#turnCount += 1 # why are we doing this # why were we doing this
+		if !(pretense == "enter" and saveState): game.undo() # so that the undo-cereal made isnt a softlock
+		addRawChangeToStack(makeCereal())
+	if _level.saveState and (pretense == "win" or pretense == "escape" or pretense == "restart"):
 		_level.addRawChangeToStack(["dummy"])
 	game.level = _level
 	queue_free()
