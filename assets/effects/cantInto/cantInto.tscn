@@ -8,7 +8,7 @@ cull_mode = 2
 albedo_color = Color(0.906332, 0.906332, 0.906332, 1)
 roughness = 0.5
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_h4b2r"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_fique"]
 _surfaces = [{
 "aabb": AABB(-1, -1, -1, 2, 2, 2),
 "format": 34896613377,
@@ -22,7 +22,7 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_3qxyn"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_e4p82"]
 resource_name = "cantInto_Cube"
 _surfaces = [{
 "aabb": AABB(-1, -1, -1, 2, 2, 2),
@@ -38,9 +38,12 @@ _surfaces = [{
 "vertex_data": PackedByteArray("///MDDLzVNX///////9U1f//GOEy81TV//8AAP//VNX//8wM5h5U1f//AAAAAFTV///mHswMVNX//zLzzAxU1f//MvMY4VTV/////wAAVNUy8+YeAAD///////8AAP//MvMy8wAA//8AAP//AAD/////AAAAAP//5h4y8wAA//8Y4cwMAAD//8wMzAwAAP//zAwY4QAA//8AAAAAAAD//xjh//8y8///AAD////////MDP//MvP//wAA//8AAP/////////////MDP//5h7//zLz//8Y4f//MvP//8wM///mHv//zAz///////8AAP//AADMDBjhVNUAAAAAAABU1QAAzAzMDFTVAAD//wAAVNUAAAAA//9U1QAAGOHMDFTVAADmHjLzVNUAADLzMvNU1QAAMvPmHlTVAAD/////VNXMDOYe////vwAA//////+/zAwy8////7//////////vwAAAAD///+/GOEy8////7/mHswM////vzLzzAz///+/MvMY4f///7///wAA////v+YeAAAy8/+///8AAP///78y8wAAMvP/v///AAAAAP+/AAAAAP///78y8wAA5h7/v8wMAAAY4f+/zAwAAMwM/78Y4QAAzAz/vwAAAAAAAP+/qiqqKqoqqiqqKqoqqiqqKqoqqiqqKqoqqiqqKqoqqiqqKqoqqiqqKv+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//f/+//3//v/9//7//f/+//3//v/9//7//f/+//3//v/9//7//f/+/VNVU1VTVVNVU1VTVVNVU1VTVVNVU1VTVVNVU1VTVVNVU1VTVVNVU1f////////////////////////////////////////////////////8AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/")
 }]
 blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_h4b2r")
+shadow_mesh = SubResource("ArrayMesh_fique")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fique"]
+resource_local_to_scene = true
+transparency = 1
+cull_mode = 2
 no_depth_test = true
 shading_mode = 0
 albedo_color = Color(1, 0, 0.4, 1)
@@ -49,6 +52,8 @@ albedo_color = Color(1, 0, 0.4, 1)
 script = ExtResource("1_fique")
 
 [node name="mesh" type="MeshInstance3D" parent="."]
-mesh = SubResource("ArrayMesh_3qxyn")
+unique_name_in_owner = true
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.5, 0)
+mesh = SubResource("ArrayMesh_e4p82")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_fique")

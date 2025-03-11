@@ -43,7 +43,7 @@ var level: Level
 var debug: bool = false
 
 func _ready():
-	level = preload("res://assets/levels/set2/5.tscn").instantiate().init("set2/5", self)
+	level = preload("res://assets/levels/map.tscn").instantiate().init("map", self)
 	add_child(level)
 
 func _input(event):
@@ -54,7 +54,7 @@ func _input(event):
 func undo():
 	#print("========")
 	#print(undoStack)
-	if len(undoStack) == 0: return
+	if !undoStack: return
 	var actions: Array = undoStack[-1][1].pop_back()
 	var doItAgain: bool = false
 	actions.reverse()
@@ -75,7 +75,7 @@ func undo():
 					var propertyWas = object.state[STACK_VALUE_IDS[action[1]]]
 					object.state[STACK_VALUE_IDS[action[1]]] = action[2]
 					object.undoed(STACK_VALUE_IDS[action[1]], propertyWas)
-	if len(undoStack[-1][1]) == 0: undoStack.pop_back()
+	if !undoStack[-1][1]: undoStack.pop_back()
 	level.turnCount -= 1
 	for object in level.allObjects: object.undoCleanup()
 	level.fulfillStatePromises()

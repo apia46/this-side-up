@@ -33,44 +33,53 @@ func addObjects(objects):
 ## really janky rotate check
 ## cant rotate 180 degrees.
 ## returns an array of fails
-func checkRotate(angle:Vector3i, center:Vector3i) -> Array[CollisionTile]:
+func moveRotate(angle:Vector3i, center:Vector3i, check:=true) -> Array[CollisionTile]:
 	assert((1 if angle.x else 0) + (1 if angle.y else 0) + (1 if angle.z else 0) == 1)
 	var collisions: Array[CollisionTile] = []
 	var direction = 1 if angle.x+angle.y+angle.z == 90 else -1
 	for ownTile in ownTiles:
-		var diff = (ownTile.position - center) * direction
+		var diff = (ownTile.position - center)
+		print(diff)
+		diff *= direction
 		var checkPosition = center
 		if angle.x:
+			checkPosition.x = ownTile.position.x
 			checkPosition.y += diff.z
-			checkPosition.z += diff.y
+			checkPosition.z -= diff.y
 		elif angle.y:
 			checkPosition.x += diff.z
-			checkPosition.z += diff.x
+			checkPosition.y = ownTile.position.y
+			checkPosition.z -= diff.x
 		else:
 			checkPosition.x += diff.y
-			checkPosition.y += diff.x
+			checkPosition.y -= diff.x
+			checkPosition.z = ownTile.position.z
+		ownTile.collidedWith.clear() # clear previous. i assume we want this
 		ownTile.position = checkPosition
-		collisions.append_array(getCollides(ownTile, ownTile.position))
+		if check: collisions.append_array(getCollides(ownTile, ownTile.position))
 	return collisions
 
 ## moves everything in a direction and see what collides
 ## can only move one axis at a time
 ## returns an array of fails
-func checkDir(vector:Vector3i) -> Array[CollisionTile]:
+func moveDir(vector:Vector3i, check:=true) -> Array[CollisionTile]:
 	assert((1 if vector.x else 0) + (1 if vector.y else 0) + (1 if vector.z else 0) == 1)
-	print("checking!")
+	#print("checking!")
 	var collisions:Array[CollisionTile] = []
 	for ownTile in ownTiles:
+		ownTile.collidedWith.clear() # clear previous. i assume we want this
 		ownTile.position += vector
-		collisions.append_array(getCollides(ownTile, ownTile.position))
+		if check: collisions.append_array(getCollides(ownTile, ownTile.position))
 	return collisions
 
 ## get array of things colliding with
 func getCollides(ownTile:CollisionTile, checkPosition:Vector3i) -> Array[CollisionTile]:
-	print("checking ", checkPosition, ", recieved ", getPosition(checkPosition))
+	#print("checking ", checkPosition, ", recieved ", getPosition(checkPosition))
 	var collisions: Array[CollisionTile] = []
 	for checkTile in getPosition(checkPosition):
-		if checkTile.object not in ownObjects and !canEnter(ownTile.collisionType, checkTile.collisionType): collisions.append(checkTile)
+		if checkTile.object not in ownObjects and !canEnter(ownTile.collisionType, checkTile.collisionType):
+			ownTile.collidedWith.append(checkTile)
+			collisions.append(ownTile)
 	return collisions
 
 ## logic for if a certain collision type should be able to enter a collision type
@@ -92,13 +101,16 @@ static func Tile(position:Vector3i, collisionType:COLLISION_TYPES, object:GameOb
 	return CollisionTile.new(position, collisionType, object)
 class CollisionTile:
 	var position: Vector3i
+	var originalPosition: Vector3i
 	var collisionType: COLLISION_TYPES
 	var object: GameObject
+	var collidedWith: Array[CollisionTile] = []
 	
 	func _init(_position:Vector3i, _collisionType:COLLISION_TYPES, _object:GameObject=null):
 		position = _position
+		originalPosition = _position
 		collisionType = _collisionType
 		object = _object
 	
 	func _to_string():
-		return "<CollisionTile: " + str(position) + ", " + COLLISION_TYPES.keys()[collisionType] + ", " + str(object) + ">"
+		return "<CollisionTile: " + str(originalPosition) + (" -> " + str(position) if position != originalPosition else "") + ", " + COLLISION_TYPES.keys()[collisionType] + (", " + str(object) if object else "") + (", against " + str(collidedWith) if len(collidedWith) > 0 else "") + ">"

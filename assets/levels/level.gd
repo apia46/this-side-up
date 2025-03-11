@@ -181,9 +181,9 @@ func changeLevel(to, pretense:String):
 	loadLevel(to, pretense)
 
 func addRawChangeToStack(change):
-	if len(game.undoStack) == 0 or game.undoStack[-1][0] != currentFile or len(game.undoStack[-1][1]) > turnCount:
+	if !game.undoStack or game.undoStack[-1][0] != currentFile or len(game.undoStack[-1][1]) > turnCount:
 		game.undoStack.append([currentFile, []])
-	if len(game.undoStack[-1][1]) < turnCount or len(game.undoStack[-1][1]) == 0:
+	if len(game.undoStack[-1][1]) < turnCount or !game.undoStack[-1][1]:
 		game.undoStack[-1][1].append([])
 	game.undoStack[-1][1][-1].append(change)
 

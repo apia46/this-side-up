@@ -40,13 +40,13 @@ func processHover():
 func hover():
 	hoverPopup.title.text = getHoverTitleText()
 	if has_node("outline"):
-		get_tree().create_tween().tween_property(get_node("outline").get_surface_override_material(0), "albedo_color", Color(1,1,1,1), 0.1)
-		get_tree().create_tween().tween_property(get_node("outline"), "scale", Vector3(0.5,0.5,0.5), 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		create_tween().tween_property(get_node("outline").get_surface_override_material(0), "albedo_color", Color(1,1,1,1), 0.1)
+		create_tween().tween_property(get_node("outline"), "scale", Vector3(0.5,0.5,0.5), 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 func unhover():
 	if has_node("outline"): 
-		get_tree().create_tween().tween_property(get_node("outline").get_surface_override_material(0), "albedo_color", Color(1,1,1,0), 0.1).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
-		get_tree().create_tween().tween_property(get_node("outline"), "scale", Vector3(0.45,0.45,0.45), 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		create_tween().tween_property(get_node("outline").get_surface_override_material(0), "albedo_color", Color(1,1,1,0), 0.1).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+		create_tween().tween_property(get_node("outline"), "scale", Vector3(0.45,0.45,0.45), 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 func getHoverTitleText(): return "unset hover text error"
 func getHoverBodyText():

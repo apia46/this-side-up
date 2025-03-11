@@ -16,8 +16,8 @@ func _init(_position = Vector3i(0,0,0), _rotation = 0, _positionOffset = Vector3
 func moveRotated(vector:Vector3i) -> void:
 	position += positionRotated(vector)
 
-func getPositionAsVector() -> Vector3:
-	return Vector3(position) + Vector3(0.5, 0, 0.5) + positionOffset
+func getPositionAsVector(vector:Vector3i=position) -> Vector3:
+	return Vector3(vector) + Vector3(0.5, 0, 0.5) + positionOffset
 
 func getRotationAsVector() -> Vector3:
 	return Vector3(rotation) * TAU_OVER_360

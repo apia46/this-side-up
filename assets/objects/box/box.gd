@@ -28,7 +28,7 @@ func hold():
 	rotation = state.getRotationAsVector()
 	
 	if positionTween and positionTween.is_running(): positionTween.kill()
-	positionTween = get_tree().create_tween()
+	positionTween = create_tween()
 	positionTween.tween_property(self, "position", state.getPositionAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	
 	level.promiseState(id, state.position, Level.STATES.BOX_HELD)
@@ -80,8 +80,8 @@ func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false
 	rotation += Vector3(state.wrapSelfRotation(state.rotation)) * ObjectState.TAU_OVER_360
 	#print("wrapped", state.rotation)
 	
-	positionTween = get_tree().create_tween()
-	rotationTween = get_tree().create_tween()
+	positionTween = create_tween()
+	rotationTween = create_tween()
 	positionTween.tween_property(self, "position", state.getPositionAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	rotationTween.tween_property(self, "rotation", state.getRotationAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	

@@ -9,7 +9,6 @@ var confirmStatus: String = "restart"
 var hoveringAnything: bool = false
 
 var birdseyeCameraPosition: Vector3 = Vector3(0,10,0)
-
 const CAMERA_SPEED: int = 15
 
 const betterControls: bool = true
@@ -44,8 +43,8 @@ func _process(delta):
 		result.collider.get_parent().hovered = true
 	for object in level.allObjects:
 		object.processHover()
-	if hoveringAnything or hoverPopup.modulate.a == 1: if result == {}: get_tree().create_tween().tween_property(hoverPopup, "modulate:a", 0, 0.2).set_ease(Tween.EASE_OUT)
-	elif result != {}: get_tree().create_tween().tween_property(hoverPopup, "modulate:a", 1, 0.2).set_ease(Tween.EASE_OUT)
+	if hoveringAnything or hoverPopup.modulate.a == 1: if result == {}: create_tween().tween_property(hoverPopup, "modulate:a", 0, 0.2).set_ease(Tween.EASE_OUT)
+	elif result != {}: create_tween().tween_property(hoverPopup, "modulate:a", 1, 0.2).set_ease(Tween.EASE_OUT)
 	hoveringAnything = result != {}
 	
 	if confirmStatus == "held":
@@ -89,11 +88,11 @@ func _input(event):
 	if event.is_action_pressed("toggle_camera") and (level.canFreecam or game.debug):
 		print("ACTION:toggle_camera")
 		if state.birdseyeCamera:
-			get_tree().create_tween().tween_property(%camera, "rotation", %cameraPosition.rotation, 0.5).set_trans(Tween.TRANS_QUAD)
+			create_tween().tween_property(%camera, "rotation", %cameraPosition.rotation, 0.5).set_trans(Tween.TRANS_QUAD)
 		else:
 			birdseyeCameraPosition = Vector3(state.position) + Vector3(0,10,0)
-			#get_tree().create_tween().tween_property(%camera, "rotation", Vector3(-1.41421356,0.883136602,-0.883136602), 0.5).set_trans(Tween.TRANS_QUAD)
-			get_tree().create_tween().tween_property(%camera, "rotation", Vector3(-1.5,0,0), 0.5).set_trans(Tween.TRANS_QUAD)
+			#create_tween().tween_property(%camera, "rotation", Vector3(-1.41421356,0.883136602,-0.883136602), 0.5).set_trans(Tween.TRANS_QUAD)
+			create_tween().tween_property(%camera, "rotation", Vector3(-1.5,0,0), 0.5).set_trans(Tween.TRANS_QUAD)
 		state.birdseyeCamera = !state.birdseyeCamera
 	if state.birdseyeCamera: return
 	
@@ -117,7 +116,6 @@ func _input(event):
 	
 	if (level.canLift or level.currentFile == "map" and game.flags.unlockLift) and event.is_action_pressed("toggle_height"):
 		print("ACTION:toggle_height")
-		level.add_child(CantInto.new(0.5, position))
 		if state.high:
 			if isTileSolid(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
 			state.high = false
@@ -144,52 +142,59 @@ func _input(event):
 	collisionCheck.addObject(self)
 	
 	if (event.is_action_pressed("forward") and Input.is_action_pressed("left") if betterControls else event.is_action_pressed("forward_left")):
-		print("collide 1:", collisionCheck.checkDir(state.positionRotated(Vector3i(1,0,0))))
-		print("collide 2:", collisionCheck.checkRotate(Vector3i(0,90,0), state.position))
-		print("collide 3:", collisionCheck.checkDir(state.positionRotated(Vector3i(0,0,-1))))
-		if isTileSolid(state.getTileRelative(Vector3i(1,0,-1), level.stateGrid)): return
-		if isTileSolid(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
-		if cantForkInto(state.getTileRelative(Vector3i(1,0,-2), level.stateGrid, state.high)): return
-		if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(1,0,-2), level.stateGrid, state.high)): return
-		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, state.high)): return
-		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(2,0,-1), level.stateGrid, state.high)): return
+		collisionCheck.moveDir(state.positionRotated(Vector3i(1,0,0)), false)
+		if game.debug: collideResponse(collisionCheck.ownTiles, CantInto.COLORS.GREEN)
+		if collideResponse(collisionCheck.moveRotate(Vector3i(0,90,0), state.positionRelative(Vector3i(1,0,0)))): return
+		if game.debug: collideResponse(collisionCheck.ownTiles, CantInto.COLORS.BLUE2)
+		if collideResponse(collisionCheck.moveDir(state.positionRotated(Vector3i(0,0,-1)))): return
+		if game.debug: collideResponse(collisionCheck.ownTiles, CantInto.COLORS.BLUE3)
+		
 		print("ACTION:forward_left")
 		state.moveRotated(Vector3i(1,0,-1))
 		state.rotation.y += 90
 	elif (event.is_action_pressed("forward") and Input.is_action_pressed("right") if betterControls else event.is_action_pressed("forward_right")):
-		if isTileSolid(state.getTileRelative(Vector3i(1,0,1), level.stateGrid)): return
-		if isTileSolid(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
-		if cantForkInto(state.getTileRelative(Vector3i(1,0,2), level.stateGrid, state.high)): return
-		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, state.high)): return
-		if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(1,0,2), level.stateGrid, state.high)): return
-		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(2,0,1), level.stateGrid, state.high)): return
+		collisionCheck.moveDir(state.positionRotated(Vector3i(1,0,0)), false)
+		if game.debug: collideResponse(collisionCheck.ownTiles, CantInto.COLORS.GREEN)
+		if collideResponse(collisionCheck.moveRotate(Vector3i(0,270,0), state.positionRelative(Vector3i(1,0,0)))): return
+		if game.debug: collideResponse(collisionCheck.ownTiles, CantInto.COLORS.BLUE2)
+		if collideResponse(collisionCheck.moveDir(state.positionRotated(Vector3i(0,0,1)))): return
+		if game.debug: collideResponse(collisionCheck.ownTiles, CantInto.COLORS.BLUE3)
+		
 		print("ACTION:forward_right")
 		state.moveRotated(Vector3i(1,0,1))
 		state.rotation.y += -90
 	elif event.is_action_pressed("forward"):
-		if isTileSolid(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
-		if cantForkInto(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, state.high)): return
-		if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(2,0,0), level.stateGrid, state.high)): return
+		if collideResponse(collisionCheck.moveDir(state.positionRotated(Vector3i(1,0,0)))): return
+		if game.debug: collideResponse(collisionCheck.ownTiles, CantInto.COLORS.BLUE1)
+		
 		print("ACTION:forward")
 		state.moveRotated(Vector3i(1,0,0))
 	elif (event.is_action_pressed("backward") and Input.is_action_pressed("left") if betterControls else event.is_action_pressed("backward_left")):
-		if isTileSolid(state.getTileRelative(Vector3i(-1,0,-1), level.stateGrid)): return
-		if isTileSolid(state.getTileRelative(Vector3i(-1,0,0), level.stateGrid)): return
-		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(0,0,1), level.stateGrid, state.high)): return
-		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(-1,0,1), level.stateGrid, state.high)): return
+		if collideResponse(collisionCheck.moveDir(state.positionRotated(Vector3i(-1,0,0)))): return
+		if game.debug: collideResponse(collisionCheck.ownTiles, CantInto.COLORS.BLUE1)
+		collisionCheck.moveRotate(Vector3i(0,270,0), state.positionRelative(Vector3i(-1,0,0)), false)
+		if game.debug: collideResponse(collisionCheck.ownTiles, CantInto.COLORS.GREEN)
+		if collideResponse(collisionCheck.moveDir(state.positionRotated(Vector3i(0,0,-1)))): return
+		if game.debug: collideResponse(collisionCheck.ownTiles, CantInto.COLORS.BLUE3)
+		
 		print("ACTION:backward_left")
 		state.moveRotated(Vector3i(-1,0,-1))
 		state.rotation.y += -90
 	elif (event.is_action_pressed("backward") and Input.is_action_pressed("right") if betterControls else event.is_action_pressed("backward_right")):
-		if isTileSolid(state.getTileRelative(Vector3i(-1,0,1), level.stateGrid)): return
-		if isTileSolid(state.getTileRelative(Vector3i(-1,0,0), level.stateGrid)): return
-		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(0,0,-1), level.stateGrid, state.high)): return
-		#if len(state.held) > 0 and isTileSolid(state.getTileRelative(Vector3i(-1,0,-1), level.stateGrid, state.high)): return
+		if collideResponse(collisionCheck.moveDir(state.positionRotated(Vector3i(-1,0,0)))): return
+		if game.debug: collideResponse(collisionCheck.ownTiles, CantInto.COLORS.BLUE1)
+		collisionCheck.moveRotate(Vector3i(0,90,0), state.positionRelative(Vector3i(-1,0,0)), false)
+		if game.debug: collideResponse(collisionCheck.ownTiles, CantInto.COLORS.GREEN)
+		if collideResponse(collisionCheck.moveDir(state.positionRotated(Vector3i(0,0,1)))): return
+		if game.debug: collideResponse(collisionCheck.ownTiles, CantInto.COLORS.BLUE3)
+		
 		print("ACTION:backward_right")
 		state.moveRotated(Vector3i(-1,0,1))
 		state.rotation.y += 90
 	elif event.is_action_pressed("backward"):
-		if isTileSolid(state.getTileRelative(Vector3i(-1,0,0), level.stateGrid)): return
+		if collideResponse(collisionCheck.moveDir(state.positionRotated(Vector3i(-1,0,0)))): return
+		if game.debug: collideResponse(collisionCheck.ownTiles, CantInto.COLORS.BLUE1)
+		
 		print("ACTION:backward")
 		state.moveRotated(Vector3i(-1,0,0))
 	else:
@@ -205,8 +210,8 @@ func _input(event):
 	
 	rotation += Vector3(state.wrapSelfRotation(state.rotation)) * ObjectState.TAU_OVER_360
 	
-	positionTween = get_tree().create_tween()
-	rotationTween = get_tree().create_tween()
+	positionTween = create_tween()
+	rotationTween = create_tween()
 	positionTween.tween_property(self, "position", state.getPositionAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	rotationTween.tween_property(self, "rotation", state.getRotationAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	
@@ -278,13 +283,13 @@ func getHoverTitleText(): return "Player"
 func getHoverBodyText(): return super()\
 	+ "Facing:" + ["up","down","north","east","south","west"][state.facing()]\
 	+ ("\nFork:" + ("lifted" if state.high else "lowered") if game.flags.unlockLift else "")\
-	+ ("\nHeld:nothing" if len(state.held) == 0 else "\nHeld:" + getHeldAsText())
+	+ ("\nHeld:nothing" if !state.held else "\nHeld:" + getHeldAsText())
 
 func getHeldAsText() -> String:
 	var objects = []
 	if len(state.held) == 1: return state.held[0].getHoverTitleText()
 	for object in state.held:
-		if len(objects) == 0 or objects[-1][1] != object.getHoverTitleText(): objects.append([1, object.getHoverTitleText()])
+		if !objects or objects[-1][1] != object.getHoverTitleText(): objects.append([1, object.getHoverTitleText()])
 		else: objects[-1][0] += 1
 	var toReturn = ""
 	for object in objects:
@@ -325,3 +330,14 @@ func occupiedTiles() -> Array[CollisionCheck.CollisionTile]:
 		CollisionCheck.Tile(state.position, CollisionCheck.COLLISION_TYPES.SOLID, self),
 		CollisionCheck.Tile(state.positionRelative(Vector3i(1,0,0), state.high), CollisionCheck.COLLISION_TYPES.FORK, self),
 	]
+
+func collideResponse(collisions:Array[CollisionCheck.CollisionTile], color:Color=CantInto.COLORS.RED) -> bool:
+	print("collide: ", collisions)
+	get_tree().call_group("cantIntoEphemeral", "queue_free")
+	for collision in collisions:
+		#assert(collision.collidedWith)
+		if collision.collidedWith:
+			level.add_child(CantInto.New(state.getPositionAsVector(collision.originalPosition), state.getPositionAsVector(collision.collidedWith[0].position)))
+		else: 
+			level.add_child(CantInto.New(state.getPositionAsVector(collision.originalPosition), state.getPositionAsVector(collision.position), 0.7, color, true))
+	return !!collisions
