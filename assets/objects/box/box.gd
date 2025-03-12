@@ -1,6 +1,8 @@
 class_name Box
 extends GameObject
 
+var heldObjects: Array[GameObject]
+
 static func New(_position: Vector3i, _level: Level, _state:BoxState=BoxState.new()) -> Box:
 	var _box = baseNew(preload("res://assets/objects/box/box.tscn").instantiate(), _position, _level, _state)
 	_box.state.positionOffset = Vector3(0, 0.5, 0)
@@ -21,8 +23,9 @@ func unhover():
 	for arrow in %hoverArrows.get_children():
 		arrow.visible = false
 
-func hold():
+func hold(_heldObjects):
 	if state.held: return false
+	heldObjects = _heldObjects
 	state.held = true
 	state.positionOffset = Vector3(0,0.6,0)
 	rotation = state.getRotationAsVector()
@@ -34,8 +37,8 @@ func hold():
 	level.promiseState(id, state.position, Level.STATES.BOX_HELD)
 	return true
 
-func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false):
-	print("going to " + str(_position))
+func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false, check:=false):
+	#print("going to " + str(_position))
 	var previousPosition = state.position
 	var previousRotation = state.rotation
 	
@@ -45,13 +48,20 @@ func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false
 	# we have to check because of gate bumping. fuckk
 	if state.getTileRelative(Vector3i(0,0,0), level.stateGrid) != Level.STATES.SOLID: level.stateGrid.set_cell_item(state.position, Level.STATES.NONE)
 	var relativePosition = _position - state.position
-	
 	if changeHeight:
-		state.position.y += _position.y
+		relativePosition.y = _position.y
+		relativePosition.x = 0
+		relativePosition.z = 0
 	else:
-		state.position.x = _position.x
-		state.position.z = _position.z
-	state.rotation += _rotation
+		relativePosition.y = 0
+	var direction = sign(relativePosition)
+	var magnitude = abs(relativePosition.x) + abs(relativePosition.y) + abs(relativePosition.z)
+	var collisionCheck = CollisionCheck.new(level.tileGrid, level.allObjects)
+	collisionCheck.addObject(self)
+	collisionCheck.addIgnores(heldObjects)
+	for step in magnitude:
+		if check and collisionCheck.moveDir(direction): break
+		state.position += direction
 	
 	if !state.held and isTileNonsolid(getStateOfCellIncludingPromises(state.positionRelative(Vector3i(0,-1,0)))):
 		while state.position.y > -5 and isTileNonsolid(getStateOfCellIncludingPromises(state.positionRelative(Vector3i(0,-1,0)))):
@@ -86,13 +96,13 @@ func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false
 	rotationTween.tween_property(self, "rotation", state.getRotationAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	
 	level.promiseState(id, state.position, Level.STATES.BOX_HELD)
-	print("went to " + str(state.position))
+	#print("went to " + str(state.position))
 
 func drop(_position: Vector3i):
 	state.held = false
 	state.positionOffset = Vector3(0,0.5,0)
 	level.stateGrid.set_cell_item(state.position, Level.STATES.NONE)
-	moveTo(_position)
+	moveTo(_position, Vector3i(0,0,0), false, true)
 	level.promiseState(id, state.position, Level.STATES.BOX)
 
 func getHoverTitleText(): return "Box"

@@ -16,7 +16,7 @@ const LEVEL_INFO = {
 	"set2/2": ["2-2", "Orientation Cube"],
 	"set2/3": ["2-3", "Parallel Parking"],
 	"set2/4": ["2-4!", "Magic Trick", "Something"],
-	"set2/5": ["2-5", "Unnamaed"],
+	"set2/5": ["2-5", "Natural"],
 	"set2/A": ["2-A", "Hammerhead", "Dr. Koffee"],
 }
 const STACK_VALUE_IDS = [
@@ -51,7 +51,7 @@ func _input(event):
 		debug = !debug
 		ui.debug.visible = debug
 
-func undo():
+func undo(dontIfWouldLoad:=false):
 	#print("========")
 	#print(undoStack)
 	if !undoStack: return
@@ -63,6 +63,10 @@ func undo():
 		match action[0]:
 			"dummy": doItAgain = true
 			"all":
+				if dontIfWouldLoad:
+					actions.reverse()
+					undoStack[-1][1].append(actions)
+					return false
 				level.queue_free()
 				level = level.loadLevel(undoStack[-1][0], "undo")
 				level.unmakeCereal(action, "undo")
@@ -80,4 +84,5 @@ func undo():
 	for object in level.allObjects: object.undoCleanup()
 	level.fulfillStatePromises()
 	level.processConditions()
-	if doItAgain: undo()
+	if doItAgain: undo(dontIfWouldLoad)
+	return true

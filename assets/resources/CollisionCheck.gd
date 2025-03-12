@@ -12,7 +12,7 @@ enum COLLISION_TYPES {
 var ownTiles: Array[CollisionTile] = []
 var tileGrid: GridMap
 var allObjects: Array[GameObject]
-var ownObjects: Array[GameObject]
+var ignoredObjects: Array[GameObject]
 
 func _init(_tileGrid:GridMap, _allObjects:Array[GameObject]):
 	tileGrid = _tileGrid
@@ -21,7 +21,7 @@ func _init(_tileGrid:GridMap, _allObjects:Array[GameObject]):
 ## add tile to yourself
 func addObject(object):
 	if !object: return # the bullshit player held undo ass thing
-	ownObjects.append(object)
+	if object not in ignoredObjects: ignoredObjects.append(object)
 	ownTiles.append_array(object.occupiedTiles())
 	#print(object.occupiedTiles())
 
@@ -29,6 +29,11 @@ func addObject(object):
 func addObjects(objects):
 	for object in objects:
 		addObject(object)
+
+## add ignored object
+func addIgnore(object): if object not in ignoredObjects: ignoredObjects.append(object)
+## add ignored objects
+func addIgnores(objects): for object in objects: addIgnore(object)
 
 ## really janky rotate check
 ## cant rotate 180 degrees.
@@ -62,14 +67,14 @@ func moveRotate(angle:Vector3i, center:Vector3i, check:=true) -> Array[Collision
 ## moves everything in a direction and see what collides
 ## can only move one axis at a time
 ## returns an array of fails
-func moveDir(vector:Vector3i, check:=true) -> Array[CollisionTile]:
+func moveDir(vector:Vector3i, check:=true, move:=true) -> Array[CollisionTile]:
 	assert((1 if vector.x else 0) + (1 if vector.y else 0) + (1 if vector.z else 0) == 1)
 	#print("checking!")
 	var collisions:Array[CollisionTile] = []
 	for ownTile in ownTiles:
 		ownTile.collidedWith.clear() # clear previous. i assume we want this
-		ownTile.position += vector
-		if check: collisions.append_array(getCollides(ownTile, ownTile.position))
+		if check: collisions.append_array(getCollides(ownTile, ownTile.position+vector))
+		if move: ownTile.position += vector
 	return collisions
 
 ## get array of things colliding with
@@ -77,7 +82,7 @@ func getCollides(ownTile:CollisionTile, checkPosition:Vector3i) -> Array[Collisi
 	#print("checking ", checkPosition, ", recieved ", getPosition(checkPosition))
 	var collisions: Array[CollisionTile] = []
 	for checkTile in getPosition(checkPosition):
-		if checkTile.object not in ownObjects and !canEnter(ownTile.collisionType, checkTile.collisionType):
+		if checkTile.object not in ignoredObjects and !canEnter(ownTile.collisionType, checkTile.collisionType):
 			ownTile.collidedWith.append(checkTile)
 			collisions.append(ownTile)
 	return collisions
@@ -86,6 +91,7 @@ func getCollides(ownTile:CollisionTile, checkPosition:Vector3i) -> Array[Collisi
 func canEnter(selfType:COLLISION_TYPES, checkType:COLLISION_TYPES) -> bool:
 	if checkType == COLLISION_TYPES.NON_SOLID: return true
 	if selfType == COLLISION_TYPES.FORK and checkType == COLLISION_TYPES.HOLDABLE: return true
+	if selfType == COLLISION_TYPES.HELD and checkType == COLLISION_TYPES.FORK: return true
 	return false
 
 ## get the collisionTiles that are in a position from the tilemap or from objects, ignoring own objects

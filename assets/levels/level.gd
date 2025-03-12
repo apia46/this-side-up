@@ -123,8 +123,8 @@ func init(_currentFile, _game, _subsitute:Variant=false):
 func loadLevel(levelFile, pretense:String):
 	if pretense == "enter" and saveState:
 		#print("making cereal!")
-		game.undo() # so that the cereal made isnt a softlock
-		levelData.serial = makeCereal()
+		if game.undo(true): # so that the cereal made isnt a softlock
+			levelData.serial = makeCereal()
 	
 	var _level
 	if (levelFile) in game.LEVEL_INFO:
@@ -135,10 +135,10 @@ func loadLevel(levelFile, pretense:String):
 	game.add_child(_level)
 	if _level.saveState and (pretense == "win" or pretense == "escape" or pretense == "restart"):
 		#print("unmaking cereal!")
-		_level.unmakeCereal(_level.levelData.serial, "change")
+		if _level.levelData.serial: _level.unmakeCereal(_level.levelData.serial, "change")
 	if turnCount > 0 and pretense != "undo":
 		#turnCount += 1 # why are we doing this # why were we doing this
-		if !(pretense == "enter" and saveState): game.undo() # so that the undo-cereal made isnt a softlock
+		if !(pretense == "enter" and saveState): game.undo(true) # so that the undo-cereal made isnt a softlock
 		addRawChangeToStack(makeCereal())
 	if _level.saveState and (pretense == "win" or pretense == "escape" or pretense == "restart"):
 		_level.addRawChangeToStack(["dummy"])
@@ -229,4 +229,4 @@ func fulfillStatePromises():
 	statePromises.clear()
 
 func generateLevelNumber(file):
-	return file[3] + "-" + (file[5] if len(file) > 5 else "0") + "?"
+	return (file[3] if len(file) > 3 else "0") + "-" + (file[5] if len(file) > 5 else "0") + "?"

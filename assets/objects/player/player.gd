@@ -44,7 +44,7 @@ func _process(delta):
 	for object in level.allObjects:
 		object.processHover()
 	if hoveringAnything or hoverPopup.modulate.a == 1: if result == {}: create_tween().tween_property(hoverPopup, "modulate:a", 0, 0.2).set_ease(Tween.EASE_OUT)
-	elif result != {}: create_tween().tween_property(hoverPopup, "modulate:a", 1, 0.2).set_ease(Tween.EASE_OUT)
+	elif result != {}: get_tree().create_tween().tween_property(hoverPopup, "modulate:a", 1, 0.2).set_ease(Tween.EASE_OUT)
 	hoveringAnything = result != {}
 	
 	if confirmStatus == "held":
@@ -99,12 +99,15 @@ func _input(event):
 	if event is InputEventKey: animateArrow()
 	
 	if event.is_action_pressed("drop"):
+		if !state.held: return
 		print("ACTION:drop")
 		var objects = 0
-		for object in state.held:
-			if isTileSolid(state.getTileRelative(Vector3i(2,objects,0), level.stateGrid, state.high)): return
+		var boxesCollisionCheck = CollisionCheck.new(level.tileGrid, level.allObjects)
+		boxesCollisionCheck.addObjects(state.held)
+		if collideResponse(boxesCollisionCheck.moveDir(state.positionRotated(Vector3i(1,0,0)))): return
+		if game.debug: collideResponse(boxesCollisionCheck.ownTiles, CantInto.COLORS.BLUE1)
 		objects = 0
-		var highRelative = isTileNonsolid(state.getTileRelative(Vector3i(2,-1,0), level.stateGrid, state.high))
+		var highRelative = !boxesCollisionCheck.moveDir(Vector3i(0,-1,0), true, false)
 		for object in state.held:
 			object.drop(state.positionRelative(Vector3i(2 + objects,0,0)))
 			if highRelative: objects += 1
@@ -224,7 +227,7 @@ func _input(event):
 		var object = level.getObject("solid", state.positionRelative(Vector3i(1,0,0) + offset, state.high))
 		if object is Box and !object.state.held:
 			state.held.append(object)
-			if (object.hold()): level.addChangeToStack(id, 2, ["hold", object.id])
+			if (object.hold(state.held)): level.addChangeToStack(id, 2, ["hold", object.id])
 			offset += Vector3i(0,1,0)
 		else: break
 	endOfTurn()
@@ -312,7 +315,7 @@ func specialUndo(event):
 		"drop":
 			var object = level.allObjects[int(event[1])]
 			state.held.append(object)
-			object.hold()
+			object.hold(state.held)
 
 func undoCleanup():
 	super()
@@ -332,7 +335,7 @@ func occupiedTiles() -> Array[CollisionCheck.CollisionTile]:
 	]
 
 func collideResponse(collisions:Array[CollisionCheck.CollisionTile], color:Color=CantInto.COLORS.RED) -> bool:
-	print("collide: ", collisions)
+	#print("collide: ", collisions)
 	get_tree().call_group("cantIntoEphemeral", "queue_free")
 	for collision in collisions:
 		#assert(collision.collidedWith)
