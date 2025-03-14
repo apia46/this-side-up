@@ -6,6 +6,7 @@ extends Node3D
 const LEVEL_INFO = {
 	"map": ["", ""],
 	"placeholder": ["", ""], # before it loads the subsitute from the cereal, just so it doesnt crash
+	"testlevel": ["", ""],
 	"set1/1": ["1-1", "Boxed In"],
 	"set1/2": ["1-2", "Spread Out"],
 	"set1/3": ["1-3", "Micro"],

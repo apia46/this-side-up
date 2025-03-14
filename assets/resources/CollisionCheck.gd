@@ -19,6 +19,12 @@ func _init(_tileGrid:GridMap, _allObjects:Array[GameObject]):
 	allObjects = _allObjects
 
 ## add tile to yourself
+func addTile(object, tile):
+	if !object: return # the bullshit player held undo ass thing
+	if object not in ignoredObjects: ignoredObjects.append(object) # hmmmm
+	ownTiles.append(tile)
+
+## add object to yourself
 func addObject(object):
 	if !object: return # the bullshit player held undo ass thing
 	if object not in ignoredObjects: ignoredObjects.append(object)
@@ -67,30 +73,30 @@ func moveRotate(angle:Vector3i, center:Vector3i, check:=true) -> Array[Collision
 ## moves everything in a direction and see what collides
 ## can only move one axis at a time
 ## returns an array of fails
-func moveDir(vector:Vector3i, check:=true, move:=true) -> Array[CollisionTile]:
+func moveDir(vector:Vector3i, check:=true, move:=true, strict:=false) -> Array[CollisionTile]:
 	assert((1 if vector.x else 0) + (1 if vector.y else 0) + (1 if vector.z else 0) == 1)
 	#print("checking!")
 	var collisions:Array[CollisionTile] = []
 	for ownTile in ownTiles:
 		ownTile.collidedWith.clear() # clear previous. i assume we want this
-		if check: collisions.append_array(getCollides(ownTile, ownTile.position+vector))
+		if check: collisions.append_array(getCollides(ownTile, ownTile.position+vector, strict))
 		if move: ownTile.position += vector
 	return collisions
 
 ## get array of things colliding with
-func getCollides(ownTile:CollisionTile, checkPosition:Vector3i) -> Array[CollisionTile]:
+func getCollides(ownTile:CollisionTile, checkPosition:Vector3i, strict:=false) -> Array[CollisionTile]:
 	#print("checking ", checkPosition, ", recieved ", getPosition(checkPosition))
 	var collisions: Array[CollisionTile] = []
 	for checkTile in getPosition(checkPosition):
-		if checkTile.object not in ignoredObjects and !canEnter(ownTile.collisionType, checkTile.collisionType):
+		if checkTile.object not in ignoredObjects and !canEnter(ownTile.collisionType, checkTile.collisionType, strict):
 			ownTile.collidedWith.append(checkTile)
 			collisions.append(ownTile)
 	return collisions
 
 ## logic for if a certain collision type should be able to enter a collision type
-func canEnter(selfType:COLLISION_TYPES, checkType:COLLISION_TYPES) -> bool:
+func canEnter(selfType:COLLISION_TYPES, checkType:COLLISION_TYPES, strict:=false) -> bool:
 	if checkType == COLLISION_TYPES.NON_SOLID: return true
-	if selfType == COLLISION_TYPES.FORK and checkType == COLLISION_TYPES.HOLDABLE: return true
+	if !strict and selfType == COLLISION_TYPES.FORK and checkType == COLLISION_TYPES.HOLDABLE: return true
 	if selfType == COLLISION_TYPES.HELD and checkType == COLLISION_TYPES.FORK: return true
 	return false
 

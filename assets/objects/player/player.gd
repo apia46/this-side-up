@@ -98,16 +98,17 @@ func _input(event):
 	
 	if event is InputEventKey: animateArrow()
 	
+	var collisionCheck = CollisionCheck.new(level.tileGrid, level.allObjects)
+	collisionCheck.addObjects(state.held)
+	
 	if event.is_action_pressed("drop"):
 		if !state.held: return
 		print("ACTION:drop")
 		var objects = 0
-		var boxesCollisionCheck = CollisionCheck.new(level.tileGrid, level.allObjects)
-		boxesCollisionCheck.addObjects(state.held)
-		if collideResponse(boxesCollisionCheck.moveDir(state.positionRotated(Vector3i(1,0,0)))): return
-		if game.debug: collideResponse(boxesCollisionCheck.ownTiles, CantInto.COLORS.BLUE1)
+		if collideResponse(collisionCheck.moveDir(state.positionRotated(Vector3i(1,0,0)))): return
+		if game.debug: collideResponse(collisionCheck.ownTiles, CantInto.COLORS.BLUE1)
 		objects = 0
-		var highRelative = !boxesCollisionCheck.moveDir(Vector3i(0,-1,0), true, false)
+		var highRelative = !collisionCheck.moveDir(Vector3i(0,-1,0), true, false)
 		for object in state.held:
 			object.drop(state.positionRelative(Vector3i(2 + objects,0,0)))
 			if highRelative: objects += 1
@@ -116,19 +117,21 @@ func _input(event):
 		state.held.clear()
 		endOfTurn()
 		return
-	
+	collisionCheck.addTile(self, getFork())
 	if (level.canLift or level.currentFile == "map" and game.flags.unlockLift) and event.is_action_pressed("toggle_height"):
 		print("ACTION:toggle_height")
 		if state.high:
-			if isTileSolid(state.getTileRelative(Vector3i(1,0,0), level.stateGrid)): return
+			if collideResponse(collisionCheck.moveDir(Vector3i(0,-1,0), true, true, true)): return
 			state.high = false
 			fork.moveTo(Vector3(0,0,0))
 			for object in state.held: object.moveTo(state.positionRelative(Vector3i(0,-1,0)), Vector3i(0,0,0), true)
 		else:
+			if collideResponse(collisionCheck.moveDir(Vector3i(0,1,0))): return
 			state.high = true
 			fork.moveTo(Vector3(0,1,0))
 			for object in state.held: object.moveTo(state.positionRelative(Vector3i(0,1,0)), Vector3i(0,0,0), true)
 		level.addChangeToStack(id, 3, !state.high)
+		if game.debug: collideResponse(collisionCheck.ownTiles, CantInto.COLORS.BLUE1)
 		return
 	
 	if event.is_action_pressed("undo"):
@@ -139,11 +142,7 @@ func _input(event):
 		position = state.getPositionAsVector()
 		rotation = state.getRotationAsVector()
 	else: return
-	
-	var collisionCheck = CollisionCheck.new(level.tileGrid, level.allObjects)
-	collisionCheck.addObjects(state.held)
-	collisionCheck.addObject(self)
-	
+	collisionCheck.addTile(self, getBody())
 	if (event.is_action_pressed("forward") and Input.is_action_pressed("left") if betterControls else event.is_action_pressed("forward_left")):
 		collisionCheck.moveDir(state.positionRotated(Vector3i(1,0,0)), false)
 		if game.debug: collideResponse(collisionCheck.ownTiles, CantInto.COLORS.GREEN)
@@ -329,10 +328,9 @@ func undoCleanup():
 	state.held.sort_custom(func(a,b): return a.state.position.y < b.state.position.y)
 
 func occupiedTiles() -> Array[CollisionCheck.CollisionTile]:
-	return [
-		CollisionCheck.Tile(state.position, CollisionCheck.COLLISION_TYPES.SOLID, self),
-		CollisionCheck.Tile(state.positionRelative(Vector3i(1,0,0), state.high), CollisionCheck.COLLISION_TYPES.FORK, self),
-	]
+	return [getBody(), getFork()]
+func getBody() -> CollisionCheck.CollisionTile: return CollisionCheck.Tile(state.position, CollisionCheck.COLLISION_TYPES.SOLID, self)
+func getFork() -> CollisionCheck.CollisionTile: return CollisionCheck.Tile(state.positionRelative(Vector3i(1,0,0), state.high), CollisionCheck.COLLISION_TYPES.FORK, self)
 
 func collideResponse(collisions:Array[CollisionCheck.CollisionTile], color:Color=CantInto.COLORS.RED) -> bool:
 	#print("collide: ", collisions)
