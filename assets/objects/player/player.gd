@@ -99,17 +99,21 @@ func _input(event):
 	if event is InputEventKey: animateArrow()
 	
 	var collisionCheck = CollisionCheck.new(level.tileGrid, level.allObjects)
-	collisionCheck.addObjects(state.held)
 	
 	if event.is_action_pressed("drop"):
 		if !state.held: return
 		print("ACTION:drop")
 		var objects = 0
-		if collideResponse(collisionCheck.moveDir(state.positionRotated(Vector3i(1,0,0)))): return
+		for object in state.held: object.invertHeldState = true
+		collisionCheck.addObjects(state.held)
+		if collideResponse(collisionCheck.moveDir(state.positionRotated(Vector3i(1,0,0)))):
+			for object in state.held: object.invertHeldState = false
+			return
 		if game.debug: collideResponse(collisionCheck.ownTiles, CantInto.COLORS.BLUE1)
 		objects = 0
 		var highRelative = !collisionCheck.moveDir(Vector3i(0,-1,0), true, false)
 		for object in state.held:
+			object.invertHeldState = false
 			object.drop(state.positionRelative(Vector3i(2 + objects,0,0)))
 			if highRelative: objects += 1
 		state.held.reverse()
@@ -117,6 +121,7 @@ func _input(event):
 		state.held.clear()
 		endOfTurn()
 		return
+	collisionCheck.addObjects(state.held)
 	collisionCheck.addTile(self, getFork())
 	if (level.canLift or level.currentFile == "map" and game.flags.unlockLift) and event.is_action_pressed("toggle_height"):
 		print("ACTION:toggle_height")
@@ -202,6 +207,28 @@ func _input(event):
 	else:
 		return
 	
+	# pick up collision
+	var offset = Vector3i(0,0,0)
+	var objectsToHold = []
+	while level.getObject("solid", state.positionRelative(Vector3i(1,0,0) + offset, state.high)):
+		var object = level.getObject("solid", state.positionRelative(Vector3i(1,0,0) + offset, state.high))
+		if object is Box and !object.state.held:
+			offset += Vector3i(0,1,0)
+			object.invertHeldState = true
+			objectsToHold.append(object)
+		else: break
+	var holdCollisionCheck = CollisionCheck.new(level.tileGrid, level.allObjects)
+	holdCollisionCheck.addObjects(objectsToHold)
+	var response = collideResponse(holdCollisionCheck.checkHere())
+	for object in (objectsToHold): object.invertHeldState = false
+	if response:
+		state.position = previousPosition
+		state.rotation = previousRotation
+		print("ACTION:CANCELLED")
+		return
+	for object in objectsToHold:
+			object.invertHeldState = false
+	 
 	if state.position != previousPosition: level.addChangeToStack(id, 0, previousPosition)
 	if state.rotation != previousRotation: level.addChangeToStack(id, 1, previousRotation)
 	
@@ -220,15 +247,11 @@ func _input(event):
 	for object in state.held:
 		object.moveTo(state.positionRelative(Vector3i(1,0,0)), unfixedRotation - previousRotation)
 	
-	# pick up?
-	var offset = Vector3i(0,0,0)
-	while level.getObject("solid", state.positionRelative(Vector3i(1,0,0) + offset, state.high)):
-		var object = level.getObject("solid", state.positionRelative(Vector3i(1,0,0) + offset, state.high))
-		if object is Box and !object.state.held:
-			state.held.append(object)
-			if (object.hold(state.held)): level.addChangeToStack(id, 2, ["hold", object.id])
-			offset += Vector3i(0,1,0)
-		else: break
+	# pick up
+	offset = Vector3i(0,0,0)
+	for object in objectsToHold:
+		state.held.append(object)
+		if (object.hold(state.held)): level.addChangeToStack(id, 2, ["hold", object.id])
 	endOfTurn()
 
 static func cantForkInto(checkState:Level.STATES) -> bool:

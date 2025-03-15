@@ -67,6 +67,11 @@ func init(_currentFile, _game, _subsitute:Variant=false):
 				%stateGrid.set_cell_item(cell, STATES.SOLID)
 			1: # halfwall
 				%stateGrid.set_cell_item(cell, STATES.SOLID)
+			2, 4: # maxHeight
+				%tileGrid.set_cell_item(cell + Vector3i(0,1,0), 3)
+				%stateGrid.set_cell_item(cell + Vector3i(0,1,0), STATES.SOLID)
+			3: # invis
+				%stateGrid.set_cell_item(cell, STATES.SOLID)
 		if topBound == null or topBound > cell.z: topBound = cell.z
 		if bottomBound == null or bottomBound < cell.z: bottomBound = cell.z
 		if leftBound == null or leftBound > cell.x: leftBound = cell.x
@@ -229,4 +234,4 @@ func fulfillStatePromises():
 	statePromises.clear()
 
 func generateLevelNumber(file):
-	return (file[3] if len(file) > 3 else "0") + "-" + (file[5] if len(file) > 5 else "0") + "?"
+	return (file.substr(3).get_slice("/",0) if len(file) > 3 else "0") + "-" + (file[file.find("/")+1] if len(file) > 5 else "0") + "?"

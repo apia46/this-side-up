@@ -2,6 +2,7 @@ class_name Box
 extends GameObject
 
 var heldObjects: Array[GameObject]
+var invertHeldState := false # evil edge case thingy for collision check
 
 static func New(_position: Vector3i, _level: Level, _state:BoxState=BoxState.new()) -> Box:
 	var _box = baseNew(preload("res://assets/objects/box/box.tscn").instantiate(), _position, _level, _state)
@@ -27,7 +28,7 @@ func hold(_heldObjects):
 	if state.held: return false
 	heldObjects = _heldObjects
 	state.held = true
-	state.positionOffset = Vector3(0,0.6,0)
+	state.positionOffset = Vector3(0,0.65,0)
 	rotation = state.getRotationAsVector()
 	
 	if positionTween and positionTween.is_running(): positionTween.kill()
@@ -106,7 +107,9 @@ func drop(_position: Vector3i):
 	level.promiseState(id, state.position, Level.STATES.BOX)
 
 func getHoverTitleText(): return "Box"
-func getHoverBodyText(): return super() + "Held:" + str(state.held) + "\nFacing:" + ["up","down","north","east","south","west"][state.facing()]
+func getHoverBodyText(): return super() + "Held:" + str(state.held)\
+	+ ("\nInvert held state:"+str(invertHeldState) if game.debug else "")\
+	+ "\nFacing:" + ["up","down","north","east","south","west"][state.facing()]
 
 func undoed(property, propertyWas):
 	super(property, propertyWas)
@@ -121,5 +124,5 @@ func getStateOfCellIncludingPromises(cell:Vector3i) -> Level.STATES:
 
 func occupiedTiles() -> Array[CollisionCheck.CollisionTile]:
 	return [
-		CollisionCheck.Tile(state.position, CollisionCheck.COLLISION_TYPES.HELD if state.held else CollisionCheck.COLLISION_TYPES.HOLDABLE, self)
+		CollisionCheck.Tile(state.position, CollisionCheck.COLLISION_TYPES.HELD if state.held != invertHeldState else CollisionCheck.COLLISION_TYPES.HOLDABLE, self)
 	]

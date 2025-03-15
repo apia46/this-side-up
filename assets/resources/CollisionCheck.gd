@@ -7,6 +7,7 @@ enum COLLISION_TYPES {
 	HOLDABLE,
 	HELD,
 	FORK,
+	MAX_HEIGHT
 }
 
 var ownTiles: Array[CollisionTile] = []
@@ -83,6 +84,13 @@ func moveDir(vector:Vector3i, check:=true, move:=true, strict:=false) -> Array[C
 		if move: ownTile.position += vector
 	return collisions
 
+## checks at the current location
+func checkHere(strict:=false) -> Array[CollisionTile]:
+	var collisions:Array[CollisionTile] = []
+	for ownTile in ownTiles:
+		collisions.append_array(getCollides(ownTile, ownTile.position, strict))
+	return collisions
+
 ## get array of things colliding with
 func getCollides(ownTile:CollisionTile, checkPosition:Vector3i, strict:=false) -> Array[CollisionTile]:
 	#print("checking ", checkPosition, ", recieved ", getPosition(checkPosition))
@@ -98,6 +106,7 @@ func canEnter(selfType:COLLISION_TYPES, checkType:COLLISION_TYPES, strict:=false
 	if checkType == COLLISION_TYPES.NON_SOLID: return true
 	if !strict and selfType == COLLISION_TYPES.FORK and checkType == COLLISION_TYPES.HOLDABLE: return true
 	if selfType == COLLISION_TYPES.HELD and checkType == COLLISION_TYPES.FORK: return true
+	if checkType == COLLISION_TYPES.MAX_HEIGHT and selfType != COLLISION_TYPES.HELD: return true
 	return false
 
 ## get the collisionTiles that are in a position from the tilemap or from objects, ignoring own objects
@@ -106,7 +115,10 @@ func getPosition(position:Vector3i) -> Array[CollisionTile]:
 	for object in allObjects:
 		for collisionTile in object.occupiedTiles():
 			if collisionTile.position == position: tile.append(collisionTile)
-	if tileGrid.get_cell_item(position) != -1: tile.append(Tile(position, COLLISION_TYPES.WALL))
+	match tileGrid.get_cell_item(position):
+		-1: pass
+		2, 4: tile.append(Tile(position, COLLISION_TYPES.MAX_HEIGHT))
+		_: tile.append(Tile(position, COLLISION_TYPES.WALL))
 	return tile
 
 static func Tile(position:Vector3i, collisionType:COLLISION_TYPES, object:GameObject=null) -> CollisionTile:
