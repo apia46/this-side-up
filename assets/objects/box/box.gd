@@ -55,6 +55,7 @@ func moveTo(_position: Vector3i, _rotation:=Vector3i(0,0,0), changeHeight:=false
 		relativePosition.z = 0
 	else:
 		relativePosition.y = 0
+	state.rotation += _rotation
 	var direction = sign(relativePosition)
 	var magnitude = abs(relativePosition.x) + abs(relativePosition.y) + abs(relativePosition.z)
 	var collisionCheck = CollisionCheck.new(level.tileGrid, level.allObjects)

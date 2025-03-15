@@ -12,6 +12,34 @@
 [ext_resource type="Script" uid="uid://cebsuitwtsmgp" path="res://assets/objects/box/BoxState.gd" id="7_uqxq1"]
 [ext_resource type="FontFile" uid="uid://cwlarvo4i0hrb" path="res://assets/resources/SpaceMono-Bold.woff" id="9_uytd3"]
 
+[sub_resource type="Resource" id="Resource_y4iy7"]
+script = ExtResource("7_h6cjy")
+levelSet = "set2b"
+condition = "none"
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://dcrrmp5dlahvf"
+
+[sub_resource type="Resource" id="Resource_ekoro"]
+script = ExtResource("4_vwmcu")
+condition = "pass_tutorial_2b"
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://ymf4q6fkocgy"
+
+[sub_resource type="Resource" id="Resource_1etax"]
+script = ExtResource("4_vwmcu")
+condition = "???"
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://ymf4q6fkocgy"
+
+[sub_resource type="Resource" id="Resource_qjca5"]
+script = ExtResource("5_f36gd")
+levelText = "?"
+levelFile = "q"
+defaultSet = "set2b"
+won = false
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://b7wnio6cceo8p"
+
 [sub_resource type="Resource" id="Resource_xwvqj"]
 script = ExtResource("5_f36gd")
 levelText = "4"
@@ -29,6 +57,12 @@ defaultSet = "set1"
 won = false
 rotation = Vector3i(0, 0, 0)
 metadata/_custom_type_script = "uid://b7wnio6cceo8p"
+
+[sub_resource type="Resource" id="Resource_l8wi6"]
+script = ExtResource("3_vwmcu")
+condition = "pass_tutorial_2b"
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://ocatylxuuv00"
 
 [sub_resource type="Resource" id="Resource_7e0f3"]
 script = ExtResource("3_vwmcu")
@@ -82,6 +116,24 @@ metadata/_custom_type_script = "uid://ocatylxuuv00"
 script = ExtResource("3_vwmcu")
 condition = "set1/1"
 rotation = Vector3i(0, 270, 0)
+metadata/_custom_type_script = "uid://ocatylxuuv00"
+
+[sub_resource type="Resource" id="Resource_pfmsi"]
+script = ExtResource("3_vwmcu")
+condition = "pass_set2"
+rotation = Vector3i(0, 90, 0)
+metadata/_custom_type_script = "uid://ocatylxuuv00"
+
+[sub_resource type="Resource" id="Resource_flily"]
+script = ExtResource("3_vwmcu")
+condition = "pass_set2"
+rotation = Vector3i(0, 90, 0)
+metadata/_custom_type_script = "uid://ocatylxuuv00"
+
+[sub_resource type="Resource" id="Resource_htslg"]
+script = ExtResource("3_vwmcu")
+condition = "pass_set2"
+rotation = Vector3i(0, 90, 0)
 metadata/_custom_type_script = "uid://ocatylxuuv00"
 
 [sub_resource type="Resource" id="Resource_usuf8"]
@@ -306,58 +358,6 @@ script = ExtResource("4_vwmcu")
 condition = "pass_tutorial2"
 rotation = Vector3i(0, 0, 0)
 metadata/_custom_type_script = "uid://ymf4q6fkocgy"
-
-[sub_resource type="Resource" id="Resource_pfmsi"]
-script = ExtResource("3_vwmcu")
-condition = "pass_set2"
-rotation = Vector3i(0, 90, 0)
-metadata/_custom_type_script = "uid://ocatylxuuv00"
-
-[sub_resource type="Resource" id="Resource_flily"]
-script = ExtResource("3_vwmcu")
-condition = "pass_set2"
-rotation = Vector3i(0, 90, 0)
-metadata/_custom_type_script = "uid://ocatylxuuv00"
-
-[sub_resource type="Resource" id="Resource_htslg"]
-script = ExtResource("3_vwmcu")
-condition = "pass_set2"
-rotation = Vector3i(0, 90, 0)
-metadata/_custom_type_script = "uid://ocatylxuuv00"
-
-[sub_resource type="Resource" id="Resource_ekoro"]
-script = ExtResource("4_vwmcu")
-condition = "pass_tutorial_2b"
-rotation = Vector3i(0, 0, 0)
-metadata/_custom_type_script = "uid://ymf4q6fkocgy"
-
-[sub_resource type="Resource" id="Resource_1etax"]
-script = ExtResource("4_vwmcu")
-condition = "???"
-rotation = Vector3i(0, 0, 0)
-metadata/_custom_type_script = "uid://ymf4q6fkocgy"
-
-[sub_resource type="Resource" id="Resource_l8wi6"]
-script = ExtResource("3_vwmcu")
-condition = "pass_tutorial_2b"
-rotation = Vector3i(0, 0, 0)
-metadata/_custom_type_script = "uid://ocatylxuuv00"
-
-[sub_resource type="Resource" id="Resource_y4iy7"]
-script = ExtResource("7_h6cjy")
-levelSet = "set2b"
-condition = "none"
-rotation = Vector3i(0, 0, 0)
-metadata/_custom_type_script = "uid://dcrrmp5dlahvf"
-
-[sub_resource type="Resource" id="Resource_qjca5"]
-script = ExtResource("5_f36gd")
-levelText = "?"
-levelFile = "q"
-defaultSet = "set2b"
-won = false
-rotation = Vector3i(0, 0, 0)
-metadata/_custom_type_script = "uid://b7wnio6cceo8p"
 
 [node name="level" type="Node3D"]
 script = ExtResource("1_yvtuu")
