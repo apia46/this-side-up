@@ -254,8 +254,17 @@ func _input(event):
 		if (object.hold(state.held)): level.addChangeToStack(id, 2, ["hold", object.id])
 	endOfTurn()
 
-static func cantForkInto(checkState:Level.STATES) -> bool:
-	return checkState == Level.STATES.SOLID
+func moveRelative(vector:Vector3i):
+	var previousPosition = state.position
+	position = state.getPositionAsVector()
+	rotation = state.getRotationAsVector()
+	state.position += vector
+	for object in state.held:
+		object.moveTo(state.positionRelative(vector) if !vector.y else vector,Vector3i(0,0,0),!!vector.y)
+	level.addChangeToStack(id, 0, previousPosition)
+	if positionTween and positionTween.is_running(): positionTween.kill()
+	positionTween = create_tween()
+	positionTween.tween_property(self, "position", state.getPositionAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 func animateArrow():
 	if Input.is_action_pressed("left"):

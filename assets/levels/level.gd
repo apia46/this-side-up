@@ -67,9 +67,13 @@ func init(_currentFile, _game, _subsitute:Variant=false):
 				%stateGrid.set_cell_item(cell, STATES.SOLID)
 			1: # halfwall
 				%stateGrid.set_cell_item(cell, STATES.SOLID)
+				for offset in range(1,21):
+					%tileGrid.set_cell_item(cell + Vector3i(0,offset,0), 3)
+					%stateGrid.set_cell_item(cell + Vector3i(0,offset,0), STATES.SOLID)
 			2, 4: # maxHeight
-				%tileGrid.set_cell_item(cell + Vector3i(0,1,0), 3)
-				%stateGrid.set_cell_item(cell + Vector3i(0,1,0), STATES.SOLID)
+				for offset in range(1,21):
+					%tileGrid.set_cell_item(cell + Vector3i(0,offset,0), 3)
+					%stateGrid.set_cell_item(cell + Vector3i(0,offset,0), STATES.SOLID)
 			3: # invis
 				%stateGrid.set_cell_item(cell, STATES.SOLID)
 		if topBound == null or topBound > cell.z: topBound = cell.z

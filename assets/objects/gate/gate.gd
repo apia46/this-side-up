@@ -21,7 +21,9 @@ func close():
 	create_tween().tween_property(%gate, "position:y", 0.5, 0.1)
 	level.stateGrid.set_cell_item(state.position, Level.STATES.SOLID)
 	var overlap = level.getObject("solid", state.position)
-	if overlap and overlap is Box: overlap.moveTo(Vector3i(0,1,0), Vector3i(0,0,0), true)
+	if overlap:
+		if overlap is Box: overlap.moveTo(Vector3i(0,1,0), Vector3i(0,0,0), true)
+		elif overlap is Player: overlap.moveRelative(Vector3i(0,1,0))
 	%collision.set_collision_layer_value(1, true)
 
 func getHoverTitleText(): return "Gate"
