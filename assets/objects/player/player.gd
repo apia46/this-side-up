@@ -134,12 +134,12 @@ func _input(event):
 			if collideResponse(collisionCheck.moveDir(Vector3i(0,-1,0), true, true, true)): return
 			state.high = false
 			fork.moveTo(Vector3(0,0,0))
-			for object in state.held: object.moveTo(state.positionRelative(Vector3i(0,-1,0)), Vector3i(0,0,0), true)
+			for object in state.held: object.moveTo(Vector3i(0,-1,0), Vector3i(0,0,0), true)
 		else:
 			if collideResponse(collisionCheck.moveDir(Vector3i(0,1,0))): return
 			state.high = true
 			fork.moveTo(Vector3(0,1,0))
-			for object in state.held: object.moveTo(state.positionRelative(Vector3i(0,1,0)), Vector3i(0,0,0), true)
+			for object in state.held: object.moveTo(Vector3i(0,1,0), Vector3i(0,0,0), true)
 		level.addChangeToStack(id, 3, !state.high)
 		if game.debug: collideResponse(collisionCheck.ownTiles, CantInto.COLORS.BLUE1)
 		return
@@ -251,7 +251,7 @@ func _input(event):
 	if state.position != previousPosition: level.addChangeToStack(id, 0, previousPosition)
 	if state.rotation != previousRotation: level.addChangeToStack(id, 1, previousRotation)
 	
-	if fallTo: moveRelative(Vector3i(0,fallTo, 0), false)
+	if fallTo: moveRelative(Vector3i(0,fallTo, 0))
 	
 	if positionTween and positionTween.is_running(): positionTween.kill()
 	if rotationTween and rotationTween.is_running(): rotationTween.kill()
@@ -275,19 +275,15 @@ func _input(event):
 		if (object.hold(state.held)): level.addChangeToStack(id, 2, ["hold", object.id])
 	endOfTurn()
 
-func moveRelative(vector:Vector3i, doTween:=true):
+func moveRelative(vector:Vector3i):
 	var previousPosition = state.position
-	if doTween:
-		position = state.getPositionAsVector()
-		rotation = state.getRotationAsVector()
 	state.position += vector
 	for object in state.held:
 		object.moveTo(state.positionRelative(vector) if !vector.y else vector,Vector3i(0,0,0),!!vector.y)
 	level.addChangeToStack(id, 0, previousPosition)
-	if doTween:
-		if positionTween and positionTween.is_running(): positionTween.kill()
-		positionTween = create_tween()
-		positionTween.tween_property(self, "position", state.getPositionAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	if positionTween and positionTween.is_running(): positionTween.kill()
+	positionTween = create_tween()
+	positionTween.tween_property(self, "position", state.getPositionAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 func animateArrow():
 	if Input.is_action_pressed("left"):

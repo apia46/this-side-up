@@ -22,8 +22,10 @@ func close():
 	level.stateGrid.set_cell_item(state.position, Level.STATES.SOLID)
 	var overlap = level.getObject("solid", state.position)
 	if overlap:
+		level.turnCount -= 1
 		if overlap is Box: overlap.moveTo(Vector3i(0,1,0), Vector3i(0,0,0), true)
 		elif overlap is Player: overlap.moveRelative(Vector3i(0,1,0))
+		level.turnCount += 1
 	%collision.set_collision_layer_value(1, true)
 
 func getHoverTitleText(): return "Gate"

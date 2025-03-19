@@ -31,7 +31,7 @@ func getTile(location:Vector3i, stateGrid:GridMap) -> Level.STATES:
 func positionRotated(vector:Vector3i) -> Vector3i:
 	var result = Vector3i(0,0,0)
 	result.y = vector.y
-	match rotation.y:
+	match mod360(rotation.y):
 		0:
 			result.x = vector.x
 			result.z = vector.z
