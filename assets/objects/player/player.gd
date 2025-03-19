@@ -13,6 +13,9 @@ const CAMERA_SPEED: int = 15
 
 const betterControls: bool = true
 
+var positionComponent1: Vector3
+var positionComponent2: Vector3
+
 static func New(_position: Vector3i, _level: Level, _state:=PlayerState.new()) -> Player:
 	var _player = baseNew(preload("res://assets/objects/player/player.tscn").instantiate(), _position, _level, _state)
 	if _level.levelData.spawnRotation != Vector3i(0,-1,0): _player.state.rotation = _level.levelData.spawnRotation
@@ -25,6 +28,8 @@ func _ready():
 	%camera.position = global_transform.origin + %cameraPosition.position
 
 func _process(delta):
+	#position = positionComponent1 + positionComponent2
+	
 	if Input.is_action_pressed("forward") and birdseyeCameraPosition.z >= level.topBound: birdseyeCameraPosition -= Vector3(0,0,CAMERA_SPEED*delta)
 	if Input.is_action_pressed("left") and birdseyeCameraPosition.x >= level.leftBound: birdseyeCameraPosition -= Vector3(CAMERA_SPEED*delta,0,0)
 	if Input.is_action_pressed("right") and birdseyeCameraPosition.x <= level.rightBound: birdseyeCameraPosition += Vector3(CAMERA_SPEED*delta,0,0)
@@ -207,6 +212,20 @@ func _input(event):
 	else:
 		return
 	
+	# fall
+	var fallTo = 0
+	while fallTo + state.position.y > -5 and !collisionCheck.moveDir(Vector3i(0,-1,0), true, true, true):
+		print("ACTION:FALL")
+		fallTo -= 1
+	var bodyCheck = CollisionCheck.new(level.tileGrid, level.allObjects)
+	bodyCheck.addTile(self, getBody())
+	if !bodyCheck.moveDir(Vector3i(0, fallTo-1, 0)):
+		collideResponse(collisionCheck.getCurrentlyCollided())
+		state.position = previousPosition
+		state.rotation = previousRotation
+		print("ACTION:CANCELLED")
+		return
+	
 	# pick up collision
 	var offset = Vector3i(0,0,0)
 	var objectsToHold = []
@@ -232,6 +251,8 @@ func _input(event):
 	if state.position != previousPosition: level.addChangeToStack(id, 0, previousPosition)
 	if state.rotation != previousRotation: level.addChangeToStack(id, 1, previousRotation)
 	
+	if fallTo: moveRelative(Vector3i(0,fallTo, 0), false)
+	
 	if positionTween and positionTween.is_running(): positionTween.kill()
 	if rotationTween and rotationTween.is_running(): rotationTween.kill()
 	
@@ -254,17 +275,19 @@ func _input(event):
 		if (object.hold(state.held)): level.addChangeToStack(id, 2, ["hold", object.id])
 	endOfTurn()
 
-func moveRelative(vector:Vector3i):
+func moveRelative(vector:Vector3i, doTween:=true):
 	var previousPosition = state.position
-	position = state.getPositionAsVector()
-	rotation = state.getRotationAsVector()
+	if doTween:
+		position = state.getPositionAsVector()
+		rotation = state.getRotationAsVector()
 	state.position += vector
 	for object in state.held:
 		object.moveTo(state.positionRelative(vector) if !vector.y else vector,Vector3i(0,0,0),!!vector.y)
 	level.addChangeToStack(id, 0, previousPosition)
-	if positionTween and positionTween.is_running(): positionTween.kill()
-	positionTween = create_tween()
-	positionTween.tween_property(self, "position", state.getPositionAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	if doTween:
+		if positionTween and positionTween.is_running(): positionTween.kill()
+		positionTween = create_tween()
+		positionTween.tween_property(self, "position", state.getPositionAsVector(), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 func animateArrow():
 	if Input.is_action_pressed("left"):

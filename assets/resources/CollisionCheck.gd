@@ -91,6 +91,13 @@ func checkHere(strict:=false) -> Array[CollisionTile]:
 		collisions.append_array(getCollides(ownTile, ownTile.position, strict))
 	return collisions
 
+## get all the things currently stored as having collided
+func getCurrentlyCollided() -> Array[CollisionTile]:
+	var toReturn:Array[CollisionTile] = []
+	for ownTile in ownTiles:
+		if ownTile.collidedWith: toReturn.append(ownTile)
+	return toReturn
+
 ## get array of things colliding with
 func getCollides(ownTile:CollisionTile, checkPosition:Vector3i, strict:=false) -> Array[CollisionTile]:
 	#print("checking ", checkPosition, ", recieved ", getPosition(checkPosition))
