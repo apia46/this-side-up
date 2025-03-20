@@ -19,6 +19,8 @@ const LEVEL_INFO = {
 	"set2/4": ["2-4!", "Magic Trick", "Something"],
 	"set2/5": ["2-5", "Natural"],
 	"set2/A": ["2-A", "Hammerhead", "Dr. Koffee"],
+	
+	"set2b/3": ["2b-3", "Steps"],
 }
 const STACK_VALUE_IDS = [
 	"position",
@@ -44,7 +46,7 @@ var level: Level
 var debug: bool = false
 
 func _ready():
-	level = preload("res://assets/levels/map.tscn").instantiate().init("map", self)
+	level = load("res://assets/levels/map.tscn").instantiate().init("map", self)
 	add_child(level)
 
 func _input(event):
