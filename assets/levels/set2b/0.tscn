@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://cysj03ojp4xxq"]
+
+[ext_resource type="Script" uid="uid://b7nu886vfs1kr" path="res://assets/levels/level.gd" id="1_juhyh"]
+[ext_resource type="MeshLibrary" uid="uid://3gbxnqp433cm" path="res://assets/tiles/tileGridMesh.tres" id="4_nkjx1"]
+[ext_resource type="MeshLibrary" uid="uid://b54wjm1eelmux" path="res://assets/objects/objectsGridMesh.tres" id="5_jffah"]
+[ext_resource type="MeshLibrary" uid="uid://datu87mb6cyca" path="res://assets/states/stateMeshLibrary.tres" id="6_pkljq"]
+
+[node name="level" type="Node3D"]
+script = ExtResource("1_juhyh")
+
+[node name="tileGrid" type="GridMap" parent="."]
+unique_name_in_owner = true
+mesh_library = ExtResource("4_nkjx1")
+cell_size = Vector3(1, 1, 1)
+data = {
+"cells": PackedInt32Array(-4, 65535, 0, -3, 65535, 0, -65534, 65535, 0, -3, 0, 0, -4, 1, 0, -4, 2, 0, -3, 3, 0, -2, 3, 0, -1, 2, 0, -65536, 3, 0, -65535, 3, 0, -65534, 2, 0, -65534, 1, 0, -65535, 0, 0, -65535, 65535, 0, -4, 65534, 0, -65534, 65534, 0, -3, 65534, 0, -65535, 65534, 0, -3, 65533, 0, -65535, 65533, 0)
+}
+metadata/_editor_floor_ = Vector3(0, -1, 0)
+
+[node name="objectGrid" type="GridMap" parent="."]
+unique_name_in_owner = true
+mesh_library = ExtResource("5_jffah")
+cell_size = Vector3(1, 1, 1)
+data = {
+"cells": PackedInt32Array(65532, 65535, 0, 1, 65535, 1, 65533, 65535, 2)
+}
+metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="stateGrid" type="GridMap" parent="."]
+unique_name_in_owner = true
+visible = false
+mesh_library = ExtResource("6_pkljq")
+cell_size = Vector3(1, 1, 1)

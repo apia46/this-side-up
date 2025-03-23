@@ -20,7 +20,10 @@ const LEVEL_INFO = {
 	"set2/5": ["2-5", "Natural"],
 	"set2/A": ["2-A", "Hammerhead", "Dr. Koffee"],
 	
-	"set2b/3": ["2b-3", "Steps"],
+	"set2b/0": ["2B-0!", "Wow!"],
+	"set2b/1": ["2B-1", "Repetition"],
+	"set2b/2": ["2B-2", "Steps"],
+	"set2b/3": ["2B-3", "Misalignment"],
 }
 const STACK_VALUE_IDS = [
 	"position",

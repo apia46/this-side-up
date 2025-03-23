@@ -1,33 +1,66 @@
-[gd_scene load_steps=5 format=3 uid="uid://dkonki5wk65a0"]
+[gd_scene load_steps=13 format=3 uid="uid://cqa36gpvmtatd"]
 
-[ext_resource type="Script" uid="uid://b7nu886vfs1kr" path="res://assets/levels/level.gd" id="1_gqhf2"]
-[ext_resource type="MeshLibrary" uid="uid://3gbxnqp433cm" path="res://assets/tiles/tileGridMesh.tres" id="2_35y55"]
-[ext_resource type="MeshLibrary" uid="uid://b54wjm1eelmux" path="res://assets/objects/objectsGridMesh.tres" id="3_302jv"]
-[ext_resource type="MeshLibrary" uid="uid://datu87mb6cyca" path="res://assets/states/stateMeshLibrary.tres" id="4_52rj4"]
+[ext_resource type="Script" uid="uid://b7nu886vfs1kr" path="res://assets/levels/level.gd" id="1_c1rwm"]
+[ext_resource type="Script" uid="uid://b5lh1fbsn6mnn" path="res://assets/objects/ObjectState.gd" id="2_peuti"]
+[ext_resource type="Script" uid="uid://ymf4q6fkocgy" path="res://assets/objects/boxGoal/BoxGoalState.gd" id="3_lp53u"]
+[ext_resource type="Script" uid="uid://ocatylxuuv00" path="res://assets/objects/gate/GateState.gd" id="4_yrra1"]
+[ext_resource type="Script" uid="uid://cebsuitwtsmgp" path="res://assets/objects/box/BoxState.gd" id="5_tgssn"]
+[ext_resource type="MeshLibrary" uid="uid://3gbxnqp433cm" path="res://assets/tiles/tileGridMesh.tres" id="6_6t8r3"]
+[ext_resource type="MeshLibrary" uid="uid://b54wjm1eelmux" path="res://assets/objects/objectsGridMesh.tres" id="7_lr8bo"]
+[ext_resource type="MeshLibrary" uid="uid://datu87mb6cyca" path="res://assets/states/stateMeshLibrary.tres" id="8_05jwp"]
+
+[sub_resource type="Resource" id="Resource_u577a"]
+script = ExtResource("3_lp53u")
+condition = "gate"
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://ymf4q6fkocgy"
+
+[sub_resource type="Resource" id="Resource_mnxim"]
+script = ExtResource("4_yrra1")
+condition = "gate"
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://ocatylxuuv00"
+
+[sub_resource type="Resource" id="Resource_5glgm"]
+script = ExtResource("4_yrra1")
+condition = "gate"
+rotation = Vector3i(0, 0, 0)
+metadata/_custom_type_script = "uid://ocatylxuuv00"
+
+[sub_resource type="Resource" id="Resource_32vq5"]
+script = ExtResource("5_tgssn")
+rotation = Vector3i(0, 0, 90)
+metadata/_custom_type_script = "uid://cebsuitwtsmgp"
 
 [node name="level" type="Node3D"]
-script = ExtResource("1_gqhf2")
+script = ExtResource("1_c1rwm")
+data = Dictionary[Vector3i, ExtResource("2_peuti")]({
+Vector3i(-4, 0, 2): SubResource("Resource_u577a"),
+Vector3i(0, 0, 1): SubResource("Resource_mnxim"),
+Vector3i(0, 0, 5): SubResource("Resource_5glgm"),
+Vector3i(1, 0, 1): SubResource("Resource_32vq5")
+})
 
 [node name="tileGrid" type="GridMap" parent="."]
 unique_name_in_owner = true
-mesh_library = ExtResource("2_35y55")
+mesh_library = ExtResource("6_6t8r3")
 cell_size = Vector3(1, 1, 1)
 data = {
-"cells": PackedInt32Array(-2, 1, 0, -5, 1, 0, -5, 0, 0, -6, 0, 0, -3, 1, 0, -4, 0, 0, -3, 0, 0, -4, 1, 0, -2, 0, 0, -6, 3, 0, -6, 2, 0, -6, 1, 0, -6, 65535, 0, -5, 2, 0, -4, 2, 0, -3, 2, 0, 65530, 65535, 0, 65530, 0, 0, 65530, 1, 0, 65530, 2, 0, 65530, 3, 0, 65529, 3, 0, 65529, 2, 0, 65529, 1, 0, 65529, 0, 0, 65529, 65535, 0, 65534, 0, 0, 65534, 1, 0, 65528, 65535, 0, 65528, 0, 0, 65528, 1, 0, 65528, 2, 0, 65528, 3, 0, 65527, 3, 0, 65527, 2, 0, 65527, 1, 0, 65527, 0, 0, 65527, 65535, 0, 65530, 65534, 0, 65529, 65534, 0, 65528, 65534, 0, 65527, 65534, 0, 65526, 65534, 0, 65525, 65534, 0, 65525, 65535, 0, 65525, 0, 0, 65525, 1, 0, 65526, 1, 0, 65526, 2, 0, 65525, 2, 0, 65525, 3, 0, 65526, 3, 0, 65526, 0, 0, 65526, 65535, 0, 131062, 2, 0, 196598, 2, 0, 131065, 65534, 0, 131064, 65534, 0, 131063, 65534, 0, 131062, 65534, 0, 131061, 65534, 0, 131066, 65534, 0, 131066, 65533, 0, 131065, 65533, 0, 131064, 65533, 0, 131063, 65533, 0, 131062, 65533, 0, 131061, 65533, 0, 131061, 65532, 0, 131062, 65532, 0, 131063, 65532, 0, 131064, 65532, 0, 131065, 65532, 0, 131066, 65532, 0, 131066, 65531, 0, 131065, 65531, 0, 131064, 65531, 0, 131063, 65531, 0, 131062, 65531, 0, 131061, 65531, 0, 65524, 65534, 0, 65524, 65535, 0, 65524, 0, 0, 65524, 1, 0, 65524, 2, 0, 65524, 3, 0, 131060, 65534, 0, 131060, 65533, 0, 131060, 65532, 0, 131060, 65531, 0, 196596, 65531, 0, 196596, 65532, 0, 196596, 65533, 0, 196596, 65534, 0, 196597, 65531, 0, 196598, 65531, 0, 196599, 65531, 0, 196600, 65531, 0, 196601, 65531, 0, 196602, 65531, 0, 196602, 65532, 0, 196602, 65533, 0, 196602, 65534, 0, 131066, 65535, 0, 131066, 3, 0, 131065, 3, 0, 131064, 3, 0, 131063, 3, 0, 131062, 3, 0, 131060, 65535, 0, 131060, 0, 0, 131060, 1, 0, 131060, 2, 0, 131060, 3, 0, 131061, 3, 0, 196602, 3, 1, 196601, 3, 1, 196600, 3, 1, 196599, 3, 1, 196598, 3, 1, 196597, 3, 1, 196596, 3, 1, 196596, 2, 1, 196596, 1, 1, 196596, 0, 1, 196596, 65535, 1, 262132, 65534, 1, 262132, 65533, 1, 262132, 65532, 1, 262132, 65531, 1, 262133, 65531, 1, 262134, 65531, 1, 262135, 65531, 1, 262136, 65531, 1, 262137, 65531, 1, 262138, 65531, 1, 262138, 65532, 1, 262138, 65533, 1, 262138, 65534, 1, 196602, 65535, 1, 65531, 0, 0, 65532, 0, 0, 131066, 0, 0, 196602, 0, 1, 131067, 0, 1, 65533, 0, 0, -5, 3, 0, -4, 3, 0, 65531, 3, 0, -3, 3, 0, -3, 4, 0, -4, 4, 0, -5, 4, 0, 65531, 4, 0, 65532, 4, 0, 65533, 4, 0, 65533, 3, 0, 65533, 2, 0, -2, 2, 0, 65534, 2, 0, 131068, 0, 1, 131069, 0, 1, 131070, 0, 1, 131070, 1, 1, 131070, 2, 1, 131069, 2, 1, 131069, 3, 1, 131069, 4, 1, 131068, 4, 1, 131067, 4, 1, 131067, 3, 1)
+"cells": PackedInt32Array(-4, 1, 0, -3, 1, 0, -4, 2, 0, -3, 2, 0, -2, 2, 0, -1, 2, 0, -65536, 2, 0, -65535, 2, 0, -65534, 2, 0, -65535, 3, 0, -65535, 1, 0, 1, 2, 1441796, -65536, 1, 0, -65535, 4, 0, -65536, 4, 0, -1, 4, 0, -65536, 5, 0, 0, 6, 1441794)
 }
-metadata/_editor_floor_ = Vector3(0, 1, 0)
+metadata/_editor_floor_ = Vector3(0, -1, 0)
 
 [node name="objectGrid" type="GridMap" parent="."]
 unique_name_in_owner = true
-mesh_library = ExtResource("3_302jv")
+mesh_library = ExtResource("7_lr8bo")
 cell_size = Vector3(1, 1, 1)
 data = {
-"cells": PackedInt32Array(196597, 65533, 0, 196601, 65533, 2, 196599, 65533, 1, 262134, 2, 2, 131064, 1, 1, 65531, 1, 1, 65533, 1, 2)
+"cells": PackedInt32Array(65532, 1, 0, 65535, 2, 1, 0, 1, 3, 1, 2, 2, 65532, 2, 2, 1, 1, 1, 0, 2, 2, 0, 5, 3)
 }
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="stateGrid" type="GridMap" parent="."]
 unique_name_in_owner = true
 visible = false
-mesh_library = ExtResource("4_52rj4")
+mesh_library = ExtResource("8_05jwp")
 cell_size = Vector3(1, 1, 1)
