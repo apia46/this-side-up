@@ -237,5 +237,5 @@ func fulfillStatePromises():
 		%stateGrid.set_cell_item(change[1], change[2])
 	statePromises.clear()
 
-func generateLevelNumber(file):
+static func generateLevelNumber(file):
 	return (file.substr(3).get_slice("/",0) if len(file) > 3 else "0") + "-" + (file[file.find("/")+1] if len(file) > 5 else "0") + "?"

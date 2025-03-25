@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://c70oec0hk76u7"]
+
+[ext_resource type="PackedScene" uid="uid://c32agitx7ytyc" path="res://assets/ui/minimap/levelDisplay.tscn" id="1_nnxhg"]
+[ext_resource type="Script" uid="uid://br3olmvi5jbg5" path="res://assets/ui/minimap/levelDisplaySet.gd" id="2_gxgf1"]
+
+[node name="minimap" type="Node2D"]
+
+[node name="levelDisplay" parent="." instance=ExtResource("1_nnxhg")]
+offset_left = 97.0
+offset_top = 51.0
+offset_right = 225.0
+offset_bottom = 179.0
+level = "1-1"
+
+[node name="LevelDisplaySet" type="Node2D" parent="."]
+script = ExtResource("2_gxgf1")
+number = 12312
+metadata/_custom_type_script = "uid://br3olmvi5jbg5"
