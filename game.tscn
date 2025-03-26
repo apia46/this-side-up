@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dvh8iipea8odv"]
+[gd_scene load_steps=12 format=3 uid="uid://dvh8iipea8odv"]
 
 [ext_resource type="Script" uid="uid://cqfax3b5u1tan" path="res://game.gd" id="1_2cxbc"]
 [ext_resource type="Texture2D" uid="uid://dpg4vfg6yqrrv" path="res://assets/ui/confirmCircle.png" id="2_e2o6t"]
@@ -7,11 +7,18 @@
 [ext_resource type="Script" uid="uid://56hcfbj08sy3" path="res://assets/ui/ui.gd" id="3_eow3j"]
 [ext_resource type="FontFile" uid="uid://cwlarvo4i0hrb" path="res://assets/resources/SpaceMono-Bold.woff" id="4_ryrav"]
 [ext_resource type="FontFile" uid="uid://bfamskbaca6r" path="res://assets/resources/SpaceMono-Regular.woff" id="5_eow3j"]
+[ext_resource type="PackedScene" uid="uid://c70oec0hk76u7" path="res://assets/ui/minimap/minimap.tscn" id="5_j5wjh"]
+[ext_resource type="Shader" uid="uid://dchdepyx1wdp2" path="res://assets/ui/minimap/minimapViewport.gdshader" id="8_vef74"]
 
 [sub_resource type="Resource" id="Resource_eow3j"]
 script = ExtResource("2_ryrav")
 unlockLift = true
 metadata/_custom_type_script = "uid://b0qcojqhxnbb5"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hve3p"]
+shader = ExtResource("8_vef74")
+shader_parameter/t = 0.785398
+shader_parameter/size = 0.115
 
 [node name="game" type="Node3D"]
 script = ExtResource("1_2cxbc")
@@ -45,7 +52,7 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 40
-text = "Level Number"
+text = "1-1 Level Number"
 
 [node name="author" type="Label" parent="ui/VBoxContainer"]
 layout_mode = 2
@@ -63,6 +70,7 @@ layout_mode = 2
 text = "turncount:"
 
 [node name="confirmCircle" type="TextureProgressBar" parent="ui"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
@@ -99,3 +107,28 @@ theme_override_constants/line_spacing = 0
 theme_override_fonts/font = ExtResource("5_eow3j")
 theme_override_font_sizes/font_size = 12
 text = "bodytext"
+
+[node name="minimapViewportContainer" type="SubViewportContainer" parent="."]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_hve3p")
+offset_right = 500.0
+offset_bottom = 500.0
+
+[node name="minimapViewport" type="SubViewport" parent="minimapViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(600, 600)
+render_target_update_mode = 4
+
+[node name="minimap" parent="minimapViewportContainer/minimapViewport" instance=ExtResource("5_j5wjh")]
+
+[node name="minimapHitbox" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[connection signal="gui_input" from="minimapHitbox" to="minimapViewportContainer/minimapViewport/minimap" method="_input"]
+[connection signal="mouse_entered" from="minimapHitbox" to="." method="_minimapHitbox_entered"]
+[connection signal="mouse_exited" from="minimapHitbox" to="." method="_minimapHitbox_exited"]

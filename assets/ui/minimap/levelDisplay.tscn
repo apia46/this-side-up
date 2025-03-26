@@ -3,14 +3,14 @@
 [ext_resource type="Script" uid="uid://q2q6yp6swyyb" path="res://assets/ui/minimap/levelDisplay.gd" id="1_hyb4k"]
 
 [node name="levelDisplay" type="PanelContainer"]
-offset_right = 128.0
-offset_bottom = 128.0
+offset_right = 120.0
+offset_bottom = 120.0
 script = ExtResource("1_hyb4k")
 
 [node name="Label" type="Label" parent="."]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 40
 text = "0"
 horizontal_alignment = 1

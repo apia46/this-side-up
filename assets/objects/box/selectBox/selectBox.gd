@@ -22,6 +22,6 @@ func levelNames() -> String:
 	var levels = []
 	for _level in level.levelData.selectBoxLevels[id]:
 		if _level in game.LEVEL_INFO: levels.append(game.LEVEL_INFO[_level][0])
-		else: levels.append(level.generateLevelNumber(_level))
+		else: levels.append(Level.generateUnknownLevelId(_level))
 	return ", ".join(levels)
 func getLevelFile() -> String: return state.defaultSet + "/" + state.levelFile

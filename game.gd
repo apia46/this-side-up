@@ -2,6 +2,9 @@ class_name Game
 extends Node3D
 
 @onready var ui : UI = get_node("ui")
+@onready var minimap = get_node("minimapViewportContainer/minimapViewport/minimap")
+var hoveringMinimap := false
+var minimapStage := 0.0
 
 const LEVEL_INFO = {
 	"map": ["", ""],
@@ -92,3 +95,18 @@ func undo(dontIfWouldLoad:=false):
 	level.processConditions()
 	if doItAgain: undo(dontIfWouldLoad)
 	return true
+
+func _process(delta):
+	if hoveringMinimap: minimapStage = min(1, minimapStage+1.5*delta)
+	else: minimapStage = max(0,minimapStage-1.5*delta)
+	var easing = (1 - (minimapStage-1) ** 2)
+	var minimapHitboxSize = easing*360 + 100
+	%minimapHitbox.size = Vector2(minimapHitboxSize,minimapHitboxSize)
+	%minimapViewportContainer.get_material().set_shader_parameter("size", easing)
+	%minimapViewportContainer.get_material().set_shader_parameter("t", easing*3.8)
+
+func _minimapHitbox_entered():
+	hoveringMinimap = true
+	if minimapStage == 0: minimap.go(level.currentFile)
+
+func _minimapHitbox_exited(): hoveringMinimap = false

@@ -48,7 +48,7 @@ func _process(_delta):
 
 func setUiText():
 	if subsitute:
-		ui.levelName.text = generateLevelNumber(subsitute)
+		ui.levelName.text = generateUnknownLevelId(subsitute)
 		ui.author.text = ""
 	else:
 		ui.levelName.text = game.LEVEL_INFO[currentFile][0] + ": " + game.LEVEL_INFO[currentFile][1] if game.LEVEL_INFO[currentFile][0] != "" else ""
@@ -237,5 +237,6 @@ func fulfillStatePromises():
 		%stateGrid.set_cell_item(change[1], change[2])
 	statePromises.clear()
 
-static func generateLevelNumber(file):
-	return (file.substr(3).get_slice("/",0) if len(file) > 3 else "0") + "-" + (file[file.find("/")+1] if len(file) > 5 else "0") + "?"
+static func generateUnknownLevelId(file): return generateLevelSet(file) + "-" + generateLevelNumber(file) + "?"
+static func generateLevelSet(file): return (file.substr(3).get_slice("/",0).to_upper() if len(file) > 3 else "0")
+static func generateLevelNumber(file): return (file.get_slice("/",1) if len(file) > 5 else "0")
