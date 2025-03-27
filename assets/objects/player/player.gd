@@ -39,15 +39,19 @@ func _process(delta):
 	# https://docs.godotengine.org/en/stable/tutorials/physics/ray-casting.html
 	for object in level.allObjects:
 		object.hovered = false
-	var from = %camera.project_ray_origin(get_viewport().get_mouse_position())
-	var to = from + %camera.project_ray_normal(get_viewport().get_mouse_position()) * %camera.far
-	var query = PhysicsRayQueryParameters3D.create(from, to)
-	query.collide_with_areas = true
-	var result = get_world_3d().direct_space_state.intersect_ray(query)
-	if result != {}:
-		result.collider.get_parent().hovered = true
+	var result = {}
+	if !game.hoveringMinimap:
+		var from = %camera.project_ray_origin(get_viewport().get_mouse_position())
+		var to = from + %camera.project_ray_normal(get_viewport().get_mouse_position()) * %camera.far
+		var query = PhysicsRayQueryParameters3D.create(from, to)
+		query.collide_with_areas = true
+		result = get_world_3d().direct_space_state.intersect_ray(query)
+		if result != {}:
+			result.collider.get_parent().hovered = true
+	else:
+		pass
 	for object in level.allObjects:
-		object.processHover()
+			object.processHover()
 	if hoveringAnything or hoverPopup.modulate.a == 1: if result == {}: create_tween().tween_property(hoverPopup, "modulate:a", 0, 0.2).set_ease(Tween.EASE_OUT)
 	elif result != {}: get_tree().create_tween().tween_property(hoverPopup, "modulate:a", 1, 0.2).set_ease(Tween.EASE_OUT)
 	hoveringAnything = result != {}
