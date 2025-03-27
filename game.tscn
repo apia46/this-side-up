@@ -77,9 +77,30 @@ size_flags_vertical = 0
 fill_mode = 4
 texture_progress = ExtResource("2_e2o6t")
 
+[node name="minimapViewportContainer" type="SubViewportContainer" parent="."]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_hve3p")
+offset_right = 500.0
+offset_bottom = 500.0
+
+[node name="minimapViewport" type="SubViewport" parent="minimapViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(600, 600)
+render_target_update_mode = 4
+
+[node name="minimap" parent="minimapViewportContainer/minimapViewport" instance=ExtResource("5_j5wjh")]
+
+[node name="minimapHitbox" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
 [node name="hover" type="PanelContainer" parent="."]
-offset_right = 12.0
-offset_bottom = 43.0
+offset_right = 63.0
+offset_bottom = 47.0
 script = ExtResource("3_7jktm")
 
 [node name="MarginContainer" type="MarginContainer" parent="hover"]
@@ -107,27 +128,6 @@ theme_override_constants/line_spacing = 0
 theme_override_fonts/font = ExtResource("5_eow3j")
 theme_override_font_sizes/font_size = 12
 text = "bodytext"
-
-[node name="minimapViewportContainer" type="SubViewportContainer" parent="."]
-unique_name_in_owner = true
-material = SubResource("ShaderMaterial_hve3p")
-offset_right = 500.0
-offset_bottom = 500.0
-
-[node name="minimapViewport" type="SubViewport" parent="minimapViewportContainer"]
-transparent_bg = true
-handle_input_locally = false
-size = Vector2i(600, 600)
-render_target_update_mode = 4
-
-[node name="minimap" parent="minimapViewportContainer/minimapViewport" instance=ExtResource("5_j5wjh")]
-
-[node name="minimapHitbox" type="Control" parent="."]
-unique_name_in_owner = true
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
 
 [connection signal="gui_input" from="minimapHitbox" to="minimapViewportContainer/minimapViewport/minimap" method="_input"]
 [connection signal="mouse_entered" from="minimapHitbox" to="." method="_minimapHitbox_entered"]
