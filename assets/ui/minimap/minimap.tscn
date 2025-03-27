@@ -1,21 +1,44 @@
-[gd_scene load_steps=3 format=3 uid="uid://c70oec0hk76u7"]
+[gd_scene load_steps=4 format=3 uid="uid://c70oec0hk76u7"]
 
 [ext_resource type="Script" uid="uid://buywkx7yn3ouo" path="res://assets/ui/minimap/minimap.gd" id="1_gxgf1"]
 [ext_resource type="Script" uid="uid://br3olmvi5jbg5" path="res://assets/ui/minimap/levelDisplaySet.gd" id="2_gxgf1"]
+[ext_resource type="PackedScene" uid="uid://c32agitx7ytyc" path="res://assets/ui/minimap/levelDisplay.tscn" id="3_kli43"]
 
 [node name="minimap" type="Node2D"]
 script = ExtResource("1_gxgf1")
 
 [node name="set1" type="Node2D" parent="."]
 script = ExtResource("2_gxgf1")
-direction = 1
+direction = 3
 number = 5
 metadata/_custom_type_script = "uid://br3olmvi5jbg5"
 
 [node name="set2" type="Node2D" parent="."]
-position = Vector2(0, 128)
+position = Vector2(0, -128)
 script = ExtResource("2_gxgf1")
-direction = 3
+direction = 1
 number = 5
 start = "set2/1"
 metadata/_custom_type_script = "uid://br3olmvi5jbg5"
+
+[node name="set2b" type="Node2D" parent="."]
+position = Vector2(0, -256)
+script = ExtResource("2_gxgf1")
+direction = 3
+number = 3
+start = "set2b/1"
+metadata/_custom_type_script = "uid://br3olmvi5jbg5"
+
+[node name="2b0" parent="." instance=ExtResource("3_kli43")]
+offset_left = -256.0
+offset_top = -384.0
+offset_right = -136.0
+offset_bottom = -264.0
+level = "set2b/0"
+
+[node name="2a" parent="." instance=ExtResource("3_kli43")]
+offset_left = 128.0
+offset_top = -256.0
+offset_right = 248.0
+offset_bottom = -136.0
+level = "set2/A"

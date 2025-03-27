@@ -14,7 +14,7 @@ func _input(event):
 			position += event.relative
 
 func _process(delta):
-	var sizeDiff = (0.6 - scale.x) * delta * 2
+	var sizeDiff = (0.4 - scale.x) * delta * 2
 	position -= Vector2(64,64)
 	position *= 1+sizeDiff/scale.x
 	position += Vector2(64,64)

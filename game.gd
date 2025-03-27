@@ -97,9 +97,11 @@ func undo(dontIfWouldLoad:=false):
 	return true
 
 func _process(delta):
-	if hoveringMinimap: minimapStage = min(1, minimapStage+1.5*delta)
-	else: minimapStage = max(0,minimapStage-1.5*delta)
-	var easing = (1 - (minimapStage-1) ** 2)
+	if hoveringMinimap: minimapStage = minimapStage+1.5*delta
+	else:
+		minimapStage *= 1-(2*delta)
+		minimapStage = max(0, minimapStage - 1.5*delta)
+	var easing = 1 - 2**(-minimapStage)
 	var minimapHitboxSize = easing*360 + 100
 	%minimapHitbox.size = Vector2(minimapHitboxSize,minimapHitboxSize)
 	%minimapViewportContainer.get_material().set_shader_parameter("size", easing)
