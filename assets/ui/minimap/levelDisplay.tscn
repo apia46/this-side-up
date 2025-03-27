@@ -14,3 +14,6 @@ size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 40
 text = "0"
 horizontal_alignment = 1
+
+[connection signal="mouse_entered" from="." to="." method="_mouseEntered"]
+[connection signal="mouse_exited" from="." to="." method="_mouseExited"]

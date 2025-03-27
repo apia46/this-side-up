@@ -51,6 +51,7 @@ var level: Level
 @export var flags: Flags
 
 var debug: bool = false
+var minimapHover : LevelDisplay = null
 
 func _ready():
 	level = load("res://assets/levels/map.tscn").instantiate().init("map", self)
