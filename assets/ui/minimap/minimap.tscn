@@ -8,24 +8,26 @@
 script = ExtResource("1_gxgf1")
 
 [node name="set1" type="Node2D" parent="."]
+position = Vector2(128, 0)
 script = ExtResource("2_gxgf1")
 direction = 3
-number = 5
+number = 6
+start = "set1/0"
 metadata/_custom_type_script = "uid://br3olmvi5jbg5"
 
 [node name="set2" type="Node2D" parent="."]
-position = Vector2(0, -128)
+position = Vector2(-128, -128)
 script = ExtResource("2_gxgf1")
 direction = 1
-number = 5
-start = "set2/1"
+number = 6
+start = "set2/0"
 metadata/_custom_type_script = "uid://br3olmvi5jbg5"
 
 [node name="set2b" type="Node2D" parent="."]
 position = Vector2(0, -256)
 script = ExtResource("2_gxgf1")
 direction = 3
-number = 3
+number = 5
 start = "set2b/1"
 metadata/_custom_type_script = "uid://br3olmvi5jbg5"
 
@@ -42,3 +44,8 @@ offset_top = -256.0
 offset_right = 248.0
 offset_bottom = -136.0
 level = "set2/A"
+
+[node name="1a" parent="." instance=ExtResource("3_kli43")]
+offset_top = 128.0
+offset_bottom = 248.0
+level = "set1/A"

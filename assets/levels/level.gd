@@ -42,6 +42,7 @@ var statePromises: Array = []
 func _ready():
 	setUiText()
 	processConditions()
+	get_tree().call_group("levelDisplays", "reevaluate")
 
 func _process(_delta):
 	ui.turnCount.text = "turncount: " + str(turnCount)
@@ -58,8 +59,8 @@ func init(_currentFile, _game, _subsitute:Variant=false):
 	subsitute = _subsitute
 	currentFile = _currentFile
 	game = _game
-	if currentFile not in game.levelData: game.levelData[currentFile] = LevelData.new()
-	levelData = game.levelData[currentFile]
+	if (subsitute if subsitute else currentFile) not in game.levelData: game.levelData[subsitute if subsitute else currentFile] = LevelData.new()
+	levelData = game.levelData[(subsitute if subsitute else currentFile)]
 	
 	for cell in %tileGrid.get_used_cells():
 		match %tileGrid.get_cell_item(cell):

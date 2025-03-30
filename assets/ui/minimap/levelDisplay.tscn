@@ -1,8 +1,25 @@
-[gd_scene load_steps=2 format=3 uid="uid://c32agitx7ytyc"]
+[gd_scene load_steps=3 format=3 uid="uid://c32agitx7ytyc"]
 
 [ext_resource type="Script" uid="uid://q2q6yp6swyyb" path="res://assets/ui/minimap/levelDisplay.gd" id="1_hyb4k"]
 
-[node name="levelDisplay" type="PanelContainer"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1dc5f"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[node name="levelDisplay" type="PanelContainer" groups=["levelDisplays"]]
 offset_right = 120.0
 offset_bottom = 120.0
 script = ExtResource("1_hyb4k")
@@ -15,5 +32,18 @@ theme_override_font_sizes/font_size = 40
 text = "0"
 horizontal_alignment = 1
 
-[connection signal="mouse_entered" from="." to="." method="_mouseEntered"]
-[connection signal="mouse_exited" from="." to="." method="_mouseExited"]
+[node name="winMark" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 40
+text = "✓"
+horizontal_alignment = 1
+
+[node name="border" type="Panel" parent="."]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_1dc5f")

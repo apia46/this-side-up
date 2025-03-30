@@ -99,7 +99,7 @@ func undo(dontIfWouldLoad:=false):
 	return true
 
 func _process(delta):
-	hoveringMinimap = max(get_viewport().get_mouse_position().x, get_viewport().get_mouse_position().y) <= minimapHitbox.size.x
+	hoveringMinimap = get_viewport().get_mouse_position().x <= minimapHitbox.size.x and get_viewport().get_mouse_position().y <= minimapHitbox.size.y
 	if hoveringMinimap:
 		if minimapStage == 0: minimap.go(level.currentFile)
 		minimapStage = minimapStage+1.5*delta
@@ -107,7 +107,7 @@ func _process(delta):
 		minimapStage *= 1-(2*delta)
 		minimapStage = max(0, minimapStage - 1.5*delta)
 	var easing = 1 - 2**(-minimapStage)
-	var minimapHitboxSize = easing*360 + 100
-	minimapHitbox.size = Vector2(minimapHitboxSize,minimapHitboxSize)
+	var minimapHitboxSize = easing*430 + 70
+	minimapHitbox.size = Vector2(minimapHitboxSize*1.3,minimapHitboxSize)
 	%minimapViewportContainer.get_material().set_shader_parameter("size", easing)
 	%minimapViewportContainer.get_material().set_shader_parameter("t", easing*3.8)

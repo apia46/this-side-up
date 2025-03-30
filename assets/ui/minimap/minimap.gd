@@ -11,7 +11,7 @@ func _ready():
 
 func _process(delta):
 	if game.hoveringMinimap and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-		position -= get_viewport().get_mouse_position() - previousMousePosition
+		position += get_viewport().get_mouse_position() - previousMousePosition
 	var sizeDiff = (0.6 - scale.x) * delta * 2
 	position -= Vector2(64,64)
 	position *= 1+sizeDiff/scale.x
@@ -24,8 +24,9 @@ func go(level:String):
 	for display in displays:
 		if display.level == level:
 			startDisplay = display
+	scale = Vector2(1,1)
 	if !startDisplay:
 		position = Vector2(-26, -28)
 	else:
-		position = Vector2(-26, -28) - startDisplay.position - startDisplay.get_parent().position
-	scale = Vector2(1,1)
+		position = Vector2(-26, -28) - startDisplay.position
+		if startDisplay.get_parent() is LevelDisplaySet: position -= startDisplay.get_parent().position
