@@ -51,7 +51,7 @@ func moveRotate(angle:Vector3i, center:Vector3i, check:=true) -> Array[Collision
 	var direction = 1 if angle.x+angle.y+angle.z == 90 else -1
 	for ownTile in ownTiles:
 		var diff = (ownTile.position - center)
-		print(diff)
+		#print(diff)
 		diff *= direction
 		var checkPosition = center
 		if angle.x:

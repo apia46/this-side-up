@@ -6,6 +6,7 @@ extends Node3D
 var hoveringMinimap := false
 var minimapStage := 0.0
 @onready var minimapHitbox = get_node("minimapHitbox")
+var loadingLevel := false
 
 const LEVEL_INFO = {
 	"map": ["", ""],
@@ -100,7 +101,7 @@ func undo(dontIfWouldLoad:=false):
 
 func _process(delta):
 	hoveringMinimap = get_viewport().get_mouse_position().x <= minimapHitbox.size.x and get_viewport().get_mouse_position().y <= minimapHitbox.size.y
-	if hoveringMinimap:
+	if hoveringMinimap and !loadingLevel:
 		if minimapStage == 0: minimap.go(level.currentFile)
 		minimapStage = minimapStage+1.5*delta
 	else:

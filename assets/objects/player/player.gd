@@ -52,7 +52,7 @@ func _process(delta):
 		if game.minimapHover:
 			result = {"":""} # really fucked up
 			hoverPopup.body.text = ""
-			hoverPopup.body.text = ("Cleared" if game.minimapHover.level in game.levelData and game.levelData[game.minimapHover.level].won else "Uncleared")
+			hoverPopup.body.text = ("Cleared" if game.minimapHover.visited and game.levelData[game.minimapHover.level].won else "Uncleared")
 			if game.minimapHover.level in Game.LEVEL_INFO:
 				hoverPopup.title.text = game.minimapHover.levelText + ": " + Game.LEVEL_INFO[game.minimapHover.level][1]
 				if len(Game.LEVEL_INFO[game.minimapHover.level]) > 2: hoverPopup.body.text += "\nAuthor: " + Game.LEVEL_INFO[game.minimapHover.level][2]

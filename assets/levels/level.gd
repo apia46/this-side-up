@@ -154,6 +154,7 @@ func loadLevel(levelFile, pretense:String):
 		_level.addRawChangeToStack(["dummy"])
 	game.level = _level
 	queue_free()
+	game.loadingLevel = false
 	return _level
 
 func restart(): loadLevel(currentFile, "restart")
@@ -167,7 +168,7 @@ func processConditions():
 			if box is SelectBox:
 				var levelFile = goal.state.levelSet + "/" + box.state.levelFile
 				if levelFile not in levelData.selectBoxLevels[box.id]: # havent seen before; add level
-					print("jere")
+					#print("jere")
 					levelData.selectBoxLevels[box.id].append(levelFile)
 				changeLevel(levelFile, "enter")
 		else:
@@ -187,6 +188,7 @@ func win():
 	changeLevel("map", "win")
 
 func changeLevel(to, pretense:String):
+	game.loadingLevel = true
 	inputOverride = true
 	await get_tree().create_timer(0.5).timeout
 	loadLevel(to, pretense)
@@ -208,7 +210,7 @@ func makeCereal():
 
 func unmakeCereal(cereal, pretense):
 	assert(cereal[0] == "all")
-	print(game.undoStack[-1])
+	#print(game.undoStack[-1])
 	if pretense == "undo": turnCount = len(game.undoStack[-1][1]) + 1
 	for serial in cereal[1]:
 		var object = allObjects[int(serial[0])]

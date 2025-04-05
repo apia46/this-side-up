@@ -1,9 +1,6 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dcy0wca5cef37"]
-
-[ext_resource type="Material" uid="uid://dsgny7f2ast0y" path="res://assets/tiles/wall/wallMaterial2.tres" id="1_82rq1"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dcy0wca5cef37"]
 
 [resource]
-next_pass = ExtResource("1_82rq1")
 albedo_color = Color(0.720467, 0.720468, 0.720467, 1)
 rim = 0.08
 subsurf_scatter_strength = 0.11

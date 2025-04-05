@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://c32agitx7ytyc"]
+[gd_scene load_steps=4 format=3 uid="uid://c32agitx7ytyc"]
 
 [ext_resource type="Script" uid="uid://q2q6yp6swyyb" path="res://assets/ui/minimap/levelDisplay.gd" id="1_hyb4k"]
+[ext_resource type="Texture2D" uid="uid://cqay6ctumenbk" path="res://assets/ui/confirmSquare.png" id="2_wjrgd"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1dc5f"]
 content_margin_left = 0.0
@@ -38,7 +39,7 @@ layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 theme_override_font_sizes/font_size = 40
-text = "✓"
+text = "✓ "
 horizontal_alignment = 1
 
 [node name="border" type="Panel" parent="."]
@@ -47,3 +48,9 @@ modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_1dc5f")
+
+[node name="confirm" type="TextureProgressBar" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+fill_mode = 4
+texture_progress = ExtResource("2_wjrgd")
