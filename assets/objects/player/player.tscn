@@ -207,6 +207,7 @@ unique_name_in_owner = true
 transform = Transform3D(-4.37114e-08, -1, 0, -4.37114e-08, 1.91069e-15, -1, 1, -4.37114e-08, -4.37114e-08, 0, 1.2, 0)
 pixel_size = 0.0156
 no_depth_test = true
+texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_mofqt")
 animation = &"idle_left"
 

@@ -100,7 +100,8 @@ func undo(dontIfWouldLoad:=false):
 	return true
 
 func _process(delta):
-	hoveringMinimap = get_viewport().get_mouse_position().x <= minimapHitbox.size.x and get_viewport().get_mouse_position().y <= minimapHitbox.size.y
+	hoveringMinimap = get_viewport().get_mouse_position().x >= 0 and get_viewport().get_mouse_position().y >= 0\
+		and get_viewport().get_mouse_position().x <= minimapHitbox.size.x and get_viewport().get_mouse_position().y <= minimapHitbox.size.y
 	if hoveringMinimap and !loadingLevel:
 		if minimapStage == 0: minimap.go(level.currentFile)
 		minimapStage = minimapStage+1.5*delta

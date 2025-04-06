@@ -11,6 +11,7 @@ resource_name = "Material"
 cull_mode = 2
 albedo_texture = ExtResource("2_2hrcx")
 roughness = 0.5
+texture_filter = 0
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_ukk1v"]
 _surfaces = [{
@@ -138,6 +139,7 @@ cast_shadow = 0
 pixel_size = 0.0078
 double_sided = false
 no_depth_test = true
+texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_063fw")
 
 [node name="arrows3" type="AnimatedSprite3D" parent="hoverArrows"]
@@ -147,6 +149,7 @@ cast_shadow = 0
 pixel_size = 0.0078
 double_sided = false
 no_depth_test = true
+texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_063fw")
 
 [node name="arrows4" type="AnimatedSprite3D" parent="hoverArrows"]
@@ -156,6 +159,7 @@ cast_shadow = 0
 pixel_size = 0.0078
 double_sided = false
 no_depth_test = true
+texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_063fw")
 
 [node name="arrows2" type="AnimatedSprite3D" parent="hoverArrows"]
@@ -165,6 +169,7 @@ cast_shadow = 0
 pixel_size = 0.0078
 double_sided = false
 no_depth_test = true
+texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_063fw")
 
 [node name="number" type="Label3D" parent="."]

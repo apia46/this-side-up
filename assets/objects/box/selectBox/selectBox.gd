@@ -11,6 +11,7 @@ func _ready():
 	if getLevelFile() in game.levelData and game.levelData[getLevelFile()].won: state.won = true
 	%number.text = state.levelText
 	%number.outline_modulate.a = 1 if state.won else 0
+	super()
 
 func getHoverTitleText(): return "Box[Select]"
 func getHoverBodyText():

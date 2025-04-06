@@ -1,17 +1,22 @@
-[gd_resource type="MeshLibrary" load_steps=16 format=4 uid="uid://3gbxnqp433cm"]
+[gd_resource type="MeshLibrary" load_steps=20 format=4 uid="uid://3gbxnqp433cm"]
 
 [ext_resource type="Texture2D" uid="uid://bceg18gwsck4a" path="res://assets/tiles/wall/wall.png" id="1_56wrv"]
-[ext_resource type="BoxMesh" uid="uid://djsiai7uwsh34" path="res://assets/tiles/halfWall/halfWall.tres" id="2_45j7s"]
-[ext_resource type="Material" uid="uid://dsgny7f2ast0y" path="res://assets/tiles/wall/wallMaterial2.tres" id="2_wplme"]
+[ext_resource type="Shader" uid="uid://c46mpgbsybxim" path="res://assets/resources/edgeHighlight.gdshader" id="2_c184k"]
 [ext_resource type="Texture2D" uid="uid://5rm0tdfakp13" path="res://assets/tiles/maxHeight/maxHeight.png" id="3_7jmck"]
 [ext_resource type="Texture2D" uid="uid://m5dy45jjkku6" path="res://assets/tiles/maxHeight/maxHeight1.png" id="4_c184k"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_56wrv"]
+render_priority = 0
+shader = ExtResource("2_c184k")
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i3el0"]
 resource_name = "Material"
-next_pass = ExtResource("2_wplme")
+next_pass = SubResource("ShaderMaterial_56wrv")
 cull_mode = 2
 albedo_texture = ExtResource("1_56wrv")
 roughness = 0.5
+texture_filter = 2
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_ccqx6"]
 _surfaces = [{
@@ -27,11 +32,11 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_i2r2i"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_c184k"]
 resource_name = "wall_Cube"
 _surfaces = [{
 "aabb": AABB(-0.5, -0.5, -0.5, 1, 1, 1),
-"attribute_data": PackedByteArray("/3//////AAD//////38AAP9///8AAAAA/38AAAAA////f///AAAAAP9/AAAAAP///3//////AAD//////38AAP9///8AAAAA/38AAAAA////f///AAAAAP9/AAAAAP//"),
+"attribute_data": PackedByteArray("94EHfv//AAD//wd+94EAAAd+B34AAAAAB34AAAAAB34Hfgd+AAAAAAd+AAAAAAd+94EHfv//AAD//wd+94EAAAd+B34AAAAAB34AAAAAB34Hfgd+AAAAAAd+AAAAAAd+"),
 "format": 34896613399,
 "index_count": 36,
 "index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
@@ -44,6 +49,51 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_ccqx6")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wplme"]
+render_priority = 0
+shader = ExtResource("2_c184k")
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0txr5"]
+resource_name = "Material"
+next_pass = SubResource("ShaderMaterial_wplme")
+cull_mode = 2
+albedo_texture = ExtResource("1_56wrv")
+roughness = 0.5
+texture_filter = 2
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_5yb53"]
+_surfaces = [{
+"aabb": AABB(-0.5, -0.5, -0.5, 1, 0.5, 1),
+"format": 34896613377,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAwACAAEAAAAEAAEAAwAFAAIABQAAAAIABgAEAAAABQAGAAAABwABAAQABwADAAEABgAHAAQABQADAAcABQAHAAYA"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/////wAAAAAAAP////8AAAAA//8AAAAAAAAAAP//AAD///////8AAAAAAAAAAAAA//8AAAAAAAD//wAA//8AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_wplme"]
+resource_name = "halfWall_Cube"
+_surfaces = [{
+"aabb": AABB(-0.5, -0.5, -0.5, 1, 0.5, 1),
+"attribute_data": PackedByteArray("AAD//wd+94EHfv//AAD3gQd+B34AAAM/B34DPwAAB34Hfgd+AAADPwd+Az8AAAd+94EHfv//AAD//wd+94EAAAd+B34AAAM/B34DPwAAB34Hfgd+AAADPwd+Az8AAAd+"),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
+"material": SubResource("StandardMaterial3D_0txr5"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("/////wAA//8AAP///////wAA//8AAP///////////////wAA//8AgAAA/////wCA////////AIAAAAAA//8AgAAAAAD///+/AAD//wAA/78AAP//////vwAAAAAAAP+/AAAAAAAA/7///wAA////v///AAAAAP+/AAAAAP///7///wAAAAD/v/////////+//////wAA/7///wAA////vwAAAAAAAP///////wAA//8AAP//AAD/////AAAAAP///3//v/9//7//f/+//3//v/9/////f////3////9/////f////3////9/////f///AAD/fwAA/38AAP9/AAD/f/9/AAD/fwAA/38AAP9/AAD/f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_5yb53")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2njva"]
 resource_name = "Material"
@@ -125,15 +175,15 @@ shadow_mesh = SubResource("ArrayMesh_rccbl")
 
 [resource]
 item/0/name = "wall"
-item/0/mesh = SubResource("ArrayMesh_i2r2i")
+item/0/mesh = SubResource("ArrayMesh_c184k")
 item/0/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/0/mesh_cast_shadow = 1
 item/0/shapes = []
 item/0/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/0/navigation_layers = 1
 item/1/name = "halfWall"
-item/1/mesh = ExtResource("2_45j7s")
-item/1/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+item/1/mesh = SubResource("ArrayMesh_wplme")
+item/1/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/1/mesh_cast_shadow = 1
 item/1/shapes = []
 item/1/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
