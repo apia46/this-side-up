@@ -574,14 +574,6 @@ text = "levels need to be completed
 to count for goals"
 font_size = 96
 
-[node name="controls10" type="Label3D" parent="texts"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 20.5, 1.6, -7.5)
-modulate = Color(0, 0, 0, 1)
-outline_modulate = Color(1, 1, 1, 1)
-text = "levels need to be completed
-to count for goals"
-font_size = 96
-
 [node name="controls8" type="Label3D" parent="texts"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 20.5, 1.6, -16.5)
 modulate = Color(0, 0, 0, 1)
