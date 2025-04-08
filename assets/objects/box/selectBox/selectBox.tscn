@@ -6,14 +6,14 @@
 [ext_resource type="Texture2D" uid="uid://c45iytxddclqm" path="res://assets/objects/box/hover.png" id="3_f4dgy"]
 [ext_resource type="FontFile" uid="uid://cwlarvo4i0hrb" path="res://assets/resources/SpaceMono-Bold.woff" id="5_f4dgy"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m6368"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fr86c"]
 resource_name = "Material"
 cull_mode = 2
 albedo_texture = ExtResource("2_2hrcx")
 roughness = 0.5
-texture_filter = 0
+texture_filter = 2
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_ukk1v"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_lpgcx"]
 _surfaces = [{
 "aabb": AABB(-1, -1, -1, 2, 2, 2),
 "format": 34896613377,
@@ -27,15 +27,15 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_56t8r"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_ano7h"]
 resource_name = "box_Cube"
 _surfaces = [{
 "aabb": AABB(-1, -1, -1, 2, 2, 2),
-"attribute_data": PackedByteArray("Zfb+/////3////7/Zfb/f/+//v//f/9//7//f/9//v//v/7//3//f/+//3//f/7//7/+/////3////7//7//f/+//v//f/9//7//f/9//v//v////3//f/+//3//f/7/"),
+"attribute_data": PackedByteArray("/3////+//7//v////3//v/+//7//f/9//7//f/9//7//v/+//3//f/+//3//f/+//7//v////3////+//7//f/+//7//f/9//7//f/9//7//v/+//3//f/+//3//f/+/"),
 "format": 34896613399,
 "index_count": 36,
 "index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
-"material": SubResource("StandardMaterial3D_m6368"),
+"material": SubResource("StandardMaterial3D_fr86c"),
 "name": "Material",
 "primitive": 3,
 "uv_scale": Vector4(2, 2, 0, 0),
@@ -43,7 +43,7 @@ _surfaces = [{
 "vertex_data": PackedByteArray("/////wAA//8AAP///////wAA//8AAP///////////////wAA//8AgAAA/////wCA////////AIAAAAAA//8AgAAAAAD///+/AAD//wAA/78AAP//////vwAAAAAAAP+/AAAAAAAA/7///wAA////v///AAAAAP+/AAAAAP///7///wAAAAD/v/////////+//////wAA/7///wAA////vwAAAAAAAP///////wAA//8AAP//AAD/////AAAAAP///3//v/9//7//f/+//3//v/9/////f////3////9/////f////3////9/////f///AAD/fwAA/38AAP9/AAD/f/9/AAD/fwAA/38AAP9/AAD/f////3////9/////f///")
 }]
 blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_ukk1v")
+shadow_mesh = SubResource("ArrayMesh_lpgcx")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2o5n7"]
 
@@ -113,7 +113,7 @@ script = ExtResource("1_nol4f")
 
 [node name="body" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
-mesh = SubResource("ArrayMesh_56t8r")
+mesh = SubResource("ArrayMesh_ano7h")
 skeleton = NodePath("")
 
 [node name="outline" type="MeshInstance3D" parent="."]

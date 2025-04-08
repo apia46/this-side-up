@@ -27,12 +27,13 @@ func _ready():
 		reevaluate()
 
 func _process(delta):
-	if hovered and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and !game.loadingLevel and visited:
-		%confirm.value += delta * 100
-	else:
-		%confirm.value -= delta*500
-	if !game.loadingLevel and %confirm.value == 100:
-		game.level.changeLevel(level, "enter")
+	if !Engine.is_editor_hint():
+		if hovered and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and !game.loadingLevel and visited:
+			%confirm.value += delta * 100
+		else:
+			%confirm.value -= delta*500
+		if !game.loadingLevel and %confirm.value == 100:
+			game.level.changeLevel(level, "enter")
 
 func reevaluate():
 	visited = level in game.levelData

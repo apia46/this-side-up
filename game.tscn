@@ -12,7 +12,7 @@
 
 [sub_resource type="Resource" id="Resource_eow3j"]
 script = ExtResource("2_ryrav")
-unlockLift = true
+unlockLift = false
 metadata/_custom_type_script = "uid://b0qcojqhxnbb5"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hve3p"]
