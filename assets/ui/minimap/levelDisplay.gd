@@ -14,7 +14,7 @@ var visited := false
 var levelText : String
 
 static func New(_level:String, _position:Vector2):
-	var object: LevelDisplay = preload("res://assets/ui/minimap/levelDisplay.tscn").instantiate()
+	var object: LevelDisplay = load("res://assets/ui/minimap/levelDisplay.tscn").instantiate()
 	object.level = _level
 	object.position = _position
 	return object
