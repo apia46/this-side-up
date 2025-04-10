@@ -30,10 +30,10 @@ func _ready():
 func _process(delta):
 	#position = positionComponent1 + positionComponent2
 	
-	if Input.is_action_pressed("forward") and birdseyeCameraPosition.z >= level.topBound: birdseyeCameraPosition -= Vector3(0,0,CAMERA_SPEED*delta)
-	if Input.is_action_pressed("left") and birdseyeCameraPosition.x >= level.leftBound: birdseyeCameraPosition -= Vector3(CAMERA_SPEED*delta,0,0)
-	if Input.is_action_pressed("right") and birdseyeCameraPosition.x <= level.rightBound: birdseyeCameraPosition += Vector3(CAMERA_SPEED*delta,0,0)
-	if Input.is_action_pressed("backward") and birdseyeCameraPosition.z <= level.bottomBound: birdseyeCameraPosition += Vector3(0,0,CAMERA_SPEED*delta)
+	if game.won != 1 and Input.is_action_pressed("forward") and birdseyeCameraPosition.z >= level.topBound: birdseyeCameraPosition -= Vector3(0,0,CAMERA_SPEED*delta)
+	if game.won != 1 and Input.is_action_pressed("left") and birdseyeCameraPosition.x >= level.leftBound: birdseyeCameraPosition -= Vector3(CAMERA_SPEED*delta,0,0)
+	if game.won != 1 and Input.is_action_pressed("right") and birdseyeCameraPosition.x <= level.rightBound: birdseyeCameraPosition += Vector3(CAMERA_SPEED*delta,0,0)
+	if game.won != 1 and Input.is_action_pressed("backward") and birdseyeCameraPosition.z <= level.bottomBound: birdseyeCameraPosition += Vector3(0,0,CAMERA_SPEED*delta)
 	%camera.position += ((birdseyeCameraPosition.snapped(Vector3(1,1,1)) + Vector3(0.5,0,1.2) if state.birdseyeCamera else global_transform.origin + %cameraPosition.position) - %camera.position) * 0.15
 	
 	# https://docs.godotengine.org/en/stable/tutorials/physics/ray-casting.html
@@ -73,7 +73,7 @@ func _process(delta):
 		if Input.is_action_pressed("escape") and level.currentFile != "map":
 			if confirmStatus != "escape": confirmCircle.value = 0
 			confirmStatus = "escape"
-		elif Input.is_action_pressed("restart"):
+		elif game.won != 1 and Input.is_action_pressed("restart"):
 			if confirmStatus != "restart": confirmCircle.value = 0
 			confirmStatus = "restart"
 	if confirmStatus == "escape":
@@ -84,14 +84,15 @@ func _process(delta):
 			print("ACTION:escape")
 			level.changeLevel("map", "escape")
 	elif confirmStatus == "restart":
-		if Input.is_action_pressed("restart"): confirmCircle.value += delta * 200
+		if game.won != 1 and Input.is_action_pressed("restart"): confirmCircle.value += delta * 200
 		else: confirmCircle.value -= delta*500
 		if confirmCircle.value == 100:
 			confirmStatus = "confirmed"
 			print("ACTION:restart")
 			level.restart()
 
-func _input(event):
+func _unhandled_input(event):
+	if game.won == 1: return
 	if level.inputOverride: return
 	var previousPosition = state.position
 	var previousRotation = state.rotation
@@ -287,6 +288,8 @@ func _input(event):
 	for object in objectsToHold:
 		state.held.append(object)
 		if (object.hold(state.held)): level.addChangeToStack(id, 2, ["hold", object.id])
+	
+	if game.won == 2: game.ui.winContainer.visible = false
 	endOfTurn()
 
 func moveRelative(vector:Vector3i):

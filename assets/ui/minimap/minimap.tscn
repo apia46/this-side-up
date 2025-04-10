@@ -31,14 +31,6 @@ number = 5
 start = "set2b/1"
 metadata/_custom_type_script = "uid://br3olmvi5jbg5"
 
-[node name="set0" type="Node2D" parent="."]
-position = Vector2(256, -512)
-script = ExtResource("2_gxgf1")
-direction = 1
-number = 5
-start = "set0/1"
-metadata/_custom_type_script = "uid://br3olmvi5jbg5"
-
 [node name="2b0" parent="." instance=ExtResource("3_kli43")]
 offset_left = -256.0
 offset_top = -384.0
@@ -57,20 +49,3 @@ level = "set2/A"
 offset_top = 128.0
 offset_bottom = 248.0
 level = "set1/A"
-
-[node name="0f" parent="." instance=ExtResource("3_kli43")]
-offset_top = -512.0
-offset_bottom = -392.0
-level = "set0/F"
-
-[node name="00" parent="." instance=ExtResource("3_kli43")]
-offset_top = -384.0
-offset_bottom = -264.0
-level = "set0/0"
-
-[node name="0a" parent="." instance=ExtResource("3_kli43")]
-offset_left = 384.0
-offset_top = -384.0
-offset_right = 504.0
-offset_bottom = -264.0
-level = "set0/A"

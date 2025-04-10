@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dvh8iipea8odv"]
+[gd_scene load_steps=14 format=3 uid="uid://dvh8iipea8odv"]
 
 [ext_resource type="Script" uid="uid://cqfax3b5u1tan" path="res://game.gd" id="1_2cxbc"]
 [ext_resource type="Texture2D" uid="uid://dpg4vfg6yqrrv" path="res://assets/ui/confirmCircle.png" id="2_e2o6t"]
@@ -8,11 +8,14 @@
 [ext_resource type="FontFile" uid="uid://cwlarvo4i0hrb" path="res://assets/resources/SpaceMono-Bold.woff" id="4_ryrav"]
 [ext_resource type="FontFile" uid="uid://bfamskbaca6r" path="res://assets/resources/SpaceMono-Regular.woff" id="5_eow3j"]
 [ext_resource type="PackedScene" uid="uid://c70oec0hk76u7" path="res://assets/ui/minimap/minimap.tscn" id="5_j5wjh"]
+[ext_resource type="Texture2D" uid="uid://c20cx4bnspwij" path="res://assets/resources/win.png" id="5_mfdv2"]
 [ext_resource type="Shader" uid="uid://dchdepyx1wdp2" path="res://assets/ui/minimap/minimapViewport.gdshader" id="8_vef74"]
+[ext_resource type="Texture2D" uid="uid://ceupbgmrovh8m" path="res://assets/ui/exit.png" id="10_hve3p"]
 
 [sub_resource type="Resource" id="Resource_eow3j"]
 script = ExtResource("2_ryrav")
 unlockLift = false
+unlockMinimap = false
 metadata/_custom_type_script = "uid://b0qcojqhxnbb5"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hve3p"]
@@ -76,6 +79,27 @@ size_flags_vertical = 0
 fill_mode = 4
 texture_progress = ExtResource("2_e2o6t")
 
+[node name="winContainer" type="MarginContainer" parent="ui"]
+visible = false
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="MarginContainer" type="MarginContainer" parent="ui/winContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="win" type="TextureRect" parent="ui/winContainer/MarginContainer"]
+layout_mode = 2
+texture = ExtResource("5_mfdv2")
+expand_mode = 2
+
 [node name="minimapViewportContainer" type="SubViewportContainer" parent="."]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_hve3p")
@@ -129,3 +153,11 @@ offset_left = 4.0
 offset_top = 4.0
 offset_right = 1148.0
 offset_bottom = 644.0
+
+[node name="minimapExit" type="TextureButton" parent="."]
+unique_name_in_owner = true
+offset_right = 32.0
+offset_bottom = 32.0
+texture_normal = ExtResource("10_hve3p")
+
+[connection signal="pressed" from="minimapExit" to="." method="_minimapExit_pressed"]

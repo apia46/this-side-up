@@ -154,7 +154,6 @@ func loadLevel(levelFile, pretense:String):
 		_level.addRawChangeToStack(["dummy"])
 	game.level = _level
 	queue_free()
-	game.loadingLevel = false
 	return _level
 
 func restart(): loadLevel(currentFile, "restart")
@@ -177,6 +176,7 @@ func processConditions():
 		if checkCondition(gate.state.condition): gate.open()
 		else: gate.close()
 	if !game.flags.unlockLift and checkCondition("pass_set1"): game.flags.unlockLift = true
+	if !game.flags.unlockMinimap and checkCondition("set1/1"): game.flags.unlockMinimap = true
 	if checkCondition("win"): win()
 
 func checkCondition(condition):
@@ -185,10 +185,13 @@ func checkCondition(condition):
 
 func win():
 	levelData.won = true
-	changeLevel("map", "win")
+	if currentFile == "map":
+		game.win()
+	else:
+		changeLevel("map", "win")
 
 func changeLevel(to, pretense:String):
-	game.loadingLevel = true
+	game.closingMinimap = true
 	inputOverride = true
 	await get_tree().create_timer(0.5).timeout
 	loadLevel(to, pretense)
@@ -211,7 +214,7 @@ func makeCereal():
 func unmakeCereal(cereal, pretense):
 	assert(cereal[0] == "all")
 	#print(game.undoStack[-1])
-	if pretense == "undo": turnCount = len(game.undoStack[-1][1]) + 1
+	if pretense == "undo": turnCount = len(game.undoStack[-1][1]) + 2
 	for serial in cereal[1]:
 		var object = allObjects[int(serial[0])]
 		object.state.deserialise(serial[1], object)

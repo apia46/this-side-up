@@ -7,3 +7,5 @@ extends MarginContainer
 
 @onready var debug = get_node("VBoxContainer/debug")
 @onready var turnCount = get_node("VBoxContainer/debug/turnCount")
+
+@onready var winContainer = get_node("winContainer")

@@ -6,7 +6,8 @@ extends Node3D
 var hoveringMinimap := false
 var minimapStage := 0.0
 @onready var minimapHitbox = get_node("minimapHitbox")
-var loadingLevel := false
+var closingMinimap := false
+var won := 0
 
 const LEVEL_INFO = {
 	"map": ["", ""],
@@ -58,7 +59,7 @@ func _ready():
 	level = load("res://assets/levels/map.tscn").instantiate().init("map", self)
 	add_child(level)
 
-func _input(event):
+func _unhandled_input(event):
 	if event.is_action_pressed("toggle_debug"):
 		debug = !debug
 		ui.debug.visible = debug
@@ -102,14 +103,34 @@ func undo(dontIfWouldLoad:=false):
 func _process(delta):
 	hoveringMinimap = get_viewport().get_mouse_position().x >= 0 and get_viewport().get_mouse_position().y >= 0\
 		and get_viewport().get_mouse_position().x <= minimapHitbox.size.x and get_viewport().get_mouse_position().y <= minimapHitbox.size.y
-	if hoveringMinimap and !loadingLevel:
+	%minimapExit.visible = hoveringMinimap and !closingMinimap and flags.unlockMinimap and won != 1
+	if hoveringMinimap and !closingMinimap and flags.unlockMinimap and won != 1:
 		if minimapStage == 0: minimap.go(level.currentFile)
 		minimapStage = minimapStage+1.5*delta
 	else:
 		minimapStage *= 1-(2*delta)
 		minimapStage = max(0, minimapStage - 1.5*delta)
+	if minimapStage == 0: closingMinimap = false
 	var easing = 1 - 2**(-minimapStage)
-	var minimapHitboxSize = easing*430 + 70
+	var minimapHitboxSize = easing*450 + 50
+	%minimapExit.modulate.a = minimapStage
 	minimapHitbox.size = Vector2(minimapHitboxSize*1.3,minimapHitboxSize)
 	%minimapViewportContainer.get_material().set_shader_parameter("size", easing)
 	%minimapViewportContainer.get_material().set_shader_parameter("t", easing*3.8)
+
+func _minimapExit_pressed():
+	closingMinimap = true
+
+func win():
+	if won != 0: return
+	won = 1
+	await get_tree().create_timer(0.5).timeout
+	ui.winContainer.visible = true
+	create_tween().tween_property(ui.winContainer, "modulate", Color(1,1,1,1), 2)
+	await get_tree().create_timer(3).timeout
+	won = 2
+
+
+func _winButton_pressed():
+	won = 2
+	ui.winContainer.visible = false
